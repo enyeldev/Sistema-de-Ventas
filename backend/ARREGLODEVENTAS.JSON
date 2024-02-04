@@ -1,0 +1,23 @@
+[
+    {
+        "codigoProducto": "0001",
+        "cantidadProducto": 10,
+        "costoProducto": 275.00,
+        "monto": 2750.00,
+        "financiado": true
+    },
+    {
+        "codigoProducto": "0003",
+        "cantidadProducto": 1,
+        "costoProducto": 3250.00,
+        "monto": 3250.00,
+        "financiado": true
+    }
+    // {
+    //     "codigoProducto": "0002",
+    //     "cantidadProducto": 8,
+    //     "costoProducto": 4050.00,
+    //     "monto": 32400.00,
+    //     "financiado": false
+    // }
+]

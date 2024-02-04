@@ -1,0 +1,202 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Productos {
+  codigoProducto String @id
+
+  nombre String
+
+  cantidadStock Int
+
+  minStock Int
+
+  precioCompraUnd Decimal
+
+  precioVentaUnd Decimal
+
+  ganancia Decimal
+
+  agotado Boolean @default(false)
+
+  enBaja Boolean @default(false)
+
+  ventas VentasItem[]
+
+  deudas ProductosDeudas[]
+}
+
+model VentasItem {
+  id Int @id @default(autoincrement())
+
+  codigoVenta String
+
+  codigoProducto String
+
+  nombreProducto String
+
+  cantidadProducto Int
+
+  costoVentaItem Decimal
+
+  costoActualProducto Decimal
+
+  producto Productos @relation(fields: [codigoProducto], references: [codigoProducto])
+
+  venta Ventas @relation(fields: [codigoVenta], references: [codigoVenta])
+}
+
+model Ventas {
+  codigoVenta String @id
+
+  costoTotal Decimal
+
+  pagoCliente Decimal
+
+  devueltaCliente Decimal
+
+  nombreCliente String?
+
+  telefonoCliente String?
+
+  atendidoPor String?
+
+  fecha String
+
+  productos VentasItem[]
+
+  factura         Facturas?
+  UsuarioCajero   UsuarioCajero? @relation(fields: [usuarioCajeroId], references: [id])
+  usuarioCajeroId String?
+}
+
+model Deudas {
+  codigoDeuda String @id
+
+  nombreCliente String
+
+  telefonoCliente String
+
+  despachadoPor String
+
+  montoDeuda Decimal
+
+  montoActualDeuda Decimal
+
+  fecha String
+
+  fechaUltimoPago String?
+
+  estado Boolean @default(true)
+
+  productos ProductosDeudas[]
+
+  factura              FacturasDeudas?
+  HistorialPagosDeudas HistorialPagosDeudas[]
+  UsuarioCajero        UsuarioCajero?         @relation(fields: [usuarioCajeroId], references: [id])
+  usuarioCajeroId      String?
+}
+
+model ProductosDeudas {
+  id Int @id @default(autoincrement())
+
+  codigoDeuda String
+
+  codigoProducto String
+
+  nombreProducto String
+
+  cantidadProducto Int
+
+  costoProducto Decimal
+
+  monto Decimal
+
+  dedua Deudas @relation(fields: [codigoDeuda], references: [codigoDeuda])
+
+  producto Productos @relation(fields: [codigoProducto], references: [codigoProducto])
+}
+
+model Facturas {
+  codigoFactura String @id
+
+  codigoVenta String @unique
+
+  venta Ventas @relation(fields: [codigoVenta], references: [codigoVenta])
+}
+
+model Ingresos {
+  codigoIngreso String @id
+
+  montoIngreso Decimal
+
+  descripcion String?
+
+  fecha String
+
+  tipoId Int
+
+  tipo TiposIngresos @relation(fields: [tipoId], references: [codigoDeTipoIngreso])
+}
+
+model Retiros {
+  codigoRetiro String @id
+
+  montoRetiro Decimal
+
+  descripcion String?
+
+  fecha String
+}
+
+model TiposIngresos {
+  codigoDeTipoIngreso Int @id @default(autoincrement())
+
+  tipoIngreso String
+
+  ingreso Ingresos[]
+}
+
+model FacturasDeudas {
+  codigoFacturaDeuda String @id
+  codigoDeuda        String @unique
+
+  deuda Deudas @relation(fields: [codigoDeuda], references: [codigoDeuda])
+}
+
+model HistorialPagosDeudas {
+  id          Int    @id @default(autoincrement())
+  codigoDedua String
+  motoPago    Int
+  fecha       String
+
+  dedua Deudas @relation(fields: [codigoDedua], references: [codigoDeuda])
+}
+
+model UsuariosAdministrativos {
+  id String @id
+
+  userName String @unique
+
+  password String
+}
+
+model UsuarioCajero {
+  id String @id
+
+  userName String @unique
+
+  password String
+
+  ventas Ventas[]
+
+  dedudas Deudas[]
+}
