@@ -25,7 +25,7 @@ import {
 
 import { PDFDownloadLink } from '@react-pdf/renderer'
 // import { PdfFacturaVenta } from '../components/PdfFacturaVenta'
-import { PlantillaFacturaVenta } from '../components/PlantillaFacturaVenta'
+import { PlantillaFacturaVenta } from './PlantillaFacturaVenta'
 
 export const ModalFacturaVenta = ({ showModalFacturaVenta, setShowModalFacturaVenta, datosFacturaVenta }) => {
 
