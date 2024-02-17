@@ -1,171 +1,172 @@
 /* eslint-disable react/prop-types */
 
-import { formatoDinero } from '../helpers/formatoDinero'
-
+import { formatoDinero } from "../helpers/formatoDinero";
 
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalCloseButton,
-    ModalFooter,
-    Button,
-    Heading,
-    Text,
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    TableContainer,
-} from '@chakra-ui/react'
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  ModalFooter,
+  Button,
+  Heading,
+  Text,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+} from "@chakra-ui/react";
 
-import { PDFDownloadLink } from '@react-pdf/renderer'
+import { PDFDownloadLink } from "@react-pdf/renderer";
 // import { PdfFacturaVenta } from '../components/PdfFacturaVenta'
-import { PlantillaFacturaVenta } from './PlantillaFacturaVenta'
+import { PlantillaFacturaVenta } from "./PlantillaFacturaVenta";
 
-export const ModalFacturaVenta = ({ showModalFacturaVenta, setShowModalFacturaVenta, datosFacturaVenta }) => {
+export const ModalFacturaVenta = ({
+  showModalFacturaVenta,
+  setShowModalFacturaVenta,
+  datosFacturaVenta,
+}) => {
+  const cerrarModal = () => {
+    setShowModalFacturaVenta(false);
+  };
 
-    const cerrarModal = () => {
-        setShowModalFacturaVenta(false)
-    }
+  const { codigoFactura, datosVenta, productosVendidos } = datosFacturaVenta;
 
-    const { codigoFactura, datosVenta, productosVendidos } = datosFacturaVenta
+  return (
+    <Modal isOpen={showModalFacturaVenta} onClose={cerrarModal}>
+      <ModalOverlay />
+      <ModalContent maxW={1000}>
+        <ModalHeader>Factura de la venta</ModalHeader>
+        <ModalCloseButton />
 
-    return (
+        <ModalBody display={"flex"} flexDirection={"column"} gap={"10px"}>
+          <div className="w-full">
+            <div className="w-full">
+              <Heading
+                textTransform="uppercase"
+                fontSize="larger"
+                textAlign={"center"}
+              >
+                NOMBRE LOCAL
+              </Heading>
+              <Text fontSize={"medium"} textAlign={"center"}>
+                Av. 27 de Febrero, Sto. Dgo. Oeste Frente al Colegio Cristiano
+                Belen
+              </Text>
 
-        <Modal isOpen={showModalFacturaVenta} onClose={cerrarModal}>
-            <ModalOverlay />
-            <ModalContent
-                maxW={1000}
-            >
-                <ModalHeader>Factura de la venta</ModalHeader>
-                <ModalCloseButton />
+              <Text fontSize={"medium"} textAlign={"center"}>
+                Telefono: 809-560-7032
+              </Text>
+            </div>
 
-                <ModalBody
-                    display={'flex'}
-                    flexDirection={'column'}
-                    gap={'10px'}
+            <div className="w-full">
+              <Text>Codigo Factura: {codigoFactura}</Text>
+              <Text>Fecha: {datosVenta.fecha}</Text>
+            </div>
 
-                >
-                    <div className="w-full">
-                        <div className="w-full">
-                            <Heading textTransform='uppercase' fontSize='larger' textAlign={'center'}>
-                                NOMBRE LOCAL
-                            </Heading>
-                            <Text fontSize={'medium'} textAlign={'center'}>
-                                Av. 27 de Febrero, Sto. Dgo. Oeste
-                                Frente al Colegio Cristiano Belen
-                            </Text>
+            <div className="w-full">
+              <Text>Cliente: {datosVenta.nombreCleinte}</Text>
 
-                            <Text fontSize={'medium'} textAlign={'center'}>
-                                Telefono: 809-560-7032
-                            </Text>
-                        </div>
+              <Text>Telefono Cliente: {datosVenta.telefonoCliente}</Text>
 
+              <Text>Despachado Por: {datosVenta.despachadoPor}</Text>
+            </div>
+          </div>
 
-                        <div className="w-full">
-                            <Text>
-                                Codigo Factura: {codigoFactura}
-                            </Text>
-                            <Text>
-                                Fecha: {datosVenta.fecha}
-                            </Text>
-                        </div>
+          <div className="w-full bg-white rounded-md max-h-[150px] overflow-y-scroll">
+            <TableContainer width={""}>
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Codigo</Th>
+                    <Th>Descripcion</Th>
+                    <Th>Descuento</Th>
+                    <Th>Total</Th>
+                  </Tr>
+                </Thead>
 
-                        <div className="w-full">
-                            <Text>
-                                Cliente: {datosVenta.nombreCleinte}
-                            </Text>
+                <Tbody>
+                  {productosVendidos.map((e) => {
+                    const {
+                      codigoProducto,
+                      nombre,
+                      cantidadProducto,
+                      costoVentaItem,
+                      totalVentaItem,
+                      descuento,
+                    } = e;
 
-                            <Text>
-                                Telefono Cliente: {datosVenta.telefonoCliente}
-                            </Text>
+                    return (
+                      <Tr key={codigoProducto}>
+                        <Td>
+                          <Text>{codigoProducto}</Text>
+                        </Td>
 
-                            <Text>
-                                Despachado Por: {datosVenta.despachadoPor}
-                            </Text>
-                        </div>
-                    </div>
+                        <Td>
+                          <Text>
+                            {`${nombre} CANT. ${cantidadProducto} PRECIO: ${formatoDinero(
+                              costoVentaItem
+                            )}`}
+                          </Text>
+                        </Td>
 
-                    <div className="w-full bg-white rounded-md max-h-[150px] overflow-y-scroll">
-                        <TableContainer width={''}>
-                            <Table variant='simple'>
-                                <Thead>
-                                    <Tr>
-                                        <Th>Codigo</Th>
-                                        <Th>Descripcion</Th>
-                                        <Th>Total</Th>
-                                    </Tr>
-                                </Thead>
+                        <Td>
+                          <Text>
+                            {descuento
+                              ? formatoDinero(descuento)
+                              : formatoDinero(0)}
+                          </Text>
+                        </Td>
 
-                                <Tbody >
+                        <Td>
+                          <Text>{formatoDinero(totalVentaItem)}</Text>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </div>
 
-                                    {
-                                        productosVendidos.map(e => {
+          <div className=" w-full flex flex-wrap gap-[8px] mt-[5px]">
+            <div>
+              <Heading fontSize={"larger"}>Total:</Heading>
+              <Text fontSize={"large"}>
+                {formatoDinero(datosVenta.costoTotal)}
+              </Text>
+            </div>
 
-                                            const { codigoProducto, nombre, cantidadProducto, costoVentaItem, totalVentaItem } = e
+            <div>
+              <Heading fontSize={"larger"}>Cambio:</Heading>
+              <Text fontSize={"large"}>
+                {formatoDinero(datosVenta.devueltaCliente)}
+              </Text>
+            </div>
 
-                                            return (
-                                                <Tr key={codigoProducto}>
-                                                    <Td >
-                                                        <Text >
-                                                            {codigoProducto}
-                                                        </Text>
-                                                    </Td>
+            <div>
+              <Heading fontSize={"larger"}>Pago Cliente:</Heading>
+              <Text fontSize={"large"}>
+                {formatoDinero(datosVenta.pagoCliente)}
+              </Text>
+            </div>
+          </div>
+        </ModalBody>
 
-                                                    <Td>
-                                                        <Text >
-                                                            {`${nombre} CANT. ${cantidadProducto} PRECIO: ${formatoDinero(costoVentaItem)}`}
-                                                        </Text>
-                                                    </Td>
-
-                                                    <Td >
-                                                        <Text >
-                                                            {formatoDinero(totalVentaItem)}
-                                                        </Text>
-                                                    </Td>
-                                                </Tr>
-                                            )
-                                        })
-                                    }
-                                </Tbody>
-                            </Table>
-                        </TableContainer>
-                    </div>
-
-                    <div className=" w-full flex flex-wrap gap-[8px] mt-[5px]">
-
-                        <div>
-                            <Heading fontSize={'larger'}>Total:</Heading>
-                            <Text fontSize={'large'}>{formatoDinero(datosVenta.costoTotal)}</Text>
-                        </div>
-
-                        <div>
-                            <Heading fontSize={'larger'} >Cambio:</Heading>
-                            <Text fontSize={'large'}>{formatoDinero(datosVenta.devueltaCliente)}</Text>
-                        </div>
-
-                        <div>
-                            <Heading fontSize={'larger'} >Pago Cliente:</Heading>
-                            <Text fontSize={'large'}>{formatoDinero(datosVenta.pagoCliente)}</Text>
-                        </div>
-                    </div>
-                </ModalBody>
-
-                <ModalFooter display={'flex'} flexDirection={'column'} gap={2}>
-                    <PDFDownloadLink document={<PlantillaFacturaVenta datos={datosFacturaVenta} />} fileName={`facturaContado - ${codigoFactura}.pdf`}>
-                        <Button colorScheme='blue'>
-                            Imprimir Factura
-                        </Button>
-                    </PDFDownloadLink>
-                </ModalFooter>
-
-            </ModalContent>
-        </Modal>
-
-    )
-}
+        <ModalFooter display={"flex"} flexDirection={"column"} gap={2}>
+          <PDFDownloadLink
+            document={<PlantillaFacturaVenta datos={datosFacturaVenta} />}
+            fileName={`facturaContado - ${codigoFactura}.pdf`}
+          >
+            <Button colorScheme="blue">Imprimir Factura</Button>
+          </PDFDownloadLink>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};

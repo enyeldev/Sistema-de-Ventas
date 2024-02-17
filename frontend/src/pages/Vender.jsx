@@ -56,7 +56,6 @@ export const Vender = () => {
   const [atendidoPor, setAtendidoPor] = useState("");
 
   // Calcular el total de venta, sin productos financiados
-
   // const productosNoFinanciados = arrProductosVent.filter(e => e.financiado == false)
   const totalVenta = arrProductosVent.reduce((total, e) => {
     return total + e.total;
@@ -166,6 +165,8 @@ export const Vender = () => {
 
   const cobrarVenta = async (e) => {
     e.preventDefault();
+
+    console.log(arrProductosVent);
 
     setErrorCobrarInput(false);
 

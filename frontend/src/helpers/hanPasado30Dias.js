@@ -7,9 +7,6 @@ export function hanPasado30Dias(fechaInicial, fechaActual) {
   const fechaInicialObj = moment(fechaInicialFormateada);
   const fechaActualObj = moment(fechaActualFormateada);
 
-  console.log(fechaInicialObj);
-  console.log(fechaActualObj);
-
   const diasDiferencia = fechaActualObj.diff(fechaInicialObj, "days");
 
   const estaVencido = diasDiferencia >= 30;

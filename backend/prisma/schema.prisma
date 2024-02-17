@@ -49,6 +49,8 @@ model VentasItem {
 
   costoActualProducto Decimal
 
+  descuento Decimal?
+
   producto Productos @relation(fields: [codigoProducto], references: [codigoProducto])
 
   venta Ventas @relation(fields: [codigoVenta], references: [codigoVenta])

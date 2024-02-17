@@ -1,43 +1,45 @@
 import { prisma } from "../config/db.js";
-import { existeCodigoVenta } from "../helpers/verificarCodigos.js"
-
-
-
+import { existeCodigoVenta } from "../helpers/verificarCodigos.js";
 
 export const generarVenta = async (req, res) => {
+  try {
+    const codigoVenta = await existeCodigoVenta();
 
-    try {
+    const {
+      costoTotal,
+      pagoCliente,
+      devueltaCliente,
+      fecha,
+      usuarioCajeroId,
+      nombreCliente,
+      telefonoCliente,
+      atendidoPor,
+    } = req.body;
 
-        const codigoVenta = await existeCodigoVenta();
+    const nuevaVenta = {
+      codigoVenta,
+      costoTotal,
+      pagoCliente,
+      devueltaCliente,
+      fecha,
+      usuarioCajeroId,
+      nombreCliente: nombreCliente || "",
+      telefonoCliente: telefonoCliente || "",
+      atendidoPor: atendidoPor || "",
+    };
 
-        const { costoTotal, pagoCliente, devueltaCliente, fecha, usuarioCajeroId, nombreCliente, telefonoCliente, atendidoPor } = req.body;
-
-        const nuevaVenta = {
-            codigoVenta,
-            costoTotal,
-            pagoCliente,
-            devueltaCliente,
-            fecha,
-            usuarioCajeroId,
-            nombreCliente: nombreCliente || '',
-            telefonoCliente: telefonoCliente || '',
-            atendidoPor: atendidoPor || ''
-        }
-
-
-        const guardarNuevaVenta = await prisma.ventas.create({
-            data: nuevaVenta
-        })
-        res.json({ msg: 'Venta agregada correctamente', codigoVenta })
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({ msg: error })
-    }
-}
+    const guardarNuevaVenta = await prisma.ventas.create({
+      data: nuevaVenta,
+    });
+    res.json({ msg: "Venta agregada correctamente", codigoVenta });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
 
 export const generarVentaItem = async (req, res) => {
-
-    /*
+  /*
     
     {
         "codigoProducto": "9400045050",
@@ -48,31 +50,36 @@ export const generarVentaItem = async (req, res) => {
     
     */
 
-    const productosVendidos = req.body;
+  const productosVendidos = req.body;
 
+  try {
+    productosVendidos.forEach(async (e) => {
+      const {
+        codigoProducto,
+        cantidad,
+        codigoVenta,
+        total,
+        precioVentaUnd,
+        nombre,
+        descuento,
+      } = e;
 
-    try {
-        productosVendidos.forEach(async (e) => {
-            const { codigoProducto, cantidad, codigoVenta, total, monto, nombre } = e
+      const nuevoItemVenta = await prisma.ventasItem.create({
+        data: {
+          codigoProducto,
+          codigoVenta,
+          cantidadProducto: parseInt(cantidad),
+          costoVentaItem: total,
+          costoActualProducto: parseFloat(precioVentaUnd),
+          nombreProducto: nombre,
+          descuento: parseFloat(descuento),
+        },
+      });
+    });
 
-            const nuevoItemVenta = await prisma.ventasItem.create({
-                data: {
-                    codigoProducto,
-                    codigoVenta,
-                    cantidadProducto: parseInt(cantidad),
-                    costoVentaItem: total,
-                    costoActualProducto: parseFloat(total / cantidad),
-                    nombreProducto: nombre
-                }
-            })
-        });
-
-        res.json({ msg: 'Venta Item agregado correctamente' })
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({ msg: error })
-    }
-
-
-
-}
+    res.json({ msg: "Venta Item agregado correctamente" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
