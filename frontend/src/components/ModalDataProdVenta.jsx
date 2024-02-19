@@ -169,6 +169,7 @@ export const ModalDataProdVenta = ({
       detallesProductoVenta.total =
         parseFloat(total) - parseFloat(descuento) * parseInt(cantidad);
     }
+    
     setArrProductosVent([...arrProductosVent, detallesProductoVenta]);
     cerrarModal();
   };

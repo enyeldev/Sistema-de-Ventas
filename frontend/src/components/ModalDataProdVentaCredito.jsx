@@ -1,230 +1,247 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
-import { formatoDinero } from '../helpers/formatoDinero'
-
-
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalCloseButton,
-    ModalFooter,
-    Heading,
-    Text,
-    Input,
-    Button
-
-} from '@chakra-ui/react'
+import { useState, useEffect } from "react";
+import { formatoDinero } from "../helpers/formatoDinero";
 
 import {
-    MinusIcon,
-    AddIcon
-} from '@chakra-ui/icons'
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  ModalFooter,
+  Heading,
+  Text,
+  Input,
+  Button,
+} from "@chakra-ui/react";
 
-import { Alerta } from '../components/Alerta'
+import { MinusIcon, AddIcon } from "@chakra-ui/icons";
 
+import { Alerta } from "../components/Alerta";
 
-export const ModalDataProdVentaCredito = ({ modal, setModal, arrProductosVent, setArrProductosVent }) => {
+export const ModalDataProdVentaCredito = ({
+  modal,
+  setModal,
+  arrProductosVent,
+  setArrProductosVent,
+}) => {
+  if (modal.datos == null) {
+    return;
+  }
 
+  const {
+    nombre,
+    precioVentaUnd,
+    precioCompraUnd,
+    cantidadStock,
+    codigoProducto,
+  } = modal.datos;
 
-    if (modal.datos == null) {
-        return
+  const [cantidad, setCantidad] = useState(1);
+  const [total, setTotal] = useState(precioVentaUnd);
+  const [alerta, setAlerta] = useState({});
+  const [descuento, setDescuento] = useState("");
+
+  const regexDescuento = /^[0-9]+$/;
+
+  const descuentoCalculado =
+    parseFloat(total) / parseInt(cantidad) - parseFloat(descuento);
+
+  useEffect(() => {
+    setTotal(parseFloat(precioVentaUnd));
+  }, [precioVentaUnd]);
+
+  const cambiarCantidad = ({ target }) => {
+    setAlerta({});
+
+    if (parseInt(target.value) < 0) {
+      return;
     }
 
-    const { nombre, precioVentaUnd, cantidadStock, codigoProducto } = modal.datos
+    const cantidadActual = target.value;
 
-
-    const [cantidad, setCantidad] = useState(1)
-    const [total, setTotal] = useState(precioVentaUnd)
-    const [alerta, setAlerta] = useState({})
-
-    useEffect(() => {
-        setTotal(parseFloat(precioVentaUnd))
-    }, [precioVentaUnd])
-
-
-
-    const cambiarCantidad = ({ target }) => {
-
-        setAlerta({})
-
-        if (parseInt(target.value) < 0) {
-            return
-        }
-
-
-        const cantidadActual = target.value
-
-        if (cantidadActual > parseInt(cantidadStock)) {
-            setAlerta({ titulo: 'Error', msg: 'La cantidad es mayor a la que hay en el inventario', status: 'error' })
-            return
-        }
-
-        setCantidad(target.value)
-        setTotal(cantidadActual * precioVentaUnd)
+    if (cantidadActual > parseInt(cantidadStock)) {
+      setAlerta({
+        titulo: "Error",
+        msg: "La cantidad es mayor a la que hay en el inventario",
+        status: "error",
+      });
+      return;
     }
 
-    const restarCantidad = () => {
+    setCantidad(target.value);
+    setTotal(cantidadActual * precioVentaUnd);
+  };
 
-        setAlerta({})
-        if (cantidad == 1) {
-            return
-        }
-
-        const nuevaCantidad = cantidad - 1
-
-        if (nuevaCantidad > parseInt(cantidadStock)) {
-            setAlerta({ titulo: 'Error', msg: 'La cantidad es mayor a la que hay en el inventario', status: 'error' })
-            return
-        }
-
-        setCantidad(nuevaCantidad);
-        setTotal(nuevaCantidad * precioVentaUnd)
+  const restarCantidad = () => {
+    setAlerta({});
+    if (cantidad == 1) {
+      return;
     }
 
-    const sumarCantidad = () => {
-        setAlerta({})
+    const nuevaCantidad = cantidad - 1;
 
-        const nuevaCantidad = cantidad + 1
-
-
-        if (nuevaCantidad > parseInt(cantidadStock)) {
-            setAlerta({ titulo: 'Error', msg: 'La cantidad es mayor a la que hay en el inventario', status: 'error' })
-            return
-        }
-
-        setCantidad(nuevaCantidad)
-        setTotal(nuevaCantidad * precioVentaUnd)
+    if (nuevaCantidad > parseInt(cantidadStock)) {
+      setAlerta({
+        titulo: "Error",
+        msg: "La cantidad es mayor a la que hay en el inventario",
+        status: "error",
+      });
+      return;
     }
 
-    const agregarProducto = () => {
+    setCantidad(nuevaCantidad);
+    setTotal(nuevaCantidad * precioVentaUnd);
+  };
 
-        console.log(modal.datos);
+  const sumarCantidad = () => {
+    setAlerta({});
 
-        const detallesProductoVenta = {
-            nombre,
-            codigoProducto,
-            cantidad,
-            total,
-            precioVentaUnd,
-            financiado: true
-        }
+    const nuevaCantidad = cantidad + 1;
 
-
-        const existeProducto = arrProductosVent.find(e => e.codigoProducto == detallesProductoVenta.codigoProducto)
-
-
-        if (cantidad <= 0 || cantidad > parseInt(cantidadStock)) {
-            setAlerta({ titulo: 'Error', msg: 'La cantidad no es valida', status: 'error' })
-            return
-        }
-
-
-        if (existeProducto) {
-            setAlerta({ titulo: 'Error', msg: 'El producto ya fue seleccionado', status: 'error' })
-            return
-        }
-
-
-
-        setArrProductosVent([...arrProductosVent, detallesProductoVenta])
-        cerrarModal()
+    if (nuevaCantidad > parseInt(cantidadStock)) {
+      setAlerta({
+        titulo: "Error",
+        msg: "La cantidad es mayor a la que hay en el inventario",
+        status: "error",
+      });
+      return;
     }
 
-    const cerrarModal = () => {
-        setCantidad(1)
-        setTotal(parseFloat(precioVentaUnd))
-        setAlerta({})
-        setModal({ show: false, datos: modal.datos })
+    setCantidad(nuevaCantidad);
+    setTotal(nuevaCantidad * precioVentaUnd);
+  };
+
+  const agregarProducto = () => {
+    console.log(modal.datos);
+
+    const detallesProductoVenta = {
+      nombre,
+      codigoProducto,
+      cantidad,
+      total,
+      descuento,
+      precioVentaUnd,
+      financiado: true,
+    };
+
+    const existeProducto = arrProductosVent.find(
+      (e) => e.codigoProducto == detallesProductoVenta.codigoProducto
+    );
+
+    if (cantidad <= 0 || cantidad > parseInt(cantidadStock)) {
+      setAlerta({
+        titulo: "Error",
+        msg: "La cantidad no es valida",
+        status: "error",
+      });
+      return;
     }
 
+    if (existeProducto) {
+      setAlerta({
+        titulo: "Error",
+        msg: "El producto ya fue seleccionado",
+        status: "error",
+      });
+      return;
+    }
 
-    const { msg } = alerta
+    if (descuento.trim().length > 0) {
+      const regexDescuentoValidation = regexDescuento.test(descuento);
 
-    return (
+      if (
+        !regexDescuentoValidation ||
+        descuentoCalculado < parseFloat(precioCompraUnd)
+      ) {
+        setAlerta({
+          titulo: "Error",
+          msg: "El valor del descuento es invalido",
+          status: "error",
+        });
+        return;
+      }
 
-        <Modal isOpen={modal.show} onClose={cerrarModal}>
-            <ModalOverlay />
-            <ModalContent
-                maxW={600}
-            >
-                <ModalHeader>Detalles del producto</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody
-                    display={'flex'}
-                    justifyContent={'space-around'}
-                    alignItems={'center'}
+      detallesProductoVenta.total =
+        parseFloat(total) - parseFloat(descuento) * parseInt(cantidad);
+    }
 
-                >
-                    <div className="">
-                        <Heading
-                            fontSize={'large'}
-                        >
-                            Descripcion del producto
-                        </Heading>
-                        <Text>
-                            {nombre}
-                        </Text>
-                    </div>
+    setArrProductosVent([...arrProductosVent, detallesProductoVenta]);
+    cerrarModal();
+  };
 
-                    <div className="flex flex-col items-center ">
-                        <Heading
-                            fontSize={'large'}
-                        >
-                            Cantidad
-                        </Heading>
-                        <div className=" flex items-center gap-3">
-                            <MinusIcon
-                                cursor={'pointer'}
-                                onClick={restarCantidad}
-                            />
-                            <Input
-                                width='80px'
-                                size='sm'
-                                textAlign={'center'}
-                                value={cantidad}
-                                onChange={cambiarCantidad}
-                            />
-                            <AddIcon
-                                cursor={'pointer'}
-                                onClick={sumarCantidad}
-                            />
-                        </div>
+  const cerrarModal = () => {
+    setCantidad(1);
+    setTotal(parseFloat(precioVentaUnd));
+    setAlerta({});
+    setModal({ show: false, datos: modal.datos });
+  };
 
-                    </div>
+  const leerDescuento = ({ currentTarget }) => {
+    const valor = currentTarget.value;
+    setDescuento(valor);
+  };
 
-                    <div className="">
-                        <Heading
-                            fontSize={'large'}
-                        >
-                            Total
-                        </Heading>
+  const { msg } = alerta;
 
-                        <Text>
-                            {formatoDinero(total)}
-                        </Text>
-                    </div>
-                </ModalBody>
+  return (
+    <Modal isOpen={modal.show} onClose={cerrarModal}>
+      <ModalOverlay />
+      <ModalContent maxW={600}>
+        <ModalHeader>Detalles del producto</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody
+          display={"flex"}
+          justifyContent={"space-around"}
+          alignItems={"center"}
+        >
+          <div className="">
+            <Heading fontSize={"large"}>Descripcion del producto</Heading>
+            <Text>{nombre}</Text>
+          </div>
 
-                <ModalFooter display={'flex'} flexDirection={'column'} gap={2}>
-                    <div className={`flex justify-between w-full flex-row-reverse`}>
-                        <Button
-                            colorScheme='green'
-                            onClick={agregarProducto}
-                        >
-                            Agregar producto
-                        </Button>
-                    </div>
+          <div className="flex flex-col items-center ">
+            <Heading fontSize={"large"}>Cantidad</Heading>
+            <div className=" flex items-center gap-3">
+              <MinusIcon cursor={"pointer"} onClick={restarCantidad} />
+              <Input
+                width="80px"
+                size="sm"
+                textAlign={"center"}
+                value={cantidad}
+                onChange={cambiarCantidad}
+              />
+              <AddIcon cursor={"pointer"} onClick={sumarCantidad} />
+            </div>
+          </div>
 
-                    {msg && <Alerta alerta={alerta} />}
-                </ModalFooter>
+          <div className="">
+            <Heading fontSize={"large"}>Total</Heading>
 
-            </ModalContent>
-        </Modal >
-    )
-}
+            <Text>{formatoDinero(total)}</Text>
+          </div>
+        </ModalBody>
 
+        <ModalFooter display={"flex"} flexDirection={"column"} gap={2}>
+          <div className="w-full flex justify-between items-end">
+            <div className="">
+              <Heading fontSize={"larger"}>Descuento</Heading>
+              <Input onChange={leerDescuento} />
+            </div>
+
+            <div className="">
+              <Button colorScheme="green" onClick={agregarProducto}>
+                Agregar producto
+              </Button>
+            </div>
+          </div>
+
+          {msg && <Alerta alerta={alerta} />}
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};

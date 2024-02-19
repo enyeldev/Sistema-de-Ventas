@@ -168,6 +168,7 @@ export const imprimirFacturaDeuda = async (req, res) => {
       cantidadProducto: producto.cantidadProducto,
       costoProducto: producto.costoProducto,
       monto: producto.monto,
+      descuento: producto.descuento,
     }));
 
     const facturaObj = {

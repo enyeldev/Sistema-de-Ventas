@@ -122,6 +122,8 @@ model ProductosDeudas {
 
   monto Decimal
 
+  descuento Decimal?
+
   dedua Deudas @relation(fields: [codigoDeuda], references: [codigoDeuda])
 
   producto Productos @relation(fields: [codigoProducto], references: [codigoProducto])
