@@ -122,7 +122,7 @@ export const eliminarProductos = async (req, res) => {
     try {
         // const productoEliminado = await prisma.ventasItem.delete()
 
-        const productosEliminados = await prisma.$queryRaw`DELETE FROM historialpagosdeudas`;
+        const productosEliminados = await prisma.$queryRaw`DELETE FROM deudas`;
 
         res.json({ msg: 'Producto eliminado correctamente' })
     } catch (error) {

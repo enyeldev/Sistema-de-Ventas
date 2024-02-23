@@ -197,24 +197,57 @@ export const imprimirFacturaDeuda = async (req, res) => {
 
 export const mostrarTodasFacturasDeudas = async (req, res) => {
   try {
-    const facturasDeudas = await prisma.facturasDeudas.findMany();
+    const facturasDeudas =
+      await prisma.$queryRaw`SELECT codigoFacturaDeuda , * FROM FACTURASDEUDAS INNER JOIN DEUDAS  ON FACTURASDEUDAS.codigoDeuda = DEUDAS.codigoDeuda`;
 
-    const respuesta = await prisma.$transaction(
-      facturasDeudas.map((e) => {
-        return prisma.deudas.findMany({
-          where: {
-            codigoDeuda: e.codigoDeuda,
-            estado: true,
-          },
-        });
-      })
-    );
+    const arrArreglado = facturasDeudas.map((e) => {
+      e.montoDeuda = parseFloat(e.montoDeuda);
+      e.montoActualDeuda = parseFloat(e.montoActualDeuda);
+      return e;
+    });
 
-    console.log(respuesta);
-
-    res.json({ msg: "Todos las facturas", respuesta });
+    res.json({ msg: "Todos las facturas", facturasDeudas: arrArreglado });
   } catch (error) {
     console.log(error);
     res.status(400).json({ msg: error });
+  }
+};
+
+export const buscarFacturaDeudaPorCodigo = async (req, res) => {
+  const { codigoFactura } = req.params;
+
+  try {
+    const facturaExiste = await prisma.facturasDeudas.findFirst({
+      where: {
+        codigoFacturaDeuda: codigoFactura,
+      },
+    });
+
+    if (!facturaExiste) {
+      console.log("No existe la factura");
+      res.status(404).json({ msg: "Factura no existe" });
+      return;
+    }
+
+    const { codigoDeuda, codigoFacturaDeuda } = facturaExiste;
+
+    const deudaExiste = await prisma.deudas.findFirst({
+      where: {
+        codigoDeuda,
+      },
+    });
+
+    if (!deudaExiste) {
+      console.log("No existe la deuda");
+      res.status(404).json({ msg: "Deuda no existe" });
+      return;
+    }
+
+    const datosFactura = { codigoFacturaDeuda, ...deudaExiste };
+    console.log(datosFactura);
+
+    res.json({ msg: "Factura encontrada", datosFactura });
+  } catch (error) {
+    console.log(error);
   }
 };
