@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { clienteAxios } from "../config/axios";
 // import { formatoDinero } from '../helpers/formatoDinero'
+import { imprimirFacturaDeuda } from "../helpers/facturasFunciones";
 
 import {
   Table,
@@ -21,7 +22,7 @@ import {
 import { Alerta } from "../components/Alerta";
 import { TailSpin } from "react-loader-spinner";
 import { ItemReimprimirFactura } from "../components/ItemReimprimriFacturas";
-import { ModalCobrarDeuda } from "../components/ModalCobrarDeuda";
+// import { ModalCobrarDeuda } from "../components/ModalCobrarDeuda";
 import { ModalFacturaDeuda } from "../components/ModalFacturaDeuda";
 
 export const ReimprimirFacturasCrdito = () => {
@@ -31,6 +32,8 @@ export const ReimprimirFacturasCrdito = () => {
   const [cargandoBusqueda, setCargandoBusqueda] = useState(false);
   const [errorInput, setErrorInput] = useState(false);
   const [parametroBusqueda, setParametroBusqueda] = useState("");
+  const [showModalFacturaDeuda, setShowModalFacturaDeuda] = useState(false);
+  const [datosFacturaDeuda, setDatosFacturaDeuda] = useState({});
   const regexCodigo = /^[0-9]+$/;
   const regexNombre = /.*[a-zA-Z].*/;
 
@@ -92,10 +95,10 @@ export const ReimprimirFacturasCrdito = () => {
     setAlerta({});
 
     try {
-      // const url = `/producto/buscarProductoPorNombre/${parametroBusqueda}`;
-      // const respuesta = await clienteAxios.get(url);
-      // console.log(respuesta.data);
-      // setArrProductos([...respuesta.data.productos]);
+      const url = `/facturas/buscarFacturasDeudasPorNombreCliente/${parametroBusqueda}`;
+      const respuesta = await clienteAxios.get(url);
+      console.log(respuesta.data.datosFactura);
+      setArrFacturas([respuesta.data.datosFactura]);
     } catch (error) {
       console.log(error);
       setAlerta({
@@ -107,17 +110,32 @@ export const ReimprimirFacturasCrdito = () => {
     setCargandoBusqueda(false);
   };
 
+  const mostrarModalFacturaDeuda = async ({ currentTarget }) => {
+    const idTarget = currentTarget.parentElement.parentElement.dataset.id;
+
+    const datos = arrFacturas.find((e) => e.codigoFacturaDeuda == idTarget);
+
+    console.log(datos.codigoFacturaDeuda);
+
+    const { codigoFacturaDeuda } = datos;
+
+    const datosFacturaDeuda = await imprimirFacturaDeuda(codigoFacturaDeuda);
+    setDatosFacturaDeuda(datosFacturaDeuda);
+    setShowModalFacturaDeuda(true);
+  };
+
   const { msg } = alerta;
 
   return (
-    <div className="w-[85%] max-h-screen bg-gray-100 rounded-md p-2">
+    <div className="w-[85%] min-h-screen bg-gray-100 rounded-md p-2">
       <div className="w-full h-full flex flex-col gap-2">
-        {/* {modalDeuda.show && <ModalCobrarDeuda modal={modalDeuda} setModalDeuda={setModalDeuda} setShowModalFacturaDeuda={setShowModalFacturaDeuda} setDatosFacturaDeuda={setDatosFacturaDeuda} />}
-
-                {showModalFacturaDeuda && <ModalFacturaDeuda
-                    showModalFacturaDeuda={showModalFacturaDeuda}
-                    setShowModalFacturaDeuda={setShowModalFacturaDeuda}
-                    datosFacturaDeuda={datosFacturaDeuda} />} */}
+        {showModalFacturaDeuda && (
+          <ModalFacturaDeuda
+            showModalFacturaDeuda={showModalFacturaDeuda}
+            setShowModalFacturaDeuda={setShowModalFacturaDeuda}
+            datosFacturaDeuda={datosFacturaDeuda}
+          />
+        )}
 
         <div className="w-full bg-white rounded-md shadow-md p-2">
           <div className="w-full max-h-[20%]">
@@ -155,7 +173,6 @@ export const ReimprimirFacturasCrdito = () => {
                   type="button"
                   onClick={() => {
                     setParametroBusqueda("");
-                    setArrFacturas([]);
                     setAlerta({});
                     setErrorInput(false);
                     setBuscarPorCodigo(!buscarPorCodigo);
@@ -190,7 +207,7 @@ export const ReimprimirFacturasCrdito = () => {
           </div>
         </div>
 
-        <div className="w-full bg-white rounded-md shadow-md p-2">
+        <div className="w-full min-h-[80%] bg-white rounded-md shadow-md p-2">
           <div className="h-full overflow-y-scroll">
             <TableContainer width={""}>
               <Table variant="simple">
@@ -239,6 +256,7 @@ export const ReimprimirFacturasCrdito = () => {
                             montoInicial={montoDeuda}
                             nombreCliente={nombreCliente}
                             telefonoCliente={telefonoCliente}
+                            mostrarModal={mostrarModalFacturaDeuda}
                           />
                         );
                       }

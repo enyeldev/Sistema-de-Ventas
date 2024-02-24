@@ -130,7 +130,7 @@ export const Header = () => {
                         </Text>
 
                     </Link>
-                    <Link className='text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150' to='/caja/imprimir-factura'>
+                    <Link className='text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150' to='/caja/imprimir-factura-deuda'>
                         <MdLocalPrintshop
                             size={25}
                         />
@@ -138,7 +138,7 @@ export const Header = () => {
                         <Text
                             fontSize={'medium'}
                         >
-                            Imprimir Factura
+                            Imprimir Factura Deuda
                         </Text>
 
                     </Link>

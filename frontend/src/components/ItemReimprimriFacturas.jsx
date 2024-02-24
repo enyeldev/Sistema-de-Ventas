@@ -13,6 +13,7 @@ export const ItemReimprimirFactura = ({
   montoActual,
   fechaInicial,
   fechaUtlimoPago,
+  mostrarModal
 }) => {
   //   const fechaActual = obtenerFechaYHoraActual();
   //   const fechaVencida = hanPasado30Dias(fecha, fechaActual);
@@ -27,7 +28,7 @@ export const ItemReimprimirFactura = ({
       <Td>{formatoDinero(parseFloat(montoActual))}</Td>
       <Td>{fechaInicial}</Td>
       <Td>{fechaUtlimoPago}</Td>
-      {/* <Td>
+      <Td>
         <AddIcon
           color={"blue"}
           cursor={"pointer"}
@@ -35,7 +36,7 @@ export const ItemReimprimirFactura = ({
           // display={agotado ? 'none' : 'block'}
           onClick={mostrarModal}
         />
-      </Td> */}
+      </Td>
     </Tr>
   );
 };

@@ -242,7 +242,7 @@ export const Vender = () => {
   const { msg } = alerta;
 
   return (
-    <div className="w-[85%] max-h-screen  bg-gray-100 rounded-md">
+    <div className="w-[85%] min-h-screen  bg-gray-100 rounded-md">
       <div className="flex relative p-2 gap-2 h-full">
         {showModalFacturaVenta && (
           <ModalFacturaVenta

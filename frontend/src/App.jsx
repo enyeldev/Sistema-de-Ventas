@@ -4,7 +4,7 @@ import { LoginCajero } from "./pages/LoginCajero";
 import { AuthProvaider } from "./context/AuthProvaider";
 import { FondoProvaider } from "./context/FondoCajaProvaider";
 import { RutaProtegida } from "./layout/RutaProtegida";
-import { OpcionesPrincipales } from "./pages/OpcionesPrincipales";
+import { Inicio } from "./pages/Inicio";
 import { Vender } from "./pages/Vender";
 import { CobrarDeudas } from "./pages/CobrarDeudas";
 import { Comprar } from "./pages/Comprar";
@@ -29,7 +29,7 @@ function App() {
             <Route path="/fondo-caja" element={<FondoCaja />} />
 
             <Route path="/caja" element={<RutaProtegida />}>
-              <Route index element={<OpcionesPrincipales />} />
+              <Route index element={<Inicio />} />
               <Route path="vender" element={<Vender />} />
               <Route path="venderCredito" element={<VenderCredito />} />
               <Route path="comprar" element={<Comprar />} />
@@ -37,7 +37,10 @@ function App() {
               <Route path="devoluciones" element={<Devoluciones />} />
               <Route path="registrar-ingreso" element={<Ingresos />} />
               <Route path="registrar-retiro" element={<Retiro />} />
-              <Route path="imprimir-factura" element={<ReimprimirFacturasCrdito />} />
+              <Route
+                path="imprimir-factura-deuda"
+                element={<ReimprimirFacturasCrdito />}
+              />
               <Route path="facturar-venta" element={<FacturarVenta />} />
             </Route>
           </Routes>

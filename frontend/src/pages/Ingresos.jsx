@@ -45,7 +45,7 @@ export const Ingresos = () => {
   const { msg } = alerta
 
   return (
-    <div className="w-[85%] max-h-screen bg-gray-100 rounded-md p-2 flex items-center">
+    <div className="w-[85%] min-h-screen bg-gray-100 rounded-md p-2 flex items-center">
       <div className="bg-white mx-auto p-2 rounded-md shadow-lg flex flex-col gap-3">
         <div className="">
           <Heading

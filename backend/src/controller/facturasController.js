@@ -249,5 +249,40 @@ export const buscarFacturaDeudaPorCodigo = async (req, res) => {
     res.json({ msg: "Factura encontrada", datosFactura });
   } catch (error) {
     console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
+
+export const buscarFacturasDeudasPorNombreCliente = async (req, res) => {
+  const { nombreCliente } = req.params;
+
+  try {
+    const existeDeuda = await prisma.deudas.findFirst({
+      where: {
+        nombreCliente: {
+          contains: nombreCliente,
+        },
+      },
+    });
+
+    if (!existeDeuda) {
+      console.log("No existen facturas a este nombre");
+      res.status(404).json({ msg: "No existen facturas a este nombre" });
+    }
+
+    const existeFactura = await prisma.facturasDeudas.findFirst({
+      where: {
+        codigoDeuda: existeDeuda.codigoDeuda,
+      },
+    });
+
+    const { codigoFacturaDeuda } = existeFactura;
+
+    const datosFactura = { codigoFacturaDeuda, ...existeDeuda };
+
+    res.json({ msg: "Factura encontrada", datosFactura });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
   }
 };

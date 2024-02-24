@@ -109,7 +109,7 @@ export const Comprar = () => {
     return (
 
         <>
-            <div className="w-[85%] max-h-screen bg-gray-100 rounded-md p-2">
+            <div className="w-[85%] min-h-screen bg-gray-100 rounded-md p-2">
 
                 <ModalCodigoDeBarras modal={modal} setModal={setModal} />
 
