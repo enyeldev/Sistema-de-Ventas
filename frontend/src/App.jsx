@@ -9,12 +9,13 @@ import { Vender } from "./pages/Vender";
 import { CobrarDeudas } from "./pages/CobrarDeudas";
 import { Comprar } from "./pages/Comprar";
 import { Devoluciones } from "./pages/Devoluciones";
-import { ReimprimirFacturasCrdito } from "./pages/ReimprimirFacturasCredito";
+import { ReimprimirFacturasCredito } from "./pages/ReimprimirFacturasCredito";
 import { Ingresos } from "./pages/Ingresos";
 import { Retiro } from "./pages/Retiro";
 import { VenderCredito } from "./pages/VenderCredito";
 import { FondoCaja } from "./pages/FondoCaja";
 import { FacturarVenta } from "./pages/FacturarVenta";
+import { ReimprimirFacturasContado } from "./pages/ReimprimirFacturasContado";
 
 function App() {
   return (
@@ -38,8 +39,12 @@ function App() {
               <Route path="registrar-ingreso" element={<Ingresos />} />
               <Route path="registrar-retiro" element={<Retiro />} />
               <Route
-                path="imprimir-factura-deuda"
-                element={<ReimprimirFacturasCrdito />}
+                path="reimprimir-factura-credito"
+                element={<ReimprimirFacturasCredito />}
+              />
+              <Route
+                path="reimprimir-factura-contado"
+                element={<ReimprimirFacturasContado />}
               />
               <Route path="facturar-venta" element={<FacturarVenta />} />
             </Route>

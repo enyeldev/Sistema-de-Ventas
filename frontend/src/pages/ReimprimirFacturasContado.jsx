@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { clienteAxios } from "../config/axios";
 // import { formatoDinero } from '../helpers/formatoDinero'
-import { imprimirFacturaDeuda } from "../helpers/facturasFunciones";
+import { imprimirFacturaVenta } from "../helpers/facturasFunciones";
 
 import {
   Table,
@@ -21,30 +21,29 @@ import {
 // import { AddIcon } from '@chakra-ui/icons'
 import { Alerta } from "../components/Alerta";
 import { TailSpin } from "react-loader-spinner";
-import { ItemReimprimirFacturaCredito } from "../components/ItemReimprimriFacturasCredito";
+import { ItemReimprimirFacturaContado } from "../components/ItemReimprimirFactuasContado";
 // import { ModalCobrarDeuda } from "../components/ModalCobrarDeuda";
-import { ModalFacturaDeuda } from "../components/ModalFacturaDeuda";
+import { ModalFacturaVenta } from "../components/ModalFacturaVenta";
 
-export const ReimprimirFacturasCredito = () => {
+export const ReimprimirFacturasContado = () => {
   const [arrFacturas, setArrFacturas] = useState([]);
   const [buscarPorCodigo, setBuscarPorCodigo] = useState(true);
   const [alerta, setAlerta] = useState({});
   const [cargandoBusqueda, setCargandoBusqueda] = useState(false);
   const [errorInput, setErrorInput] = useState(false);
   const [parametroBusqueda, setParametroBusqueda] = useState("");
-  const [showModalFacturaDeuda, setShowModalFacturaDeuda] = useState(false);
-  const [datosFacturaDeuda, setDatosFacturaDeuda] = useState({});
+  const [datosFacturaVenta, setDatosFacturaVenta] = useState({});
+  const [showModalFacturaVenta, setShowModalFacturaVenta] = useState(false);
   const regexCodigo = /^[0-9]+$/;
   const regexNombre = /.*[a-zA-Z].*/;
 
   useEffect(() => {
     const cargarFacturas = async () => {
       const respuesta = await clienteAxios.get(
-        "/facturas/mostrarTodasFacturasDeudas"
+        "/facturas/mostrarTodasFacturasContado"
       );
 
-      console.log(respuesta.data.facturasDeudas);
-      setArrFacturas(respuesta.data.facturasDeudas.reverse());
+      setArrFacturas(respuesta.data.facturasContado.reverse());
     };
 
     cargarFacturas();
@@ -110,30 +109,30 @@ export const ReimprimirFacturasCredito = () => {
     setCargandoBusqueda(false);
   };
 
-  const mostrarModalFacturaDeuda = async ({ currentTarget }) => {
+  const mostrarModalFacturaContado = async ({ currentTarget }) => {
     const idTarget = currentTarget.parentElement.parentElement.dataset.id;
 
-    const datos = arrFacturas.find((e) => e.codigoFacturaDeuda == idTarget);
+    const datos = arrFacturas.find((e) => e.codigoFactura == idTarget);
 
-    console.log(datos.codigoFacturaDeuda);
+    // console.log(datos);
 
-    const { codigoFacturaDeuda } = datos;
+    const { codigoFactura } = datos;
 
-    const datosFacturaDeuda = await imprimirFacturaDeuda(codigoFacturaDeuda);
-    setDatosFacturaDeuda(datosFacturaDeuda);
-    setShowModalFacturaDeuda(true);
+    const datosFactura = await imprimirFacturaVenta(codigoFactura);
+    setDatosFacturaVenta(datosFactura);
+    setShowModalFacturaVenta(true);
   };
 
   const { msg } = alerta;
 
   return (
-    <div className="w-[85%] min-h-screen bg-gray-100 rounded-md p-2">
+    <div className="w-[85%] h-screen bg-gray-100 rounded-md p-2">
       <div className="w-full h-full flex flex-col gap-2">
-        {showModalFacturaDeuda && (
-          <ModalFacturaDeuda
-            showModalFacturaDeuda={showModalFacturaDeuda}
-            setShowModalFacturaDeuda={setShowModalFacturaDeuda}
-            datosFacturaDeuda={datosFacturaDeuda}
+        {showModalFacturaVenta && (
+          <ModalFacturaVenta
+            datosFacturaVenta={datosFacturaVenta}
+            showModalFacturaVenta={showModalFacturaVenta}
+            setShowModalFacturaVenta={setShowModalFacturaVenta}
           />
         )}
 
@@ -207,8 +206,8 @@ export const ReimprimirFacturasCredito = () => {
           </div>
         </div>
 
-        <div className="w-full min-h-[80%] bg-white rounded-md shadow-md p-2">
-          <div className="h-full overflow-y-scroll">
+        <div className="w-full h-[85%] bg-white rounded-md shadow-md p-2 overflow-y-scroll">
+          <div className="">
             <TableContainer width={""}>
               <Table variant="simple">
                 <Thead>
@@ -217,10 +216,10 @@ export const ReimprimirFacturasCredito = () => {
                     <Th>Nombre Cliente</Th>
                     <Th>Telefono Cliente</Th>
                     <Th>Despachado Por</Th>
-                    <Th>Monto Inicial</Th>
-                    <Th>Monto Actual</Th>
-                    <Th>Fecha Inicial</Th>
-                    <Th>Fecha Utlimo Pago</Th>
+                    <Th>Costo Total</Th>
+                    <Th>Pago Cliente</Th>
+                    <Th>Cambio</Th>
+                    <Th>Fecha</Th>
                   </Tr>
                 </Thead>
 
@@ -236,27 +235,27 @@ export const ReimprimirFacturasCredito = () => {
                   ) : (
                     arrFacturas.map(
                       ({
-                        codigoFacturaDeuda,
-                        nombreCliente,
-                        telefonoCliente,
-                        despachadoPor,
-                        montoDeuda,
-                        montoActualDeuda,
+                        atendidoPor,
+                        codigoFactura,
+                        costoTotal,
+                        devueltaCliente,
                         fecha,
-                        fechaUltimoPago,
+                        nombreCliente,
+                        pagoCliente,
+                        telefonoCliente,
                       }) => {
                         return (
-                          <ItemReimprimirFacturaCredito
-                            key={codigoFacturaDeuda}
-                            codigoFactura={codigoFacturaDeuda}
-                            despachadoPor={despachadoPor}
-                            fechaInicial={fecha}
-                            fechaUtlimoPago={fechaUltimoPago}
-                            montoActual={montoActualDeuda}
-                            montoInicial={montoDeuda}
+                          <ItemReimprimirFacturaContado
+                            key={codigoFactura}
+                            codigoFactura={codigoFactura}
+                            atendidoPor={atendidoPor}
+                            costoTotal={costoTotal}
+                            devueltaCliente={devueltaCliente}
+                            fecha={fecha}
                             nombreCliente={nombreCliente}
+                            pagoCliente={pagoCliente}
                             telefonoCliente={telefonoCliente}
-                            mostrarModal={mostrarModalFacturaDeuda}
+                            mostrarModal={mostrarModalFacturaContado}
                           />
                         );
                       }

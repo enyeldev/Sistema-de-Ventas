@@ -1,3 +1,4 @@
+import e from "express";
 import { prisma } from "../config/db.js";
 import {
   existeCodigoFactura,
@@ -207,6 +208,26 @@ export const mostrarTodasFacturasDeudas = async (req, res) => {
     });
 
     res.json({ msg: "Todos las facturas", facturasDeudas: arrArreglado });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
+
+export const mostrarTodasFacturasContado = async (req, res) => {
+  try {
+    const facturasContado =
+      await prisma.$queryRaw`SELECT codigoFactura , * FROM Facturas INNER JOIN Ventas on Facturas.codigoVenta = Ventas.codigoVenta`;
+
+    const arrArreglado = facturasContado.map((e) => {
+      e.costoTotal = parseFloat(e.costoTotal);
+      e.pagoCliente = parseFloat(e.pagoCliente);
+      e.devueltaCliente = parseFloat(e.devueltaCliente);
+
+      return e;
+    });
+
+    res.json({ msg: "Todos las facturas", facturasContado: arrArreglado });
   } catch (error) {
     console.log(error);
     res.status(400).json({ msg: error });

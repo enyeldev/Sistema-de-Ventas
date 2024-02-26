@@ -4,16 +4,16 @@ import { formatoDinero } from "../helpers/formatoDinero";
 import { AddIcon } from "@chakra-ui/icons";
 import { Tr, Td } from "@chakra-ui/react";
 
-export const ItemReimprimirFactura = ({
+export const ItemReimprimirFacturaContado = ({
+  atendidoPor,
   codigoFactura,
+  costoTotal,
+  devueltaCliente,
+  fecha,
   nombreCliente,
+  pagoCliente,
   telefonoCliente,
-  despachadoPor,
-  montoInicial,
-  montoActual,
-  fechaInicial,
-  fechaUtlimoPago,
-  mostrarModal
+  mostrarModal,
 }) => {
   //   const fechaActual = obtenerFechaYHoraActual();
   //   const fechaVencida = hanPasado30Dias(fecha, fechaActual);
@@ -21,13 +21,17 @@ export const ItemReimprimirFactura = ({
   return (
     <Tr data-id={codigoFactura}>
       <Td>{codigoFactura}</Td>
-      <Td>{nombreCliente}</Td>
-      <Td>{telefonoCliente}</Td>
-      <Td>{despachadoPor}</Td>
-      <Td>{formatoDinero(parseFloat(montoInicial))}</Td>
-      <Td>{formatoDinero(parseFloat(montoActual))}</Td>
-      <Td>{fechaInicial}</Td>
-      <Td>{fechaUtlimoPago}</Td>
+      <Td textAlign={"center"}>
+        {nombreCliente == "" ? "- - -" : nombreCliente}
+      </Td>
+      <Td textAlign={"center"}>
+        {telefonoCliente == "" ? "- - -" : telefonoCliente}
+      </Td>
+      <Td textAlign={"center"}>{atendidoPor == "" ? "- - -" : atendidoPor}</Td>
+      <Td>{formatoDinero(parseFloat(costoTotal))}</Td>
+      <Td>{formatoDinero(parseFloat(pagoCliente))}</Td>
+      <Td>{formatoDinero(parseFloat(devueltaCliente))}</Td>
+      <Td>{fecha}</Td>
       <Td>
         <AddIcon
           color={"blue"}
