@@ -5,14 +5,11 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Tr, Td } from "@chakra-ui/react";
 
 export const ItemReimprimirFacturaContado = ({
-  atendidoPor,
   codigoFactura,
   costoTotal,
   devueltaCliente,
   fecha,
-  nombreCliente,
   pagoCliente,
-  telefonoCliente,
   mostrarModal,
 }) => {
   //   const fechaActual = obtenerFechaYHoraActual();
@@ -21,13 +18,6 @@ export const ItemReimprimirFacturaContado = ({
   return (
     <Tr data-id={codigoFactura}>
       <Td>{codigoFactura}</Td>
-      <Td textAlign={"center"}>
-        {nombreCliente == "" ? "- - -" : nombreCliente}
-      </Td>
-      <Td textAlign={"center"}>
-        {telefonoCliente == "" ? "- - -" : telefonoCliente}
-      </Td>
-      <Td textAlign={"center"}>{atendidoPor == "" ? "- - -" : atendidoPor}</Td>
       <Td>{formatoDinero(parseFloat(costoTotal))}</Td>
       <Td>{formatoDinero(parseFloat(pagoCliente))}</Td>
       <Td>{formatoDinero(parseFloat(devueltaCliente))}</Td>

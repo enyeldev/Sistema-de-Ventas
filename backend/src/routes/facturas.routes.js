@@ -8,6 +8,7 @@ import {
   buscarFacturaDeudaPorCodigo,
   buscarFacturasDeudasPorNombreCliente,
   mostrarTodasFacturasContado,
+  buscarFacturaContadoPorCodigo,
 } from "../controller/facturasController.js";
 
 const router = express.Router();
@@ -39,12 +40,6 @@ router.get(
   mostrarTodasFacturasDeudas
 );
 
-// Endpoint para mostrar todas las facturas al contado
-router.get(
-  "/api/facturas/mostrarTodasFacturasContado",
-  mostrarTodasFacturasContado
-);
-
 // Endpoint para buscar factruas de deudas por codigo
 router.get(
   "/api/facturas/buscarFacturasDeudasPorCodigo/:codigoFactura",
@@ -55,6 +50,18 @@ router.get(
 router.get(
   "/api/facturas/buscarFacturasDeudasPorNombreCliente/:nombreCliente",
   buscarFacturasDeudasPorNombreCliente
+);
+
+// Endpoint para mostrar todas las facturas al contado
+router.get(
+  "/api/facturas/mostrarTodasFacturasContado",
+  mostrarTodasFacturasContado
+);
+
+// Endpoint para buscar facturas contado por codigo
+router.get(
+  "/api/facturas/buscarFacturasPorCodigo/:codigoFactura",
+  buscarFacturaContadoPorCodigo
 );
 
 export default router;

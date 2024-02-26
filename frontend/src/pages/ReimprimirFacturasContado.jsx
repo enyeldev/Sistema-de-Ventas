@@ -27,7 +27,6 @@ import { ModalFacturaVenta } from "../components/ModalFacturaVenta";
 
 export const ReimprimirFacturasContado = () => {
   const [arrFacturas, setArrFacturas] = useState([]);
-  const [buscarPorCodigo, setBuscarPorCodigo] = useState(true);
   const [alerta, setAlerta] = useState({});
   const [cargandoBusqueda, setCargandoBusqueda] = useState(false);
   const [errorInput, setErrorInput] = useState(false);
@@ -35,7 +34,6 @@ export const ReimprimirFacturasContado = () => {
   const [datosFacturaVenta, setDatosFacturaVenta] = useState({});
   const [showModalFacturaVenta, setShowModalFacturaVenta] = useState(false);
   const regexCodigo = /^[0-9]+$/;
-  const regexNombre = /.*[a-zA-Z].*/;
 
   useEffect(() => {
     const cargarFacturas = async () => {
@@ -65,7 +63,7 @@ export const ReimprimirFacturasContado = () => {
     setAlerta({});
 
     try {
-      const url = `/facturas/buscarFacturasDeudasPorCodigo/${parametroBusqueda}`;
+      const url = `/facturas/buscarFacturasPorCodigo/${parametroBusqueda}`;
       const respuesta = await clienteAxios.get(url);
       console.log(respuesta.data.datosFactura);
       setArrFacturas([respuesta.data.datosFactura]);
@@ -80,34 +78,34 @@ export const ReimprimirFacturasContado = () => {
     setCargandoBusqueda(false);
   };
 
-  //Buscar por nombre
-  const bucarFacturaPorNombre = async (e) => {
-    e.preventDefault();
+  // //Buscar por nombre
+  // const bucarFacturaPorNombre = async (e) => {
+  //   e.preventDefault();
 
-    const regexValidation = regexNombre.test(parametroBusqueda);
-    if (parametroBusqueda.length == 0 || !regexValidation) {
-      setErrorInput(true);
-      return;
-    }
+  //   const regexValidation = regexNombre.test(parametroBusqueda);
+  //   if (parametroBusqueda.length == 0 || !regexValidation) {
+  //     setErrorInput(true);
+  //     return;
+  //   }
 
-    setErrorInput(false);
-    setAlerta({});
+  //   setErrorInput(false);
+  //   setAlerta({});
 
-    try {
-      const url = `/facturas/buscarFacturasDeudasPorNombreCliente/${parametroBusqueda}`;
-      const respuesta = await clienteAxios.get(url);
-      console.log(respuesta.data.datosFactura);
-      setArrFacturas([respuesta.data.datosFactura]);
-    } catch (error) {
-      console.log(error);
-      setAlerta({
-        titulo: "Error",
-        msg: error.response.data.msg,
-        status: "error",
-      });
-    }
-    setCargandoBusqueda(false);
-  };
+  //   try {
+  //     const url = `/facturas/buscarFacturasDeudasPorNombreCliente/${parametroBusqueda}`;
+  //     const respuesta = await clienteAxios.get(url);
+  //     console.log(respuesta.data.datosFactura);
+  //     setArrFacturas([respuesta.data.datosFactura]);
+  //   } catch (error) {
+  //     console.log(error);
+  //     setAlerta({
+  //       titulo: "Error",
+  //       msg: error.response.data.msg,
+  //       status: "error",
+  //     });
+  //   }
+  //   setCargandoBusqueda(false);
+  // };
 
   const mostrarModalFacturaContado = async ({ currentTarget }) => {
     const idTarget = currentTarget.parentElement.parentElement.dataset.id;
@@ -141,25 +139,17 @@ export const ReimprimirFacturasContado = () => {
             <form
               action=""
               className="flex items-end gap-3"
-              onSubmit={
-                buscarPorCodigo ? buscarFacturaPorCodigo : bucarFacturaPorNombre
-              }
+              onSubmit={buscarFacturaPorCodigo}
             >
               <div className="flex flex-col gap-2 w-[50%]">
                 <Heading htmlFor="codigo" fontSize={"large"}>
-                  {buscarPorCodigo
-                    ? "Codigo de la factura"
-                    : "Nombre del cliente"}
+                  Codigo de la factura
                 </Heading>
                 <Input
                   background={"gray.100"}
                   borderColor={`${errorInput ? "red" : "gray.200"}`}
                   id="codigo"
-                  placeholder={
-                    buscarPorCodigo
-                      ? "Ej: 897217091241 , 4478"
-                      : "Ej: Pedro, Jose"
-                  }
+                  placeholder={"Ej: 897217091241 , 4478"}
                   onChange={({ target }) => setParametroBusqueda(target.value)}
                   value={parametroBusqueda}
                   autoFocus
@@ -167,21 +157,6 @@ export const ReimprimirFacturasContado = () => {
               </div>
 
               <div className="w-[50%] flex flex-col gap-2">
-                <Button
-                  colorScheme="blue"
-                  type="button"
-                  onClick={() => {
-                    setParametroBusqueda("");
-                    setAlerta({});
-                    setErrorInput(false);
-                    setBuscarPorCodigo(!buscarPorCodigo);
-                  }}
-                >
-                  {buscarPorCodigo
-                    ? "Buscar por nombre de cliente"
-                    : "Buscar por codigo de factura"}
-                </Button>
-
                 <Button colorScheme="green" type="submit">
                   {cargandoBusqueda ? (
                     <TailSpin
@@ -213,13 +188,11 @@ export const ReimprimirFacturasContado = () => {
                 <Thead>
                   <Tr>
                     <Th>Codigo Factura</Th>
-                    <Th>Nombre Cliente</Th>
-                    <Th>Telefono Cliente</Th>
-                    <Th>Despachado Por</Th>
                     <Th>Costo Total</Th>
                     <Th>Pago Cliente</Th>
                     <Th>Cambio</Th>
                     <Th>Fecha</Th>
+                    <Th></Th>
                   </Tr>
                 </Thead>
 
