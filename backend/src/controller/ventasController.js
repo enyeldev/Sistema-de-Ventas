@@ -11,9 +11,6 @@ export const generarVenta = async (req, res) => {
       devueltaCliente,
       fecha,
       usuarioCajeroId,
-      nombreCliente,
-      telefonoCliente,
-      atendidoPor,
     } = req.body;
 
     const nuevaVenta = {
@@ -23,9 +20,6 @@ export const generarVenta = async (req, res) => {
       devueltaCliente,
       fecha,
       usuarioCajeroId,
-      nombreCliente: nombreCliente || "",
-      telefonoCliente: telefonoCliente || "",
-      atendidoPor: atendidoPor || "",
     };
 
     const guardarNuevaVenta = await prisma.ventas.create({
@@ -39,19 +33,7 @@ export const generarVenta = async (req, res) => {
 };
 
 export const generarVentaItem = async (req, res) => {
-  /*
-    
-    {
-        "codigoProducto": "9400045050",
-        "cantidadVendida": 3,
-        "codigoVenta": "y0ZB7X23JbxLzxVfucPXB",
-        "costoVentaItem": 825.00
-    }
-    
-    */
-
   const productosVendidos = req.body;
-
   try {
     productosVendidos.forEach(async (e) => {
       const {

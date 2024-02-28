@@ -7,12 +7,10 @@ export const agregarDeuda = async (req, res) => {
 
     const {
       nombreCliente,
-      telefonoCliente,
       fecha,
       montoDeuda,
       fechaUltimoPago,
       usuarioCajeroId,
-      despachadoPor,
       montoActualDeuda,
     } = req.body;
 
@@ -20,11 +18,9 @@ export const agregarDeuda = async (req, res) => {
       data: {
         codigoDeuda,
         nombreCliente,
-        telefonoCliente,
         montoDeuda: parseFloat(montoDeuda),
         montoActualDeuda: parseFloat(montoActualDeuda),
         fecha,
-        despachadoPor: despachadoPor,
       },
     });
 

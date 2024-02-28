@@ -65,11 +65,11 @@ model Ventas {
 
   devueltaCliente Decimal
 
-  nombreCliente String?
+  // nombreCliente String?
 
-  telefonoCliente String?
+  // telefonoCliente String?
 
-  atendidoPor String?
+  // atendidoPor String?
 
   fecha String
 
@@ -85,9 +85,9 @@ model Deudas {
 
   nombreCliente String
 
-  telefonoCliente String
+  // telefonoCliente String
 
-  despachadoPor String
+  // despachadoPor String
 
   montoDeuda Decimal
 
