@@ -3,6 +3,14 @@
 import { formatoDinero } from "../helpers/formatoDinero";
 
 import { Document, Page, Text, StyleSheet, View } from "@react-pdf/renderer";
+import { Font } from "@react-pdf/renderer";
+import Funete_one from "../font/CourierPrime-Bold.ttf";
+// import Funete_dos from "../font/DOTMBold.TTF";
+
+Font.register({
+  family: "FuenteDotOne",
+  src: Funete_one,
+});
 
 export const PlantillaFacturaDeuda = ({ datos }) => {
   const styles = StyleSheet.create({
@@ -15,20 +23,24 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
       width: "100%",
       flexDirection: "column",
       alignItems: "center",
+      fontFamily: "FuenteDotOne",
     },
     nombreNegocio: {
       fontSize: "18px",
-      fontWeight: "800",
+      // fontWeight: "800",
       marginBottom: "5px",
+      fontFamily: "FuenteDotOne",
     },
     textoComun: {
-      fontSize: "14px",
-      fontWeight: "800",
+      fontSize: "11px",
+      // fontWeight: "800",
+      fontFamily: "FuenteDotOne",
     },
     textoComunCenter: {
-      fontSize: "14px",
+      fontSize: "11px",
       textAlign: "center",
-      fontWeight: "800",
+      // fontWeight: "800",
+      fontFamily: "FuenteDotOne",
     },
     codigoYFecha: {
       width: "100%",
@@ -43,7 +55,7 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
     },
     tabla: {
       width: "100%",
-      marginTop: "15px",
+      marginTop: "10px",
     },
     tablaHeader: {
       width: "100%",
@@ -68,7 +80,7 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
     },
     tablaBody: {
       width: "100%",
-      marginTop: "5px",
+      // marginTop: "5px",
       gap: "5px",
     },
     bodyItem: {
@@ -86,16 +98,8 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
   const { codigoFacturaDeuda, datosDeuda, productosDeuda, historialPagos } =
     datos;
 
-  const {
-    fecha,
-    fechaUltimoPago,
-    nombreCleinte,
-    telefonoCliente,
-    despachadoPor,
-    montoInicial,
-    montoActual,
-    estado,
-  } = datosDeuda;
+  const { fecha, fechaUltimoPago, montoInicial, montoActual, estado } =
+    datosDeuda;
 
   return (
     <Document>
@@ -110,18 +114,6 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
             </Text>
 
             <Text style={styles.textoComunCenter}>Telefono: 809-560-7032</Text>
-
-            <Text
-              style={{
-                fontSize: "15px",
-                textAlign: "center",
-                marginTop: "15px",
-                marginBottom: "15px",
-                fontWeight: "800",
-              }}
-            >
-              FACTURA
-            </Text>
           </View>
 
           <View
@@ -132,7 +124,9 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
               borderBottomStyle: "solid",
             }}
           >
-            <Text style={{ fontSize: "14px" }}>Datos Factura</Text>
+            <Text style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}>
+              Datos Factura
+            </Text>
           </View>
 
           <View style={styles.codigoYFecha}>
@@ -145,35 +139,17 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
             <Text style={styles.textoComun}>
               Fecha utlimo pago: {fechaUltimoPago}
             </Text>
-            <Text style={styles.textoComun}>
-              Despachado Por: {despachadoPor}
-            </Text>
-          </View>
-
-          <View style={{ marginTop: "15px" }}>
-            <View
-              style={{
-                width: "100%",
-                borderBottomWidth: 1,
-                borderBottomColor: "#000000",
-                borderBottomStyle: "solid",
-                marginBottom: "10px",
-              }}
-            >
-              <Text style={{ fontSize: "14px" }}>Datos Cliente</Text>
-            </View>
-
-            <View style={{ gap: "5px" }}>
-              <Text style={styles.textoComun}>Nombre: {nombreCleinte}</Text>
-
-              <Text style={styles.textoComun}>Telefono: {telefonoCliente}</Text>
-            </View>
           </View>
         </View>
 
-        <View style={{ width: "100%", marginTop: "20px", marginBottom: "5px" }}>
+        <View style={{ width: "100%", marginTop: "10px" }}>
           <Text
-            style={{ fontSize: "15px", textAlign: "center", fontWeight: "800" }}
+            style={{
+              fontSize: "11px",
+              textAlign: "center",
+              // fontWeight: "800",
+              fontFamily: "FuenteDotOne",
+            }}
           >
             PRODUCTOS
           </Text>
@@ -184,8 +160,9 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
             <View style={styles.headerCodigo}>
               <Text
                 style={{
-                  fontSize: "13px",
-                  fontWeight: "800",
+                  fontSize: "11px",
+                  // fontWeight: "800",
+                  fontFamily: "FuenteDotOne",
                 }}
               >
                 Codigo
@@ -195,8 +172,9 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
             <View style={styles.headerDescripcion}>
               <Text
                 style={{
-                  fontSize: "13px",
-                  fontWeight: "800",
+                  fontSize: "11px",
+                  // fontWeight: "800",
+                  fontFamily: "FuenteDotOne",
                 }}
               >
                 Descripcion
@@ -206,8 +184,9 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
             <View style={styles.headerTotal}>
               <Text
                 style={{
-                  fontSize: "13px",
-                  fontWeight: "800",
+                  fontSize: "11px",
+                  // fontWeight: "800",
+                  fontFamily: "FuenteDotOne",
                 }}
               >
                 Total
@@ -229,11 +208,17 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
               return (
                 <View style={styles.bodyItem} key={codigoProducto}>
                   <View>
-                    <Text style={{ fontSize: "14px" }}>{codigoProducto}</Text>
+                    <Text
+                      style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
+                    >
+                      {codigoProducto}
+                    </Text>
                   </View>
 
                   <View>
-                    <Text style={{ fontSize: "14px" }}>
+                    <Text
+                      style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
+                    >
                       {`${nombreProducto} CANT. ${cantidadProducto} PRECIO: ${formatoDinero(
                         parseFloat(costoProducto)
                       )} ${
@@ -246,8 +231,10 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
                     </Text>
                   </View>
 
-                  <View style={{ width: "100%", textAlign: "right" }}>
-                    <Text style={{ fontSize: "14px" }}>
+                  <View style={{ width: "100%" }}>
+                    <Text
+                      style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
+                    >
                       {formatoDinero(parseFloat(monto))}
                     </Text>
                   </View>
@@ -261,7 +248,7 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
           style={{
             width: "100%",
             flexDirection: "column",
-            marginTop: "20px",
+            marginTop: "10px",
             gap: "4px",
           }}
         >
@@ -275,11 +262,21 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
                   key={e.id}
                   style={{ flexDirection: "row", gap: "2px", flexWrap: "wrap" }}
                 >
-                  <Text style={{ fontSize: "14px" }}>-</Text>
-                  <Text style={{ fontSize: "14px" }}>
+                  <Text
+                    style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
+                  >
+                    -
+                  </Text>
+                  <Text
+                    style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
+                  >
                     Monto de pago: {formatoDinero(e.motoPago)}
                   </Text>
-                  <Text style={{ fontSize: "14px" }}>Fecha: {fecha}</Text>
+                  <Text
+                    style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
+                  >
+                    Fecha: {fecha}
+                  </Text>
                 </View>
               );
             })
@@ -292,7 +289,7 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
             flexDirection: "row",
             flexWrap: "wrap",
             gap: "8px",
-            marginTop: "20px",
+            marginTop: "10px",
           }}
         >
           <View>
@@ -311,13 +308,23 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
         </View>
 
         <Text
-          style={{ fontSize: "13px", textAlign: "center", marginTop: "20px" }}
+          style={{
+            fontSize: "11px",
+            textAlign: "center",
+            marginTop: "10px",
+            fontFamily: "FuenteDotOne",
+          }}
         >
           Para devoluciones o reclamos debe presentar esta factura
         </Text>
 
         <Text
-          style={{ fontSize: "13px", textAlign: "center", marginTop: "5px" }}
+          style={{
+            fontSize: "11px",
+            textAlign: "center",
+            marginTop: "5px",
+            fontFamily: "FuenteDotOne",
+          }}
         >
           Gracias por preferirnos
         </Text>

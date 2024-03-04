@@ -235,11 +235,9 @@ export const CobrarDeudas = () => {
                 <Thead>
                   <Tr>
                     <Th>Nombre Cliente</Th>
-                    <Th>Telefono Cliente</Th>
                     <Th>Monto Inicial</Th>
                     <Th>Monto Actual</Th>
                     <Th>Fecha</Th>
-                    <Th>Despachao Por</Th>
                     <Th></Th>
                   </Tr>
                 </Thead>
@@ -248,23 +246,20 @@ export const CobrarDeudas = () => {
                   {arrDeudasBusuqeda.map(
                     ({
                       codigoDeuda,
-                      despachadoPor,
+
                       fecha,
                       montoActualDeuda,
                       montoDeuda,
                       nombreCliente,
-                      telefonoCliente,
                     }) => {
                       return (
                         <ItemDeudaBusqueda
                           key={codigoDeuda}
                           codigoDeuda={codigoDeuda}
-                          despachadoPor={despachadoPor}
                           fecha={fecha}
                           montoActualDeuda={montoActualDeuda}
                           montoDeuda={montoDeuda}
                           nombreCliente={nombreCliente}
-                          telefonoCliente={telefonoCliente}
                           mostrarModal={mostrarModal}
                         />
                       );

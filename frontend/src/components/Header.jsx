@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { primeraLetraMayuscula } from "../helpers/primeraLetraMayuscula";
+import { Link, useLocation } from "react-router-dom";
 import { TiShoppingCart } from "react-icons/ti";
 import { CiShoppingTag } from "react-icons/ci";
 import { GiPayMoney } from "react-icons/gi";
@@ -12,12 +13,18 @@ import { IoCreate } from "react-icons/io5";
 import { Heading, Text } from "@chakra-ui/react";
 
 export const Header = () => {
+  const location = useLocation();
+  const istrue = true;
+
   return (
     <header className="max-h-screen w-[15%] overflow-y-scroll">
       <div className="flex flex-col gap-8">
         <div className="w-full border-b border-gray-200 px-2 py-4">
           <Heading className="text-white" fontSize={"large"}>
-            Sistema de ventas
+            Sistema de ventas{" "}
+            {istrue
+              ? `/ ${primeraLetraMayuscula(location.pathname.split("/")[2] || location.pathname)}`
+              : "klk"}
           </Heading>
         </div>
 

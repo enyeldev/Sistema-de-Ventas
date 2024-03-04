@@ -7,8 +7,6 @@ import { Tr, Td } from "@chakra-ui/react";
 export const ItemReimprimirFacturaCredito = ({
   codigoFactura,
   nombreCliente,
-  telefonoCliente,
-  despachadoPor,
   montoInicial,
   montoActual,
   fechaInicial,
@@ -22,8 +20,6 @@ export const ItemReimprimirFacturaCredito = ({
     <Tr data-id={codigoFactura}>
       <Td>{codigoFactura}</Td>
       <Td>{nombreCliente}</Td>
-      <Td>{telefonoCliente}</Td>
-      <Td>{despachadoPor}</Td>
       <Td>{formatoDinero(parseFloat(montoInicial))}</Td>
       <Td>{formatoDinero(parseFloat(montoActual))}</Td>
       <Td>{fechaInicial}</Td>

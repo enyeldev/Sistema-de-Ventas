@@ -10,11 +10,11 @@ import { Tr, Td } from "@chakra-ui/react";
 export const ItemDeudaBusqueda = ({
   codigoDeuda,
   nombreCliente,
-  telefonoCliente,
+
   montoDeuda,
   montoActualDeuda,
   fecha,
-  despachadoPor,
+
   mostrarModal,
 }) => {
   const fechaActual = obtenerFechaYHoraActual();
@@ -23,11 +23,9 @@ export const ItemDeudaBusqueda = ({
   return (
     <Tr data-id={codigoDeuda} className={`${fechaVencida ? "bg-red-300" : ""}`}>
       <Td>{nombreCliente}</Td>
-      <Td>{telefonoCliente}</Td>
       <Td>{formatoDinero(parseFloat(montoDeuda))}</Td>
       <Td>{formatoDinero(parseFloat(montoActualDeuda))}</Td>
       <Td>{fecha}</Td>
-      <Td>{despachadoPor}</Td>
       <Td>
         <AddIcon
           color={"blue"}

@@ -38,16 +38,8 @@ export const ModalFacturaDeuda = ({
   const { codigoFacturaDeuda, datosDeuda, productosDeuda, historialPagos } =
     datosFacturaDeuda;
 
-  const {
-    fecha,
-    fechaUltimoPago,
-    nombreCleinte,
-    telefonoCliente,
-    despachadoPor,
-    montoInicial,
-    montoActual,
-    estado,
-  } = datosDeuda;
+  const { fecha, fechaUltimoPago, montoInicial, montoActual, estado } =
+    datosDeuda;
   console.log(datosFacturaDeuda);
 
   return (
@@ -86,14 +78,6 @@ export const ModalFacturaDeuda = ({
               <Text>Estado: {estado ? "Pendiente" : "Saldado"}</Text>
               <Text>Fecha: {fecha}</Text>
               <Text>Fecha Ultimo Pago: {fechaUltimoPago}</Text>
-            </div>
-
-            <div className="w-full">
-              <Text>Cliente: {nombreCleinte}</Text>
-
-              <Text>Telefono Cliente: {telefonoCliente}</Text>
-
-              <Text>Despachado Por: {despachadoPor}</Text>
             </div>
           </div>
 

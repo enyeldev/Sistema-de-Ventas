@@ -72,14 +72,6 @@ export const ModalFacturaComprobante = ({
               <Text>Codigo Factura: {codigoFactura}</Text>
               <Text>Fecha: {datosVenta.fecha}</Text>
             </div>
-
-            <div className="w-full">
-              <Text>Cliente: {datosVenta.nombreCleinte}</Text>
-
-              <Text>Telefono Cliente: {datosVenta.telefonoCliente}</Text>
-
-              <Text>Despachado Por: {datosVenta.despachadoPor}</Text>
-            </div>
           </div>
 
           <div className="w-full bg-white rounded-md max-h-[150px] overflow-y-scroll">

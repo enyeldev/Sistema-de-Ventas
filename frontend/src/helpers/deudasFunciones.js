@@ -1,19 +1,12 @@
 import { obtenerFechaYHoraActual } from "./fechaHoraActual";
 import { clienteAxios } from "../config/axios";
 
-export const generarNuevaDeuda = async (
-  nombreCliente,
-  telefonoCliente,
-  montoDeuda,
-  atendidoPor
-) => {
+export const generarNuevaDeuda = async (nombreCliente, montoDeuda) => {
   const data = {
     nombreCliente,
-    telefonoCliente,
     fecha: obtenerFechaYHoraActual(),
     montoDeuda,
     montoActualDeuda: montoDeuda,
-    despachadoPor: atendidoPor,
   };
 
   try {

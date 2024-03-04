@@ -215,8 +215,6 @@ export const ReimprimirFacturasCredito = () => {
                   <Tr>
                     <Th>Codigo Factura</Th>
                     <Th>Nombre Cliente</Th>
-                    <Th>Telefono Cliente</Th>
-                    <Th>Despachado Por</Th>
                     <Th>Monto Inicial</Th>
                     <Th>Monto Actual</Th>
                     <Th>Fecha Inicial</Th>
@@ -238,8 +236,6 @@ export const ReimprimirFacturasCredito = () => {
                       ({
                         codigoFacturaDeuda,
                         nombreCliente,
-                        telefonoCliente,
-                        despachadoPor,
                         montoDeuda,
                         montoActualDeuda,
                         fecha,
@@ -249,13 +245,11 @@ export const ReimprimirFacturasCredito = () => {
                           <ItemReimprimirFacturaCredito
                             key={codigoFacturaDeuda}
                             codigoFactura={codigoFacturaDeuda}
-                            despachadoPor={despachadoPor}
                             fechaInicial={fecha}
                             fechaUtlimoPago={fechaUltimoPago}
                             montoActual={montoActualDeuda}
                             montoInicial={montoDeuda}
                             nombreCliente={nombreCliente}
-                            telefonoCliente={telefonoCliente}
                             mostrarModal={mostrarModalFacturaDeuda}
                           />
                         );

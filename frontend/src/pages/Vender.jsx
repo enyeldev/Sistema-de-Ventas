@@ -39,9 +39,9 @@ export const Vender = () => {
   const [buscarPorCodigo, setBuscarPorCodigo] = useState(true);
   const [errorInput, setErrorInput] = useState(false);
   const [errorCobrarInput, setErrorCobrarInput] = useState(false);
-  const [errorNombreCliente, setErrorNombreCliente] = useState(false);
-  const [errorAtendidoPor, setErrorAtendidoPor] = useState(false);
-  const [errorTelefonoCliente, setErrorTelefonoCliente] = useState(false);
+  // const [errorNombreCliente, setErrorNombreCliente] = useState(false);
+  // const [errorAtendidoPor, setErrorAtendidoPor] = useState(false);
+  // const [errorTelefonoCliente, setErrorTelefonoCliente] = useState(false);
   const [cargandoBusqueda, setCargandoBusqueda] = useState(false);
   const [showModalFacturaVenta, setShowModalFacturaVenta] = useState(false);
   const [parametroBusqueda, setParametroBusqueda] = useState("");
@@ -51,9 +51,9 @@ export const Vender = () => {
   const [modal, setModal] = useState({ show: false, datos: null });
   const [pagoCliente, setPagoCliente] = useState(0);
   const [datosFacturaVenta, setDatosFacturaVenta] = useState({});
-  const [nombreCliente, setNombreCliente] = useState("");
-  const [telefonoCliente, setTelefonoCliente] = useState("");
-  const [atendidoPor, setAtendidoPor] = useState("");
+  // const [nombreCliente, setNombreCliente] = useState("");
+  // const [telefonoCliente, setTelefonoCliente] = useState("");
+  // const [atendidoPor, setAtendidoPor] = useState("");
 
   // Calcular el total de venta, sin productos financiados
   // const productosNoFinanciados = arrProductosVent.filter(e => e.financiado == false)
@@ -65,8 +65,8 @@ export const Vender = () => {
 
   const regexCodigo = /^[0-9]+$/;
   const regexNombre = /.*[a-zA-Z].*/;
-  const regexNombreCliente = /^([A-Za-z]+\s*)+$/;
-  const regexTelefonoCliente = /^\d{10}$/;
+  // const regexNombreCliente = /^([A-Za-z]+\s*)+$/;
+  // const regexTelefonoCliente = /^\d{10}$/;
 
   const mostrarModal = ({ currentTarget }) => {
     const idTarget = currentTarget.parentElement.parentElement.dataset.id;
@@ -179,29 +179,29 @@ export const Vender = () => {
       return;
     }
 
-    if (nombreCliente !== "") {
-      if (!regexNombreCliente.test(nombreCliente)) {
-        setErrorNombreCliente(true);
-        return;
-      }
-    }
-    setErrorNombreCliente(false);
+    // if (nombreCliente !== "") {
+    //   if (!regexNombreCliente.test(nombreCliente)) {
+    //     setErrorNombreCliente(true);
+    //     return;
+    //   }
+    // }
+    // setErrorNombreCliente(false);
 
-    if (atendidoPor !== "") {
-      if (!regexNombreCliente.test(atendidoPor)) {
-        setErrorAtendidoPor(true);
-        return;
-      }
-    }
-    setErrorAtendidoPor(false);
+    // if (atendidoPor !== "") {
+    //   if (!regexNombreCliente.test(atendidoPor)) {
+    //     setErrorAtendidoPor(true);
+    //     return;
+    //   }
+    // }
+    // setErrorAtendidoPor(false);
 
-    if (telefonoCliente !== "") {
-      if (!regexTelefonoCliente.test(telefonoCliente)) {
-        setErrorTelefonoCliente(true);
-        return;
-      }
-    }
-    setErrorTelefonoCliente(false);
+    // if (telefonoCliente !== "") {
+    //   if (!regexTelefonoCliente.test(telefonoCliente)) {
+    //     setErrorTelefonoCliente(true);
+    //     return;
+    //   }
+    // }
+    // setErrorTelefonoCliente(false);
 
     // Generar nueva venta
     const codigoVenta = await generarNuevaVenta({
@@ -209,9 +209,6 @@ export const Vender = () => {
       pagoCliente,
       devueltaCliente,
       auth,
-      nombreCliente,
-      telefonoCliente,
-      atendidoPor,
     });
 
     // Generar VentaItems
@@ -339,7 +336,7 @@ export const Vender = () => {
         </div>
 
         <div className="w-[60%] flex flex-col gap-2">
-          <div className="w-full h-[70%] bg-white rounded-md shadow-md p-3">
+          <div className="w-full h-full bg-white rounded-md shadow-md p-3">
             <div className="flex flex-col gap-2">
               {/* <div className="w-full flex items-center gap-3 border-b-2 border-black pb-2 overflow-x-scroll">
                             <Info />
@@ -419,7 +416,7 @@ export const Vender = () => {
                   </div>
                 )}
               </div>
-              <div className=" w-full h-[270px] overflow-y-scroll">
+              <div className=" w-full max-h-[80%] overflow-y-scroll">
                 <TableContainer width={""}>
                   <Table variant="simple">
                     <Thead>
@@ -462,7 +459,7 @@ export const Vender = () => {
             </div>
           </div>
 
-          <div className="w-full h-[30%] bg-white rounded-md shadow-md p-3 flex gap-3 justify-between">
+          {/* <div className="w-full h-[30%] bg-white rounded-md shadow-md p-3 flex gap-3 justify-between">
             <div className="flex flex-col gap-2">
               <Heading fontSize={"larger"}>Nombre Cliente:</Heading>
               <Input
@@ -500,7 +497,7 @@ export const Vender = () => {
                 }}
               />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

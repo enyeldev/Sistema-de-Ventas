@@ -3,6 +3,13 @@
 import { formatoDinero } from "../helpers/formatoDinero";
 
 import { Document, Page, Text, StyleSheet, View } from "@react-pdf/renderer";
+import { Font } from "@react-pdf/renderer";
+import Funete_one from "../font/CourierPrime-Bold.ttf";
+
+Font.register({
+  family: "FuenteDotOne",
+  src: Funete_one,
+});
 
 export const PlantillaFacturaComprobante = ({ datos }) => {
   const styles = StyleSheet.create({
@@ -18,15 +25,18 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
     },
     nombreNegocio: {
       fontSize: "18px",
-      fontWeight: "800",
+      // fontWeight: "800",
       marginBottom: "5px",
+      fontFamily: "FuenteDotOne",
     },
     textoComun: {
-      fontSize: "14px",
+      fontSize: "11px",
+      fontFamily: "FuenteDotOne",
     },
     textoComunCenter: {
-      fontSize: "14px",
+      fontSize: "11px",
       textAlign: "center",
+      fontFamily: "FuenteDotOne",
     },
     codigoYFecha: {
       width: "100%",
@@ -41,7 +51,7 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
     },
     tabla: {
       width: "100%",
-      marginTop: "15px",
+      marginTop: "10px",
     },
     tablaHeader: {
       width: "100%",
@@ -66,7 +76,7 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
     },
     tablaBody: {
       width: "100%",
-      marginTop: "5px",
+      // marginTop: "5px",
       gap: "5px",
     },
     bodyItem: {
@@ -85,12 +95,12 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
 
   const {
     costoTotal,
-    despachadoPor,
+    // despachadoPor,
     devueltaCliente,
     fecha,
-    nombreCleinte,
+    // nombreCleinte,
     pagoCliente,
-    telefonoCliente,
+    // telefonoCliente,
   } = datosVenta;
 
   console.log(datos);
@@ -108,18 +118,6 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
             </Text>
 
             <Text style={styles.textoComunCenter}>Telefono: 809-560-7032</Text>
-
-            <Text
-              style={{
-                fontSize: "15px",
-                textAlign: "center",
-                marginTop: "15px",
-                marginBottom: "15px",
-                fontWeight: "800",
-              }}
-            >
-              FACTURA
-            </Text>
           </View>
 
           <View
@@ -130,44 +128,25 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
               borderBottomStyle: "solid",
             }}
           >
-            <Text style={{ fontSize: "14px" }}>Datos Factura</Text>
-          </View>
-
-          <View style={styles.codigoYFecha}>
-            <Text style={styles.textoComun}>Tipo: Comprobante de Venta</Text>
-            <Text style={styles.textoComun}>Codigo: {codigoFactura}</Text>
-            <Text style={styles.textoComun}>Fecha: {fecha}</Text>
-            <Text style={styles.textoComun}>
-              Despachado Por: {despachadoPor}
+            <Text style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}>
+              Datos Factura
             </Text>
           </View>
 
-          <View style={{ marginTop: "15px" }}>
-            <View
-              style={{
-                width: "100%",
-                borderBottomWidth: 1,
-                borderBottomColor: "#000000",
-                borderBottomStyle: "solid",
-                marginBottom: "10px",
-              }}
-            >
-              <Text style={{ fontSize: "14px" }}>Datos Cliente</Text>
-            </View>
-
-            <View style={{ gap: "5px" }}>
-              <Text style={styles.textoComun}>Cliente: {nombreCleinte}</Text>
-
-              <Text style={styles.textoComun}>
-                Telefono Cliente: {telefonoCliente}
-              </Text>
-            </View>
+          <View style={styles.codigoYFecha}>
+            <Text style={styles.textoComun}>Tipo: Venta al Contado</Text>
+            <Text style={styles.textoComun}>Codigo: {codigoFactura}</Text>
+            <Text style={styles.textoComun}>Fecha: {fecha}</Text>
           </View>
         </View>
 
-        <View style={{ width: "100%", marginTop: "20px", marginBottom: "5px" }}>
+        <View style={{ width: "100%", marginTop: "10px" }}>
           <Text
-            style={{ fontSize: "15px", textAlign: "center", fontWeight: "800" }}
+            style={{
+              fontSize: "11px",
+              textAlign: "center",
+              fontFamily: "FuenteDotOne",
+            }}
           >
             PRODUCTOS
           </Text>
@@ -178,8 +157,8 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
             <View style={styles.headerCodigo}>
               <Text
                 style={{
-                  fontSize: "13px",
-                  fontWeight: "800",
+                  fontSize: "11px",
+                  fontFamily: "FuenteDotOne",
                 }}
               >
                 Codigo
@@ -189,8 +168,8 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
             <View style={styles.headerDescripcion}>
               <Text
                 style={{
-                  fontSize: "13px",
-                  fontWeight: "800",
+                  fontSize: "11px",
+                  fontFamily: "FuenteDotOne",
                 }}
               >
                 Descripcion
@@ -200,8 +179,8 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
             <View style={styles.headerTotal}>
               <Text
                 style={{
-                  fontSize: "13px",
-                  fontWeight: "800",
+                  fontSize: "11px",
+                  fontFamily: "FuenteDotOne",
                 }}
               >
                 Total
@@ -222,11 +201,17 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
               return (
                 <View style={styles.bodyItem} key={codigoProducto}>
                   <View>
-                    <Text style={{ fontSize: "12px" }}>{codigoProducto}</Text>
+                    <Text
+                      style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
+                    >
+                      {codigoProducto}
+                    </Text>
                   </View>
 
                   <View>
-                    <Text style={{ fontSize: "12px" }}>
+                    <Text
+                      style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
+                    >
                       {`${descripcion} CANT. ${cantidad} PRECIO: ${formatoDinero(
                         precioCadaUno
                       )}`}
@@ -234,7 +219,9 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
                   </View>
 
                   <View style={{ width: "100%", textAlign: "right" }}>
-                    <Text style={{ fontSize: "12px" }}>
+                    <Text
+                      style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
+                    >
                       {formatoDinero(precioTotal)}
                     </Text>
                   </View>
@@ -250,7 +237,7 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
             flexDirection: "row",
             flexWrap: "wrap",
             gap: "8px",
-            marginTop: "20px",
+            marginTop: "10px",
           }}
         >
           <View>
@@ -272,13 +259,23 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
         </View>
 
         <Text
-          style={{ fontSize: "13px", textAlign: "center", marginTop: "20px" }}
+          style={{
+            fontSize: "11px",
+            textAlign: "center",
+            marginTop: "10px",
+            fontFamily: "FuenteDotOne",
+          }}
         >
           Para devoluciones o reclamos debe presentar esta factura
         </Text>
 
         <Text
-          style={{ fontSize: "13px", textAlign: "center", marginTop: "5px" }}
+          style={{
+            fontSize: "11px",
+            textAlign: "center",
+            marginTop: "5px",
+            fontFamily: "FuenteDotOne",
+          }}
         >
           Gracias por preferirnos
         </Text>
