@@ -1,5 +1,6 @@
-import { primeraLetraMayuscula } from "../helpers/primeraLetraMayuscula";
-import { Link, useLocation } from "react-router-dom";
+import { nombreDeRuta } from "../helpers/nombreDeRuta";
+
+import { useLocation } from "react-router-dom";
 import { TiShoppingCart, TiPrinter } from "react-icons/ti";
 import { CiShoppingTag, CiShop, CiCircleMore } from "react-icons/ci";
 import { GiPayMoney } from "react-icons/gi";
@@ -10,26 +11,20 @@ import { MdLocalPrintshop } from "react-icons/md";
 import { IoHomeOutline } from "react-icons/io5";
 import { ImCreditCard } from "react-icons/im";
 import { IoCreate } from "react-icons/io5";
-import { Heading, Text } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 import { MenuLink } from "./MenuLink";
-
 import { MenuOptions } from "./MenuOptions";
+import { BtnCierreCaja } from "./BtnCierreCaja";
 
 export const Header = () => {
   const location = useLocation();
-  const istrue = true;
 
   return (
     <header className=" h-full w-[15%] ">
       <div className="flex flex-col gap-8">
         <div className="w-full border-b border-gray-200 px-2 py-4">
           <Heading className="text-white" fontSize={"large"}>
-            Sistema de ventas{" "}
-            {istrue
-              ? `/ ${primeraLetraMayuscula(
-                  location.pathname || location.pathname
-                )}`
-              : "klk"}
+            Sistema de ventas / {nombreDeRuta(location.pathname)}
           </Heading>
         </div>
 
@@ -80,7 +75,7 @@ export const Header = () => {
           <MenuLink
             icono={<GiTakeMyMoney size={25} />}
             ruta={"/caja/cobrar-deudas"}
-            texto={"Cobrar Deudas"}
+            texto={"Cobrar deudas"}
           />
 
           <MenuLink
@@ -130,8 +125,10 @@ export const Header = () => {
           <MenuLink
             icono={<IoCreate size={25} />}
             ruta={"/caja/facturar-venta"}
-            texto={"Generar Factura"}
+            texto={"Generar factura"}
           />
+
+          <BtnCierreCaja />
         </nav>
       </div>
     </header>
