@@ -1,7 +1,7 @@
 import { primeraLetraMayuscula } from "../helpers/primeraLetraMayuscula";
 import { Link, useLocation } from "react-router-dom";
-import { TiShoppingCart } from "react-icons/ti";
-import { CiShoppingTag } from "react-icons/ci";
+import { TiShoppingCart, TiPrinter } from "react-icons/ti";
+import { CiShoppingTag, CiShop, CiCircleMore } from "react-icons/ci";
 import { GiPayMoney } from "react-icons/gi";
 import { GiReceiveMoney } from "react-icons/gi";
 import { GiTakeMyMoney } from "react-icons/gi";
@@ -11,112 +11,127 @@ import { IoHomeOutline } from "react-icons/io5";
 import { ImCreditCard } from "react-icons/im";
 import { IoCreate } from "react-icons/io5";
 import { Heading, Text } from "@chakra-ui/react";
+import { MenuLink } from "./MenuLink";
+
+import { MenuOptions } from "./MenuOptions";
 
 export const Header = () => {
   const location = useLocation();
   const istrue = true;
 
   return (
-    <header className="max-h-screen w-[15%] overflow-y-scroll">
+    <header className=" h-full w-[15%] ">
       <div className="flex flex-col gap-8">
         <div className="w-full border-b border-gray-200 px-2 py-4">
           <Heading className="text-white" fontSize={"large"}>
             Sistema de ventas{" "}
             {istrue
-              ? `/ ${primeraLetraMayuscula(location.pathname.split("/")[2] || location.pathname)}`
+              ? `/ ${primeraLetraMayuscula(
+                  location.pathname || location.pathname
+                )}`
               : "klk"}
           </Heading>
         </div>
 
         <nav className="flex flex-col gap-2 px-2">
-          <Link
-            className=" text-white flex gap-3 hover:bg-blue-800 p-2 rounded-md transition-colors duration-150"
-            to="/caja"
-          >
-            <IoHomeOutline size={25} className="group-hover:text-white" />
-            <Text fontSize={"medium"}>Inicio</Text>
-          </Link>
+          <MenuLink
+            icono={
+              <IoHomeOutline size={25} className="group-hover:text-white" />
+            }
+            ruta={"/caja"}
+            texto={"Inicio"}
+          />
 
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/vender"
-          >
-            <TiShoppingCart size={25} className="group-hover:text-white" />
-            <Text fontSize={"medium"}>Vender</Text>
-          </Link>
+          <MenuOptions
+            icon={<CiShop size={25} />}
+            name={"Vender"}
+            arrOptions={[
+              <MenuLink
+                key={"vender al contado"}
+                icono={
+                  <TiShoppingCart
+                    size={25}
+                    className="group-hover:text-white"
+                  />
+                }
+                ruta={"/caja/vender"}
+                texto={"Vender al contado"}
+              />,
 
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/venderCredito"
-          >
-            <ImCreditCard size={25} className="group-hover:text-white" />
-            <Text fontSize={"medium"}>Vender a Credito</Text>
-          </Link>
+              <MenuLink
+                key={"vender a credito"}
+                icono={
+                  <ImCreditCard size={25} className="group-hover:text-white" />
+                }
+                ruta={"/caja/venderCredito"}
+                texto={"Vender a credito"}
+              />,
+            ]}
+          />
 
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/comprar"
-          >
-            <CiShoppingTag size={25} className="group-hover:text-white" />
-            <Text fontSize={"medium"}>Comprar</Text>
-          </Link>
+          <MenuLink
+            icono={
+              <CiShoppingTag size={25} className="group-hover:text-white" />
+            }
+            ruta={"/caja/comprar"}
+            texto={"Comprar"}
+          />
 
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/cobrar-deudas"
-          >
-            <GiTakeMyMoney size={25} />
-            <Text fontSize={"medium"}>Cobrar Deudas</Text>
-          </Link>
+          <MenuLink
+            icono={<GiTakeMyMoney size={25} />}
+            ruta={"/caja/cobrar-deudas"}
+            texto={"Cobrar Deudas"}
+          />
 
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/devoluciones"
-          >
-            <GiBackForth size={25} />
-            <Text fontSize={"medium"}>Devoluciones</Text>
-          </Link>
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/registrar-ingreso"
-          >
-            <GiPayMoney size={25} />
-            <Text fontSize={"medium"}>Ingreso</Text>
-          </Link>
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/registrar-retiro"
-          >
-            <GiReceiveMoney size={25} />
-            <Text fontSize={"medium"}>Retiro</Text>
-          </Link>
+          <MenuLink
+            icono={<GiBackForth size={25} />}
+            ruta={"/caja/devoluciones"}
+            texto={"Devoluciones"}
+          />
 
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/reimprimir-factura-contado"
-          >
-            <MdLocalPrintshop size={25} />
+          <MenuOptions
+            icon={<CiCircleMore size={25} />}
+            name={"Extra"}
+            arrOptions={[
+              <MenuLink
+                key={"ingreso"}
+                icono={<GiPayMoney size={25} />}
+                ruta={"/caja/registrar-ingreso"}
+                texto={"Ingreso"}
+              />,
+              <MenuLink
+                key={"retiro"}
+                icono={<GiReceiveMoney size={25} />}
+                ruta={"/caja/registrar-retiro"}
+                texto={"Retiro"}
+              />,
+            ]}
+          />
 
-            <Text fontSize={"medium"}>Reimprimir Factura Contado</Text>
-          </Link>
+          <MenuOptions
+            icon={<TiPrinter size={25} />}
+            name={"Imprimir"}
+            arrOptions={[
+              <MenuLink
+                key={"factura contado"}
+                icono={<MdLocalPrintshop size={25} />}
+                ruta={"/caja/reimprimir-factura-contado"}
+                texto={"Factura contado"}
+              />,
+              <MenuLink
+                key={"factura credito"}
+                icono={<MdLocalPrintshop size={25} />}
+                ruta={"/caja/reimprimir-factura-credito"}
+                texto={"Factura credito"}
+              />,
+            ]}
+          />
 
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/reimprimir-factura-credito"
-          >
-            <MdLocalPrintshop size={25} />
-
-            <Text fontSize={"medium"}>Reimprimir Factura Credito</Text>
-          </Link>
-
-          <Link
-            className="text-lg text-white flex gap-3 p-2 rounded-md hover:bg-blue-800 transition-colors duration-150"
-            to="/caja/facturar-venta"
-          >
-            <IoCreate size={25} />
-
-            <Text fontSize={"medium"}>Generar Factura</Text>
-          </Link>
+          <MenuLink
+            icono={<IoCreate size={25} />}
+            ruta={"/caja/facturar-venta"}
+            texto={"Generar Factura"}
+          />
         </nav>
       </div>
     </header>
