@@ -4,7 +4,6 @@ import { clienteAxios } from "../config/axios";
 import {
   Card,
   CardBody,
-  SimpleGrid,
   Heading,
   Button,
   Text,
@@ -26,11 +25,7 @@ export const Inicio = () => {
 
   return (
     <div className="w-[90%] min-h-screen h-full bg-gray-100 rounded-md p-2">
-      <SimpleGrid
-        width={"100%"}
-        spacing={3}
-        templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
-      >
+      <div className="w-full flex gap-3">
         <Card>
           <CardBody display={"flex"} flexDirection={"column"} gap={"5px"}>
             <Heading fontSize={"x-large"}>Total de productos</Heading>
@@ -58,7 +53,7 @@ export const Inicio = () => {
             <Button colorScheme="blue">Ver mas</Button>
           </CardBody>
         </Card>
-      </SimpleGrid>
+      </div>
     </div>
   );
 };
