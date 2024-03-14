@@ -238,3 +238,26 @@ export const buscarCodigoFactura = async (req, res) => {
     res.status(400).json({ msg: error });
   }
 };
+
+export const buscarProductosDelaDeuda = async (req, res) => {
+  const { codigoDeuda } = req.params;
+
+  try {
+    const productosDeudas = await prisma.productosDeudas.findMany({
+      where: {
+        codigoDeuda,
+      },
+    });
+
+    if (!productosDeudas) {
+      console.log("No existen productos para esta deuda");
+      res.status(404).json({ msg: "No existen productos para esta deuda" });
+      return;
+    }
+
+    res.json({ msg: "Productos encontrados", productosDeudas });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};

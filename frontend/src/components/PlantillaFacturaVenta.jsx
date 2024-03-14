@@ -92,21 +92,13 @@ export const PlantillaFacturaVenta = ({ datos }) => {
 
   const { codigoFactura, datosVenta, productosVendidos } = datos;
 
-  const {
-    costoTotal,
-    // despachadoPor,
-    devueltaCliente,
-    fecha,
-    // nombreCleinte,
-    pagoCliente,
-    // telefonoCliente,
-  } = datosVenta;
+  const { costoTotal, devueltaCliente, fecha, pagoCliente } = datosVenta;
 
   console.log(datos);
 
   return (
     <Document>
-      <Page size={{ width: 180 }}>
+      <Page size={{ width: 140 }}>
         <View style={styles.header}>
           <View style={styles.titulos}>
             <Text style={styles.nombreNegocio}>NOMBRE LOCAL</Text>

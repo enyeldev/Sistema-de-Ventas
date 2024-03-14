@@ -33,25 +33,19 @@ import {
 } from "@chakra-ui/react";
 
 export const VenderCredito = () => {
-  // const { auth } = useAuth()
   const [buscarPorCodigo, setBuscarPorCodigo] = useState(true);
   const [errorInput, setErrorInput] = useState(false);
-  // const [errorCobrarInput, setErrorCobrarInput] = useState(false)
   const [errorNombreCliente, setErrorNombreCliente] = useState(false);
-  // const [errorAtendidoPor, setErrorAtendidoPor] = useState(false);
-  // const [errorTelefonoCliente, setErrorTelefonoCliente] = useState(false);
   const [cargandoBusqueda, setCargandoBusqueda] = useState(false);
+  const [cargandoDeuda, setCargandoDeuda] = useState(false);
   const [showModalFacturaDeuda, setShowModalFacturaDeuda] = useState(false);
   const [parametroBusqueda, setParametroBusqueda] = useState("");
   const [arrProductos, setArrProductos] = useState([]);
   const [arrProductosVent, setArrProductosVent] = useState([]);
   const [alerta, setAlerta] = useState({});
   const [modal, setModal] = useState({ show: false, datos: null });
-  // const [pagoCliente, setPagoCliente] = useState(0)
   const [datosFacturaDeuda, setDatosFacturaDeuda] = useState({});
   const [nombreCliente, setNombreCliente] = useState("");
-  // const [telefonoCliente, setTelefonoCliente] = useState("");
-  // const [atendidoPor, setAtendidoPor] = useState("");
 
   const montoDeuda = arrProductosVent.reduce((total, e) => {
     return total + e.total;
@@ -162,8 +156,6 @@ export const VenderCredito = () => {
 
     setAlerta({});
     setErrorNombreCliente(false);
-    // setErrorAtendidoPor(false);
-    // setErrorTelefonoCliente(false);
 
     if (arrProductosVent.length <= 0) {
       setAlerta({
@@ -180,17 +172,7 @@ export const VenderCredito = () => {
     }
     setErrorNombreCliente(false);
 
-    // if (!regexNombreCliente.test(atendidoPor)) {
-    //   setErrorAtendidoPor(true);
-    //   return;
-    // }
-    // setErrorAtendidoPor(false);
-
-    // if (!regexTelefonoCliente.test(telefonoCliente)) {
-    //   setErrorTelefonoCliente(true);
-    //   return;
-    // }
-    // setErrorTelefonoCliente(false);
+    setCargandoDeuda(true);
 
     // Generar nueva deuda
     const codigoDeuda = await generarNuevaDeuda(nombreCliente, montoDeuda);
@@ -211,6 +193,7 @@ export const VenderCredito = () => {
     setParametroBusqueda("");
     setArrProductosVent([]);
     setArrProductos([]);
+    setCargandoDeuda(false);
     setAlerta({});
   };
 
@@ -272,77 +255,11 @@ export const VenderCredito = () => {
               </Table>
             </TableContainer>
           </div>
-
-          {/* 
-                    <div className="w-fulll h-[30%] p-3 bg-white shadow-md rounded-md flex justify-between">
-                        <div className="">
-                            <Heading fontSize={'large'}>
-                                Total:
-                            </Heading>
-                            <Text
-                                fontSize={'large'}
-                            >
-                                {
-                                    formatoDinero(totalVenta)
-                                }
-                            </Text>
-                        </div>
-
-                        <div className="">
-                            <Heading fontSize={'large'}>
-                                Devuelta:
-                            </Heading>
-                            <Text
-                                fontSize={'large'}
-                            >
-                                {
-                                    (pagoCliente > 0) ? formatoDinero(devueltaCliente) : '- - - - - - -'
-                                }
-                            </Text>
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                            <Heading fontSize={'large'}>
-                                Pago Cliente:
-                            </Heading>
-                            <form
-                                className='flex flex-col gap-2'
-                                onSubmit={cobrarVenta}
-                            >
-                                <Input
-                                    placeholder={'Ej: 1200 , 350'}
-                                    background={'gray.100'}
-                                    borderColor={`${errorCobrarInput ? 'red' : 'gray.200'}`}
-                                    onChange={({ target }) => {
-                                        let valorActual = target.value
-                                        valorActual < totalVenta
-                                            ? setErrorCobrarInput(true)
-                                            : (setPagoCliente(target.value), setErrorCobrarInput(false))
-                                    }}
-                                />
-
-                                <Button
-                                    type='submit'
-                                    colorScheme='blue'
-                                    width={'full'}
-                                >
-                                    Cobrar
-                                </Button>
-
-                            </form>
-                        </div>
-                    </div> */}
         </div>
 
         <div className="w-[60%] flex flex-col gap-2">
           <div className="w-full h-[80%] bg-white rounded-md shadow-md p-3">
             <div className="flex flex-col gap-2">
-              {/* <div className="w-full flex items-center gap-3 border-b-2 border-black pb-2 overflow-x-scroll">
-                            <Info />
-                            <Info />
-                            <Info />
-                        </div> */}
-
               <div className="w-full max-h-[20%]">
                 <form
                   action=""
@@ -396,8 +313,8 @@ export const VenderCredito = () => {
                     <Button colorScheme="green" type="submit">
                       {cargandoBusqueda ? (
                         <TailSpin
-                          width={50}
-                          height={55}
+                          width={30}
+                          height={30}
                           color="#fff"
                           strokeWidth={3}
                           visible={cargandoBusqueda}
@@ -479,7 +396,17 @@ export const VenderCredito = () => {
                 </div>
 
                 <Button type="submit" colorScheme="blue">
-                  Generar Deuda
+                  {cargandoDeuda ? (
+                    <TailSpin
+                      width={30}
+                      height={30}
+                      color="#fff"
+                      strokeWidth={3}
+                      visible={cargandoDeuda}
+                    />
+                  ) : (
+                    "Generar Deuda"
+                  )}
                 </Button>
               </div>
             </form>

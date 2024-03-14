@@ -156,7 +156,7 @@ export const ReimprimirFacturasContado = () => {
                 />
               </div>
 
-              <div className="w-[50%] flex flex-col gap-2">
+              <div className=" flex  gap-2">
                 <Button colorScheme="green" type="submit">
                   {cargandoBusqueda ? (
                     <TailSpin

@@ -207,8 +207,8 @@ export const CobrarDeudas = () => {
                 <Button colorScheme="green" type="submit">
                   {cargandoBusqueda ? (
                     <TailSpin
-                      width={50}
-                      height={55}
+                      width={30}
+                      height={30}
                       color="#fff"
                       strokeWidth={3}
                       visible={cargandoBusqueda}
