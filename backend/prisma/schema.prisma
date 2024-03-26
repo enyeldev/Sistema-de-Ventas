@@ -32,6 +32,8 @@ model Productos {
   ventas VentasItem[]
 
   deudas ProductosDeudas[]
+
+  productosDevueltos ProductosDevolucionAlContado[]
 }
 
 model VentasItem {
@@ -73,7 +75,8 @@ model Ventas {
 
   fecha String
 
-  productos VentasItem[]
+  productos    VentasItem[]
+  Devoluciones DevolucionesAlContado?
 
   factura         Facturas?
   UsuarioCajero   UsuarioCajero? @relation(fields: [usuarioCajeroId], references: [id])
@@ -184,6 +187,44 @@ model HistorialPagosDeudas {
 
   dedua Deudas @relation(fields: [codigoDedua], references: [codigoDeuda])
 }
+
+model DevolucionesAlContado {
+  codigoDevolucion String                         @id
+  codigoVenta      String                         @unique
+  fecha            String
+  total            Decimal
+  venta            Ventas                         @relation(fields: [codigoVenta], references: [codigoVenta])
+  Productos        ProductosDevolucionAlContado[]
+  Facturas         FacturasDevolucionesAlContado?
+}
+
+model ProductosDevolucionAlContado {
+  id                    Int                    @id @default(autoincrement())
+  nombreProducto        String
+  codigoDevolucion      String
+  codigoProducto        String
+  cantidad              Int
+  precioCadaUno         Decimal
+  total                 Decimal
+  DevolucionesAlContado DevolucionesAlContado? @relation(fields: [codigoDevolucion], references: [codigoDevolucion])
+  Productos             Productos?             @relation(fields: [codigoProducto], references: [codigoProducto])
+}
+
+model FacturasDevolucionesAlContado {
+  codigoFactura    String                @id
+  codigoDevolucion String                @unique
+  devolucion       DevolucionesAlContado @relation(fields: [codigoDevolucion], references: [codigoDevolucion])
+}
+
+// model DevolucionACredito {
+//   id             Int     @id @default(autoincrement())
+//   codigoDeuda    String
+//   codigoProducto String
+//   cantidad       Int
+//   precioCadaUno  Decimal
+//   total          Decimal
+//   fecha          String
+// }
 
 model UsuariosAdministrativos {
   id String @id

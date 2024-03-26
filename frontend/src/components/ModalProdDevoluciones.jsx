@@ -3,6 +3,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { formatoDinero } from "../helpers/formatoDinero";
+import { obtenerFechaYHoraActual } from "../helpers/fechaHoraActual";
 
 import {
   Modal,
@@ -22,37 +23,37 @@ import { MinusIcon, AddIcon } from "@chakra-ui/icons";
 
 import { Alerta } from "../components/Alerta";
 
-export const ModalDataProdVenta = ({
+export const ModalProdDevoluciones = ({
   modal,
   setModal,
-  arrProductosVent,
-  setArrProductosVent,
+  arrProductosDevoluciones,
+  setArrProductosDevoluciones,
 }) => {
   if (modal.datos == null) {
     return;
   }
 
+  // console.log(modal.datos);
+
   const {
-    nombre,
-    precioVentaUnd,
-    precioCompraUnd,
-    cantidadStock,
+    nombreProducto,
+    costoActualProducto,
+    cantidadProducto,
     codigoProducto,
+    descuento,
+    codigoVenta,
   } = modal.datos;
 
   const [cantidad, setCantidad] = useState(1);
-  const [total, setTotal] = useState(precioVentaUnd);
+  const [total, setTotal] = useState(costoActualProducto);
   const [alerta, setAlerta] = useState({});
-  const [descuento, setDescuento] = useState("");
 
-  const regexDescuento = /^[0-9]+$/;
-
-  const descuentoCalculado =
-    parseFloat(total) / parseInt(cantidad) - parseFloat(descuento);
+  const totalDescuento =
+    parseFloat(total) - parseFloat(descuento) * parseInt(cantidad);
 
   useEffect(() => {
-    setTotal(parseFloat(precioVentaUnd));
-  }, [precioVentaUnd]);
+    setTotal(parseFloat(costoActualProducto));
+  }, [costoActualProducto]);
 
   const cambiarCantidad = ({ target }) => {
     setAlerta({});
@@ -63,7 +64,7 @@ export const ModalDataProdVenta = ({
 
     const cantidadActual = target.value;
 
-    if (cantidadActual > parseInt(cantidadStock)) {
+    if (cantidadActual > parseInt(cantidadProducto)) {
       setAlerta({
         titulo: "Error",
         msg: "La cantidad es mayor a la que hay en el inventario",
@@ -73,18 +74,23 @@ export const ModalDataProdVenta = ({
     }
 
     setCantidad(target.value);
-    setTotal(cantidadActual * precioVentaUnd);
+    setTotal(cantidadActual * costoActualProducto);
   };
 
   const restarCantidad = () => {
     setAlerta({});
     if (cantidad == 1) {
+      setAlerta({
+        titulo: "Error",
+        msg: "No puede seleccionar una cantidad menor",
+        status: "error",
+      });
       return;
     }
 
     const nuevaCantidad = cantidad - 1;
 
-    if (nuevaCantidad > parseInt(cantidadStock)) {
+    if (nuevaCantidad > parseInt(cantidadProducto)) {
       setAlerta({
         titulo: "Error",
         msg: "La cantidad es mayor a la que hay en el inventario",
@@ -94,15 +100,24 @@ export const ModalDataProdVenta = ({
     }
 
     setCantidad(nuevaCantidad);
-    setTotal(nuevaCantidad * precioVentaUnd);
+    setTotal(nuevaCantidad * costoActualProducto);
   };
 
   const sumarCantidad = () => {
     setAlerta({});
 
+    if (cantidad >= cantidadProducto) {
+      setAlerta({
+        titulo: "Error",
+        msg: "No puede seleccionar una cantidad menor",
+        status: "error",
+      });
+      return;
+    }
+
     const nuevaCantidad = cantidad + 1;
 
-    if (nuevaCantidad > parseInt(cantidadStock)) {
+    if (nuevaCantidad > parseInt(cantidadProducto)) {
       setAlerta({
         titulo: "Error",
         msg: "La cantidad es mayor a la que hay en el inventario",
@@ -112,28 +127,31 @@ export const ModalDataProdVenta = ({
     }
 
     setCantidad(nuevaCantidad);
-    setTotal(nuevaCantidad * precioVentaUnd);
+    setTotal(nuevaCantidad * costoActualProducto);
   };
 
   const agregarProducto = () => {
     setAlerta({});
-    console.log(modal.datos);
+    // console.log(modal.datos);
 
-    const detallesProductoVenta = {
-      nombre,
+    const detallesProductoDevolucion = {
+      nombreProducto,
       codigoProducto,
       cantidad,
       total,
       descuento,
-      precioVentaUnd,
-      financiado: false,
+      costoActualProducto,
+      codigoVenta,
+      fecha: obtenerFechaYHoraActual(),
     };
 
-    const existeProducto = arrProductosVent.find(
-      (e) => e.codigoProducto == detallesProductoVenta.codigoProducto
+    console.log(detallesProductoDevolucion);
+
+    const existeProducto = arrProductosDevoluciones.find(
+      (e) => e.codigoProducto == detallesProductoDevolucion.codigoProducto
     );
 
-    if (cantidad <= 0 || cantidad > parseInt(cantidadStock)) {
+    if (cantidad <= 0 || cantidad > parseInt(cantidadProducto)) {
       setAlerta({
         titulo: "Error",
         msg: "La cantidad no es valida",
@@ -151,41 +169,45 @@ export const ModalDataProdVenta = ({
       return;
     }
 
-    if (descuento.trim().length > 0) {
-      const regexDescuentoValidation = regexDescuento.test(descuento);
+    // if (descuento.trim().length > 0) {
+    //   const regexDescuentoValidation = regexDescuento.test(descuento);
 
-      if (
-        !regexDescuentoValidation ||
-        descuentoCalculado < parseFloat(precioCompraUnd)
-      ) {
-        setAlerta({
-          titulo: "Error",
-          msg: "El valor del descuento es invalido",
-          status: "error",
-        });
-        return;
-      }
+    //   if (
+    //     !regexDescuentoValidation ||
+    //     descuentoCalculado < parseFloat(precioCompraUnd)
+    //   ) {
+    //     setAlerta({
+    //       titulo: "Error",
+    //       msg: "El valor del descuento es invalido",
+    //       status: "error",
+    //     });
+    //     return;
+    //   }
 
-      detallesProductoVenta.total =
-        parseFloat(total) - parseFloat(descuento) * parseInt(cantidad);
+    if (descuento) {
+      detallesProductoDevolucion.total = totalDescuento;
     }
 
-    setArrProductosVent([...arrProductosVent, detallesProductoVenta]);
+    console.log(detallesProductoDevolucion);
+    setArrProductosDevoluciones([
+      ...arrProductosDevoluciones,
+      detallesProductoDevolucion,
+    ]);
     cerrarModal();
   };
 
   const cerrarModal = () => {
     setCantidad(1);
-    setTotal(parseFloat(precioVentaUnd));
-    setDescuento("");
+    setTotal(parseFloat(costoActualProducto));
+    // setDescuento("");
     setAlerta({});
     setModal({ show: false, datos: modal.datos });
   };
 
-  const leerDescuento = ({ currentTarget }) => {
-    const valor = currentTarget.value;
-    setDescuento(valor);
-  };
+  //   const leerDescuento = ({ currentTarget }) => {
+  //     const valor = currentTarget.value;
+  //     setDescuento(valor);
+  //   };
 
   const { msg } = alerta;
 
@@ -204,7 +226,7 @@ export const ModalDataProdVenta = ({
           <div className="w-full flex justify-between">
             <div className="">
               <Heading fontSize={"large"}>Descripcion del producto</Heading>
-              <Text>{nombre}</Text>
+              <Text>{nombreProducto}</Text>
             </div>
 
             <div className="flex flex-col items-center ">
@@ -230,18 +252,17 @@ export const ModalDataProdVenta = ({
             <div className="">
               <Heading fontSize={"large"}>Total</Heading>
 
-              <Text>{formatoDinero(total)}</Text>
+              <Text>
+                {descuento
+                  ? formatoDinero(totalDescuento)
+                  : formatoDinero(total)}
+              </Text>
             </div>
           </div>
         </ModalBody>
 
         <ModalFooter display={"flex"} flexDirection={"column"} gap={4}>
           <div className="w-full flex justify-between items-end">
-            <div className="">
-              <Heading fontSize={"larger"}>Descuento</Heading>
-              <Input onChange={leerDescuento} />
-            </div>
-
             <div className={""}>
               <Button colorScheme="green" onClick={agregarProducto}>
                 Agregar producto

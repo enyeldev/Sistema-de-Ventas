@@ -9,6 +9,8 @@ import {
   buscarFacturasDeudasPorNombreCliente,
   mostrarTodasFacturasContado,
   buscarFacturaContadoPorCodigo,
+  generarFacturaDevolucionContado,
+  imprimirFacturaDevolucionContado,
 } from "../controller/facturasController.js";
 
 const router = express.Router();
@@ -21,6 +23,11 @@ router.get(
   "/api/facturas/generarFacturaDeuda/:codigoDeuda",
   generarFacturaDeuda
 );
+
+router.get(
+  "/api/facturas/generarFacturaDevolucionAlContado/:codigoDevolucion",
+  generarFacturaDevolucionContado
+);
 // Endpoint para generar facturas
 
 // Endpoint para imprimir facturas
@@ -31,6 +38,11 @@ router.get(
 router.get(
   "/api/facturas/imprimirFacturaDeuda/:codigoFacturaDeuda",
   imprimirFacturaDeuda
+);
+
+router.get(
+  "/api/facturas/imprimirFacturaDevolucionContado/:codigoFacturaDevolucion",
+  imprimirFacturaDevolucionContado
 );
 // Endpoint para imprimir facturas
 

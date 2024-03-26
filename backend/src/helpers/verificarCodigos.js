@@ -1,163 +1,203 @@
 import { generarID } from "../helpers/generarCodigo.js";
-import { generarCodigo4Digitos } from './generarCodigo4Digitos.js'
+import { generarCodigo4Digitos } from "./generarCodigo4Digitos.js";
 import { prisma } from "../config/db.js";
 
 export const existeCodigoProducto = async () => {
-    let codigoProducto = generarCodigo4Digitos();
+  let codigoProducto = generarCodigo4Digitos();
 
-    let existeCodigoProducto = await prisma.productos.findFirst({
-        where: {
-            codigoProducto
-        }
-    })
+  let existeCodigoProducto = await prisma.productos.findFirst({
+    where: {
+      codigoProducto,
+    },
+  });
 
-    while (existeCodigoProducto) {
-        codigoProducto = generarID();
+  while (existeCodigoProducto) {
+    codigoProducto = generarCodigo4Digitos();
 
-        existeCodigoProducto = await prisma.productos.findFirst({
-            where: {
-                codigoProducto
-            }
-        })
-    }
+    existeCodigoProducto = await prisma.productos.findFirst({
+      where: {
+        codigoProducto,
+      },
+    });
+  }
 
-    return codigoProducto;
-}
+  return codigoProducto;
+};
 
 export const existeCodigoDeuda = async () => {
-    let codigoDeuda = generarID();
+  let codigoDeuda = generarID();
 
-    let existeDeuda = await prisma.deudas.findFirst({
-        where: {
-            codigoDeuda
-        }
-    })
+  let existeDeuda = await prisma.deudas.findFirst({
+    where: {
+      codigoDeuda,
+    },
+  });
 
-    while (existeDeuda) {
-        codigoDeuda = generarID();
+  while (existeDeuda) {
+    codigoDeuda = generarID();
 
-        existeDeuda = await prisma.deudas.findFirst({
-            where: {
-                codigoDeuda
-            }
-        })
-    }
+    existeDeuda = await prisma.deudas.findFirst({
+      where: {
+        codigoDeuda,
+      },
+    });
+  }
 
-    return codigoDeuda;
-}
+  return codigoDeuda;
+};
 
 export const existeCodigoVenta = async () => {
-    let codigoVenta = generarID();
+  let codigoVenta = generarID();
 
-    let existeVenta = await prisma.ventas.findFirst({
-        where: {
-            codigoVenta
-        }
-    })
+  let existeVenta = await prisma.ventas.findFirst({
+    where: {
+      codigoVenta,
+    },
+  });
 
-    while (existeVenta) {
-        codigoVenta = generarID();
+  while (existeVenta) {
+    codigoVenta = generarID();
 
-        existeVenta = await prisma.ventas.findFirst({
-            where: {
-                codigoVenta
-            }
-        })
-    }
+    existeVenta = await prisma.ventas.findFirst({
+      where: {
+        codigoVenta,
+      },
+    });
+  }
 
-    return codigoVenta;
-}
-
+  return codigoVenta;
+};
 
 export const existeCodigoIngreso = async () => {
-    let codigoIngreso = generarID();
+  let codigoIngreso = generarID();
 
-    let existeIngreso = await prisma.ingresos.findFirst({
-        where: {
-            codigoIngreso
-        }
-    })
+  let existeIngreso = await prisma.ingresos.findFirst({
+    where: {
+      codigoIngreso,
+    },
+  });
 
-    while (existeIngreso) {
-        codigoIngreso = generarID();
+  while (existeIngreso) {
+    codigoIngreso = generarID();
 
-        existeIngreso = await prisma.ingresos.findFirst({
-            where: {
-                codigoIngreso
-            }
-        })
-    }
+    existeIngreso = await prisma.ingresos.findFirst({
+      where: {
+        codigoIngreso,
+      },
+    });
+  }
 
-    return codigoIngreso;
-}
+  return codigoIngreso;
+};
 
 export const existeCodigoRetiro = async () => {
-    let codigoRetiro = generarID();
+  let codigoRetiro = generarID();
 
-    let existeRetiro = await prisma.retiros.findFirst({
-        where: {
-            codigoRetiro
-        }
-    })
+  let existeRetiro = await prisma.retiros.findFirst({
+    where: {
+      codigoRetiro,
+    },
+  });
 
-    while (existeRetiro) {
-        codigoRetiro = generarID();
+  while (existeRetiro) {
+    codigoRetiro = generarID();
 
-        existeRetiro = await prisma.retiros.findFirst({
-            where: {
-                codigoRetiro
-            }
-        })
-    }
+    existeRetiro = await prisma.retiros.findFirst({
+      where: {
+        codigoRetiro,
+      },
+    });
+  }
 
-    return codigoRetiro;
-}
+  return codigoRetiro;
+};
 
 export const existeCodigoFactura = async () => {
+  let codigoFacturaVenta = generarCodigo4Digitos();
 
-    let codigoFacturaVenta = generarCodigo4Digitos();
+  let existeFacturaVenta = await prisma.facturas.findFirst({
+    where: {
+      codigoFactura: codigoFacturaVenta,
+    },
+  });
 
-    let existeFacturaVenta = await prisma.facturas.findFirst({
+  while (existeFacturaVenta) {
+    codigoFacturaVenta = generarCodigo4Digitos();
+
+    existeFacturaVenta = await prisma.facturas.findFirst({
+      where: {
+        codigoFactura: codigoFacturaVenta,
+      },
+    });
+  }
+
+  return codigoFacturaVenta;
+};
+
+export const existeCodigoFacturaDevolucion = async () => {
+  let codigoFacturaDevolucionContado = generarCodigo4Digitos();
+
+  let existeFacturaDevolucionContado =
+    await prisma.facturasDevolucionesAlContado.findFirst({
+      where: {
+        codigoFactura: codigoFacturaDevolucionContado,
+      },
+    });
+
+  while (existeFacturaDevolucionContado) {
+    codigoFacturaDevolucionContado = generarCodigo4Digitos();
+
+    existeFacturaDevolucionContado =
+      await prisma.facturasDevolucionesAlContado.findFirst({
         where: {
-            codigoFactura: codigoFacturaVenta
-        }
-    })
+          codigoFactura: codigoFacturaDevolucionContado,
+        },
+      });
+  }
 
-    while (existeFacturaVenta) {
-        codigoFacturaVenta = generarID();
-
-        existeFacturaVenta = await prisma.facturas.findFirst({
-            where: {
-                codigoFactura: codigoFacturaVenta
-            }
-        })
-    }
-
-    return codigoFacturaVenta;
-
-}
+  return codigoFacturaDevolucionContado;
+};
 
 export const existeCodigoFacturaDeduda = async () => {
+  let codigoFacturaVentaDeuda = generarCodigo4Digitos();
 
-    let codigoFacturaVentaDeuda = generarCodigo4Digitos();
+  let existeFacturaDeuda = await prisma.facturasDeudas.findFirst({
+    where: {
+      codigoFactura: codigoFacturaVentaDeuda,
+    },
+  });
 
-    let existeFacturaDeuda = await prisma.facturasDeudas.findFirst({
-        where: {
-            codigoFactura: codigoFacturaVentaDeuda
-        }
-    })
+  while (existeFacturaDeuda) {
+    codigoFacturaVentaDeuda = generarCodigo4Digitos();
 
-    while (existeFacturaDeuda) {
-        codigoFacturaVentaDeuda = generarID();
+    existeFacturaDeuda = await prisma.facturasDeudas.findFirst({
+      where: {
+        codigoFactura: codigoFacturaVentaDeuda,
+      },
+    });
+  }
 
-        existeFacturaDeuda = await prisma.facturasDeudas.findFirst({
-            where: {
-                codigoFactura: codigoFacturaVentaDeuda
-            }
-        })
-    }
+  return codigoFacturaVentaDeuda;
+};
 
-    return codigoFacturaVentaDeuda;
+export const existeCodigoDevolucionAlContado = async () => {
+  let codigoDevolucionAlContado = generarID();
 
-}
+  let existeDevolucionAlContado = await prisma.devolucionesAlContado.findFirst({
+    where: {
+      codigoDevolucion: codigoDevolucionAlContado,
+    },
+  });
 
+  while (existeDevolucionAlContado) {
+    codigoDevolucionAlContado = generarID();
+
+    existeDevolucionAlContado = await prisma.facturasDeudas.findFirst({
+      where: {
+        codigoDevolucion: codigoDevolucionAlContado,
+      },
+    });
+  }
+
+  return codigoDevolucionAlContado;
+};

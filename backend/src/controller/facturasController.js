@@ -3,6 +3,7 @@ import { prisma } from "../config/db.js";
 import {
   existeCodigoFactura,
   existeCodigoFacturaDeduda,
+  existeCodigoFacturaDevolucion,
 } from "../helpers/verificarCodigos.js";
 
 export const generarFacturaVenta = async (req, res) => {
@@ -58,7 +59,7 @@ export const imprimirFacturaVenta = async (req, res) => {
       },
     });
 
-    console.log(productosDeLaVenta);
+    // console.log(productosDeLaVenta);
 
     const nuevoArregloProductos = productosDeLaVenta.map((producto) => {
       const {
@@ -107,7 +108,7 @@ export const generarFacturaDeuda = async (req, res) => {
   const { codigoDeuda } = req.params;
 
   try {
-    const codigoFacturaDeuda = await existeCodigoFactura();
+    const codigoFacturaDeuda = await existeCodigoFacturaDeduda();
 
     const nuevaFacturaDeuda = {
       codigoFacturaDeuda,
@@ -188,6 +189,106 @@ export const imprimirFacturaDeuda = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ msg: error });
+  }
+};
+
+export const generarFacturaDevolucionContado = async (req, res) => {
+  const { codigoDevolucion } = req.params;
+
+  try {
+    // Validar si ya existe una factura de esta devolucion y no crearla
+    const existeFactura = await prisma.facturasDevolucionesAlContado.findFirst({
+      where: {
+        codigoDevolucion,
+      },
+    });
+
+    if (existeFactura) {
+      console.log("ya existe la factura, solo retorna el codigo para imrpirla");
+      res.json({
+        msg: "Factura generada",
+        codigoFacturaDevolucion: existeFactura.codigoFactura,
+      });
+      return;
+    }
+
+    const codigoFacturaDevolucion = await existeCodigoFacturaDevolucion();
+
+    const nuevaFactura = {
+      codigoFactura: codigoFacturaDevolucion,
+      codigoDevolucion,
+    };
+
+    // Crear la nueva factura
+    const nuevaFacturaDevolucion =
+      await prisma.facturasDevolucionesAlContado.create({
+        data: nuevaFactura,
+      });
+
+    console.log("Factura devolucion creada");
+    res.json({ msg: "Factura generada", codigoFacturaDevolucion });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
+
+export const imprimirFacturaDevolucionContado = async (req, res) => {
+  const { codigoFacturaDevolucion } = req.params;
+
+  try {
+    // Validar si existe esta la factura
+    const existeFactura = await prisma.facturasDevolucionesAlContado.findFirst({
+      where: {
+        codigoFactura: codigoFacturaDevolucion,
+      },
+    });
+
+    if (!existeFactura) {
+      console.log("No existe esta factura");
+      res.status(404).json({ msg: "No existe esta factura" });
+      return;
+    }
+
+    // validar si existe la devolucion de esta factura
+    const existeDevolucion = await prisma.devolucionesAlContado.findFirst({
+      where: {
+        codigoDevolucion: existeFactura.codigoDevolucion,
+      },
+    });
+
+    if (!existeDevolucion) {
+      console.log("No existe la devolucion");
+      res.status(404).json({ msg: "No existe la devolucion" });
+    }
+
+    // buscar productos de la devolucion
+    const productosDevolucion =
+      await prisma.productosDevolucionAlContado.findMany({
+        where: {
+          codigoDevolucion: existeDevolucion.codigoDevolucion,
+        },
+      });
+
+    // validar si no hay productos de esta devolucion
+    if (productosDevolucion.length == 0) {
+      console.log("No hay productos de esta devolucion");
+      res.status(404).json({ msg: "No hay productos de esta devolucion" });
+      return;
+    }
+
+    // organizar datos de la factura
+    const facturaObj = {
+      codigoFactura: existeFactura.codigoFactura,
+      datosDevolucion: {
+        total: existeDevolucion.total,
+        fecha: existeDevolucion.fecha,
+      },
+      productosDevolucion,
+    };
+    res.json({ facturaObj });
+  } catch (error) {
+    console.log();
   }
 };
 

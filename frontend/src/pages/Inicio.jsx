@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import { clienteAxios } from "../config/axios";
 
-import {
-  Card,
-  CardBody,
-  Heading,
-  Button,
-  Text,
-} from "@chakra-ui/react";
+import { Card, CardBody, Heading, Button, Text } from "@chakra-ui/react";
 
 export const Inicio = () => {
   const [datosProductos, setDatosProductos] = useState({});
@@ -48,7 +42,7 @@ export const Inicio = () => {
           <CardBody display={"flex"} flexDirection={"column"} gap={"5px"}>
             <Heading fontSize={"x-large"}>Productos agotados</Heading>
             <Text fontSize={"x-large"}>
-              {datosProductos.cantidadProductosEnBaja}
+              {datosProductos.cantidadProductosAgotados}
             </Text>
             <Button colorScheme="blue">Ver mas</Button>
           </CardBody>

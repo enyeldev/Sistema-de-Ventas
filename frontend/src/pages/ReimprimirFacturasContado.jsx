@@ -78,35 +78,6 @@ export const ReimprimirFacturasContado = () => {
     setCargandoBusqueda(false);
   };
 
-  // //Buscar por nombre
-  // const bucarFacturaPorNombre = async (e) => {
-  //   e.preventDefault();
-
-  //   const regexValidation = regexNombre.test(parametroBusqueda);
-  //   if (parametroBusqueda.length == 0 || !regexValidation) {
-  //     setErrorInput(true);
-  //     return;
-  //   }
-
-  //   setErrorInput(false);
-  //   setAlerta({});
-
-  //   try {
-  //     const url = `/facturas/buscarFacturasDeudasPorNombreCliente/${parametroBusqueda}`;
-  //     const respuesta = await clienteAxios.get(url);
-  //     console.log(respuesta.data.datosFactura);
-  //     setArrFacturas([respuesta.data.datosFactura]);
-  //   } catch (error) {
-  //     console.log(error);
-  //     setAlerta({
-  //       titulo: "Error",
-  //       msg: error.response.data.msg,
-  //       status: "error",
-  //     });
-  //   }
-  //   setCargandoBusqueda(false);
-  // };
-
   const mostrarModalFacturaContado = async ({ currentTarget }) => {
     const idTarget = currentTarget.parentElement.parentElement.dataset.id;
 

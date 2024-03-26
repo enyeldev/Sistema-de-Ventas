@@ -11,6 +11,7 @@ import facturasRoutes from "./routes/facturas.routes.js";
 import loginRoutes from "./routes/login.routes.js";
 import retirosRoutes from "./routes/retiros.routes.js";
 import inicioRoutes from "./routes/inicio.routes.js";
+import devolucionesRoutes from "./routes/devoluciones.routes.js";
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use(facturasRoutes);
 app.use(loginRoutes);
 app.use(retirosRoutes);
 app.use(inicioRoutes);
+app.use(devolucionesRoutes);
 
 //Lanzar server
 app.listen(PORT, () => {
