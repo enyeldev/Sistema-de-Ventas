@@ -11,6 +11,8 @@ import {
   buscarFacturaContadoPorCodigo,
   generarFacturaDevolucionContado,
   imprimirFacturaDevolucionContado,
+  mostrarTodasFacturasDevolucionesContado,
+  buscarFacturasDevolucionContadoPorCodigo,
 } from "../controller/facturasController.js";
 
 const router = express.Router();
@@ -74,6 +76,18 @@ router.get(
 router.get(
   "/api/facturas/buscarFacturasPorCodigo/:codigoFactura",
   buscarFacturaContadoPorCodigo
+);
+
+// Enponit para mostrar todas las facturas de devoluciones
+router.get(
+  "/api/facturas/mostrarTodasFacturasDevolucionesContado",
+  mostrarTodasFacturasDevolucionesContado
+);
+
+// Endpoint para buscar facturas devoluciones contado por codigo
+router.get(
+  "/api/facturas/buscarFacturasDevolucionContadoPorCodigo/:codigoFactura",
+  buscarFacturasDevolucionContadoPorCodigo
 );
 
 export default router;

@@ -72,6 +72,31 @@ export const Header = () => {
             texto={"Comprar"}
           />
 
+          <MenuOptions
+            icon={<TiPrinter size={25} />}
+            name={"Imprimir"}
+            arrOptions={[
+              <MenuLink
+                key={"factura contado"}
+                icono={<MdLocalPrintshop size={25} />}
+                ruta={"/caja/reimprimir-factura-contado"}
+                texto={"Factura contado"}
+              />,
+              <MenuLink
+                key={"factura credito"}
+                icono={<MdLocalPrintshop size={25} />}
+                ruta={"/caja/reimprimir-factura-credito"}
+                texto={"Factura credito"}
+              />,
+              <MenuLink
+                key={"factura devolucion contado"}
+                icono={<MdLocalPrintshop size={25} />}
+                ruta={"/caja/reimprimir-factura-devolucion-contado"}
+                texto={"Factura devolucion contado"}
+              />,
+            ]}
+          />
+
           <MenuLink
             icono={<GiTakeMyMoney size={25} />}
             ruta={"/caja/cobrar-deudas"}
@@ -103,24 +128,7 @@ export const Header = () => {
             ]}
           />
 
-          <MenuOptions
-            icon={<TiPrinter size={25} />}
-            name={"Imprimir"}
-            arrOptions={[
-              <MenuLink
-                key={"factura contado"}
-                icono={<MdLocalPrintshop size={25} />}
-                ruta={"/caja/reimprimir-factura-contado"}
-                texto={"Factura contado"}
-              />,
-              <MenuLink
-                key={"factura credito"}
-                icono={<MdLocalPrintshop size={25} />}
-                ruta={"/caja/reimprimir-factura-credito"}
-                texto={"Factura credito"}
-              />,
-            ]}
-          />
+          {/* reimprimir-factura-devolucion-contado */}
 
           <MenuLink
             icono={<IoCreate size={25} />}

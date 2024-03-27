@@ -330,6 +330,27 @@ export const mostrarTodasFacturasContado = async (req, res) => {
   }
 };
 
+export const mostrarTodasFacturasDevolucionesContado = async (req, res) => {
+  try {
+    const facturasDevolucionContado =
+      await prisma.$queryRaw`SELECT codigoFactura , * FROM FacturasDevolucionesAlContado INNER JOIN DevolucionesAlContado on FacturasDevolucionesAlContado.codigoDevolucion = DevolucionesAlContado.codigoDevolucion`;
+
+    const arrArreglado = facturasDevolucionContado.map((e) => {
+      e.total = parseFloat(e.total);
+      return e;
+    });
+
+    console.log(facturasDevolucionContado);
+    res.json({
+      msg: "Todos las facturas",
+      facturasDevolucionContado: arrArreglado,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
+
 export const buscarFacturaDeudaPorCodigo = async (req, res) => {
   const { codigoFactura } = req.params;
 
@@ -437,6 +458,48 @@ export const buscarFacturaContadoPorCodigo = async (req, res) => {
     const datosFactura = {
       codigoFactura: existeFacutra.codigoFactura,
       ...existeVenta,
+    };
+
+    res.json({ msg: "Factura encontrada", datosFactura });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
+
+export const buscarFacturasDevolucionContadoPorCodigo = async (req, res) => {
+  const { codigoFactura } = req.params;
+
+  try {
+    // Validar si existe la factura
+    const existeFactura = await prisma.facturasDevolucionesAlContado.findFirst({
+      where: {
+        codigoFactura,
+      },
+    });
+
+    if (!existeFactura) {
+      console.log("No existe la factura");
+      res.status(404).json({ msg: "No existe la factura" });
+      return;
+    }
+
+    // Validar si existe la devolucion
+    const existeDevolucion = await prisma.devolucionesAlContado.findFirst({
+      where: {
+        codigoDevolucion: existeFactura.codigoDevolucion,
+      },
+    });
+
+    if (!existeDevolucion) {
+      console.log("No existe la devolucion");
+      res.status(404).json({ msg: "No existe la devolucion" });
+      return;
+    }
+
+    const datosFactura = {
+      codigoFactura: existeFactura.codigoFactura,
+      ...existeDevolucion,
     };
 
     res.json({ msg: "Factura encontrada", datosFactura });
