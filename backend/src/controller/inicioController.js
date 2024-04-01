@@ -46,3 +46,53 @@ export const datosProductos = async (req, res) => {
     res.status(400).json({ msg: error });
   }
 };
+
+// Controller que devuelve todos los productos
+export const todosLosProductos = async (req, res) => {
+  try {
+    const productos = await prisma.productos.findMany();
+
+    res.json({ msg: "Todos los productos", listaProductos: productos });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
+
+// Controller que devuelve todos los productos en baja
+export const productosEnBaja = async (req, res) => {
+  try {
+    const todosLosProductosEnbaja = await prisma.productos.findMany({
+      where: {
+        enBaja: true,
+      },
+    });
+
+    res.json({
+      msg: "Todos los productos en baja",
+      listaProductos: todosLosProductosEnbaja,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
+
+// Controller que devuelve todos los productos agotados
+export const productosAgotados = async (req, res) => {
+  try {
+    const todosLosProductosAgotados = await prisma.productos.findMany({
+      where: {
+        agotado: true,
+      },
+    });
+
+    res.json({
+      msg: "Todos los productos agotados",
+      listaProductos: todosLosProductosAgotados,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};

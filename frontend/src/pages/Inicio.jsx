@@ -3,8 +3,11 @@ import { clienteAxios } from "../config/axios";
 
 import { Card, CardBody, Heading, Button, Text } from "@chakra-ui/react";
 
+import { ModalInicio } from "../components/ModalInicio";
+
 export const Inicio = () => {
   const [datosProductos, setDatosProductos] = useState({});
+  const [modal, setModal] = useState({ datos: [], titulo: "", show: false });
 
   useEffect(() => {
     const obtenerDatosDeProductos = async () => {
@@ -17,14 +20,36 @@ export const Inicio = () => {
     obtenerDatosDeProductos();
   }, []);
 
+  // Funcion que trae los datos y muestra el modal
+  const handleClick = async ({ titulo, url }) => {
+    try {
+      const respuesta = await clienteAxios.get(url);
+      console.log(respuesta.data.listaProductos);
+      setModal({ datos: respuesta.data.listaProductos, show: true, titulo });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-[85%] max-h-screen  bg-gray-100 rounded-md p-2">
+      {modal.show && <ModalInicio modal={modal} setModal={setModal} />}
       <div className="w-full flex gap-3">
         <Card>
           <CardBody display={"flex"} flexDirection={"column"} gap={"5px"}>
             <Heading fontSize={"x-large"}>Total de productos</Heading>
             <Text fontSize={"x-large"}>{datosProductos.cantidadTotal}</Text>
-            <Button colorScheme="blue">Ver mas</Button>
+            <Button
+              colorScheme="blue"
+              onClick={async () =>
+                await handleClick({
+                  titulo: "Todos los productos",
+                  url: "/inicio/todosProductos",
+                })
+              }
+            >
+              Ver mas
+            </Button>
           </CardBody>
         </Card>
 
@@ -34,7 +59,17 @@ export const Inicio = () => {
             <Text fontSize={"x-large"}>
               {datosProductos.cantidadProductosEnBaja}
             </Text>
-            <Button colorScheme="blue">Ver mas</Button>
+            <Button
+              colorScheme="blue"
+              onClick={() =>
+                handleClick({
+                  titulo: "Todos los productos en baja",
+                  url: "/inicio/productosEnBaja",
+                })
+              }
+            >
+              Ver mas
+            </Button>
           </CardBody>
         </Card>
 
@@ -44,7 +79,17 @@ export const Inicio = () => {
             <Text fontSize={"x-large"}>
               {datosProductos.cantidadProductosAgotados}
             </Text>
-            <Button colorScheme="blue">Ver mas</Button>
+            <Button
+              colorScheme="blue"
+              onClick={() =>
+                handleClick({
+                  titulo: "Todos los productos agotados",
+                  url: "/inicio/productosAgotados",
+                })
+              }
+            >
+              Ver mas
+            </Button>
           </CardBody>
         </Card>
       </div>
