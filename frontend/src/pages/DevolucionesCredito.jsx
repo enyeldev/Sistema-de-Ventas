@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { clienteAxios } from "../config/axios";
 import { formatoDinero } from "../helpers/formatoDinero";
-import { generarFacturaDevolucionContado } from "../helpers/facturasFunciones";
 import {
-  generarNuevaDevolucionAlContado,
-  devovlerProductosAlContado,
+  generarFacturaDevolucionCredito,
+  imprimriFacturaDevolucionCredito,
+} from "../helpers/facturasFunciones";
+import {
+  generarNuevaDevolucionACredito,
+  devovlerProductosACredito,
 } from "../helpers/devolucionesFunciones";
-
 import { obtenerFechaYHoraActual } from "../helpers/fechaHoraActual";
 import { hanPasado7Dias } from "../helpers/hanPasado7Dias";
-
-import { imprimirFacturaDevolucionContado } from "../helpers/facturasFunciones";
 
 import {
   Button,
@@ -31,7 +31,7 @@ import { ModalProdDevoluciones } from "../components/ModalProdDevoluciones";
 import { ItemDevolucion } from "../components/ItemDevolucion";
 import { ModalFacturaDevueltaAlContado } from "../components/ModalFacturaDevueltaAlContado";
 
-export const Devoluciones = () => {
+export const DevolucionesCredito = () => {
   const [parametroBusqueda, setParametroBusqueda] = useState("");
   const [alerta, setAlerta] = useState({});
   const [cargandoDevolucion, setCargandoDevolucion] = useState(false);
@@ -39,20 +39,31 @@ export const Devoluciones = () => {
   const [arrProductosSelect, setArrProductosSelect] = useState([]);
   const [arrProductosDevolucion, setArrProductosDevolucion] = useState([]);
   const [modal, setModal] = useState({ show: false, datos: null });
-  const [showModalFacturaDevueltaContado, setShowModalFacturaDevueltaContado] =
+  const [showModalFacturaDevueltaCredito, setShowModalFacturaDevueltaCredito] =
     useState(false);
-  const [datosFacturaDevueltaContado, setDatosFacturaDevueltaContado] =
+  const [datosFacturaDevueltaContado, setDatosFacturaDevueltaCredito] =
     useState({});
+  const [montoRestante, setMontoRestante] = useState(0);
+  // const [totalSeleccionado, setTotalSeleccionado] = useState(0);
 
   const regexCodigo = /^[0-9]+$/;
-  const totalDevolver = arrProductosDevolucion.reduce((total, e) => {
+  const totalSeleccionado = arrProductosDevolucion.reduce((total, e) => {
     return total + e.total;
   }, 0);
 
-  // Funcion que busco loo productos de la deuda, conel codigo de la factura
+  const totalDevolver =
+    totalSeleccionado > montoRestante
+      ? parseFloat(totalSeleccionado) - parseFloat(montoRestante)
+      : totalSeleccionado == montoRestante
+      ? 0
+      : 0;
+
+  // Funcion que busco lo productos de la deuda, conel codigo de la factura
   const buscarProductos = async (e) => {
     e.preventDefault();
     setAlerta({});
+    setMontoRestante(0);
+    setArrProductosSelect([]);
 
     const regexValidation = regexCodigo.test(parametroBusqueda);
 
@@ -69,13 +80,13 @@ export const Devoluciones = () => {
 
     try {
       const respuesta = await clienteAxios.get(
-        `/devoluciones/buscarProductosFactura/${parametroBusqueda}`
+        `/devoluciones/buscarProductosFacturaCredito/${parametroBusqueda}`
       );
 
-      if (respuesta.data.productosVenta.length == 0) {
+      if (respuesta.data.productosDeuda.length == 0) {
         setAlerta({
           titulo: "Advertencia",
-          msg: "No quedan productos en esta venta, se han devuelto todos",
+          msg: "No quedan productos en esta deuda, se han devuelto todos",
           status: "warning",
         });
 
@@ -83,15 +94,14 @@ export const Devoluciones = () => {
         return;
       }
 
+      const fechaInicial = respuesta.data.deuda.fecha;
       const fechaActual = obtenerFechaYHoraActual();
-      const fechaInicial = respuesta.data.venta.fecha;
 
-      const estaVencido = hanPasado7Dias(fechaInicial, fechaActual);
+      const estaVencida = hanPasado7Dias(fechaInicial, fechaActual);
 
-      console.log(estaVencido);
-      console.log(fechaInicial);
+      console.log(estaVencida);
 
-      if (estaVencido) {
+      if (estaVencida) {
         console.log(
           "Ya han pasado 7 dias de esta venta, no se permiten devoluciones"
         );
@@ -102,7 +112,8 @@ export const Devoluciones = () => {
         });
       }
 
-      setArrProductosSelect([...respuesta.data.productosVenta]);
+      setMontoRestante(parseFloat(respuesta.data.deuda.montoActualDeuda));
+      setArrProductosSelect([...respuesta.data.productosDeuda]);
     } catch (error) {
       setAlerta({
         titulo: "Error",
@@ -120,7 +131,26 @@ export const Devoluciones = () => {
     const datos = arrProductosSelect.find((e) => e.codigoProducto == idTarget);
 
     console.log(datos);
-    setModal({ show: true, datos });
+
+    const {
+      nombreProducto,
+      costoProducto,
+      descuento,
+      codigoProducto,
+      cantidadProducto,
+      codigoDeuda,
+    } = datos;
+    setModal({
+      show: true,
+      datos: {
+        nombreProducto,
+        costoActualProducto: costoProducto,
+        cantidadProducto,
+        codigoProducto,
+        descuento,
+        codigoVenta: codigoDeuda,
+      },
+    });
   };
 
   const eliminarItemVenta = ({ currentTarget }) => {
@@ -134,7 +164,7 @@ export const Devoluciones = () => {
   const realizarDevolucion = async () => {
     setAlerta({});
 
-    if (arrProductosDevolucion.length == 0 || totalDevolver == 0) {
+    if (arrProductosDevolucion.length == 0) {
       setAlerta({
         titulo: "Error",
         msg: "Debe seleccionar productos para la devolucion",
@@ -145,18 +175,19 @@ export const Devoluciones = () => {
 
     try {
       setCargandoDevolucion(true);
-      // generar una nueva devolucion
-      const respuesta = await generarNuevaDevolucionAlContado({
+
+      // generar una nueva devolucion a credito
+      const respuesta = await generarNuevaDevolucionACredito({
         codigoFactura: parametroBusqueda,
+        montoRestante,
         totalDevolver,
+        totalSeleccionado,
       });
 
       const codigoDevolucion = respuesta;
 
-      console.log(codigoDevolucion);
-
       // agregar productos de la devolucion
-      const respuestaProductos = await devovlerProductosAlContado({
+      const respuestaProductos = await devovlerProductosACredito({
         arrProductosDevolucion,
         codigoDevolucion,
       });
@@ -167,21 +198,21 @@ export const Devoluciones = () => {
         status: "success",
       });
 
-      const codigoFactura = await generarFacturaDevolucionContado(
+      const codigoFactura = await generarFacturaDevolucionCredito(
         codigoDevolucion
       );
 
       console.log(codigoFactura);
-      const datosFactura = await imprimirFacturaDevolucionContado(
+      const datosFactura = await imprimriFacturaDevolucionCredito(
         codigoFactura
       );
       console.log(datosFactura);
-      // console.log(codigoFactura);
+      console.log(codigoFactura);
 
       setArrProductosSelect([]);
       setArrProductosDevolucion([]);
-      setDatosFacturaDevueltaContado(datosFactura);
-      setShowModalFacturaDevueltaContado(true);
+      setDatosFacturaDevueltaCredito(datosFactura);
+      setShowModalFacturaDevueltaCredito(true);
     } catch (error) {
       console.log(error);
     }
@@ -213,7 +244,7 @@ export const Devoluciones = () => {
     //   };
 
     //   console.log(datosFacturaDevolucion);
-    //   setDatosFacturaDevueltaContado(datosFacturaDevolucion);
+    //   setDatosFacturaDevueltaCredito(datosFacturaDevolucion);
     //   setShowModalFacturaDevueltaContado(true);
     // } catch (error) {
     //   console.log(error);
@@ -236,13 +267,13 @@ export const Devoluciones = () => {
         />
       )}
 
-      {showModalFacturaDevueltaContado && (
+      {showModalFacturaDevueltaCredito && (
         <ModalFacturaDevueltaAlContado
           datosFacturaDevueltaContado={datosFacturaDevueltaContado}
           setShowModalFacturaDevueltaContado={
-            setShowModalFacturaDevueltaContado
+            setShowModalFacturaDevueltaCredito
           }
-          showModalFacturaDevueltaContado={showModalFacturaDevueltaContado}
+          showModalFacturaDevueltaContado={showModalFacturaDevueltaCredito}
         />
       )}
 
@@ -268,6 +299,7 @@ export const Devoluciones = () => {
                     total,
                     // costoActualProducto,
                   }) => {
+                    console.log(arrProductosDevolucion);
                     return (
                       <ItemDevolucion
                         cantidad={cantidad}
@@ -285,26 +317,44 @@ export const Devoluciones = () => {
           </TableContainer>
         </div>
 
-        <div className="w-fulll h-[30%] p-3 bg-white shadow-md rounded-md flex gap-2">
+        <div className="w-fulll h-[30%] p-3 bg-white shadow-md rounded-md flex flex-wrap gap-2">
           <div className="">
-            <Heading fontSize={"large"}>Total a devolver:</Heading>
-            <Text fontSize={"large"}>{formatoDinero(totalDevolver)}</Text>
+            <div className="">
+              <Heading fontSize={"large"}>Monto restante:</Heading>
+              <Text fontSize={"large"}>{formatoDinero(montoRestante)}</Text>
+            </div>
           </div>
-
           <div className="">
-            <Button colorScheme="blue" onClick={realizarDevolucion}>
-              {cargandoDevolucion ? (
-                <TailSpin
-                  width={30}
-                  height={30}
-                  color="#fff"
-                  strokeWidth={3}
-                  visible={cargandoDevolucion}
-                />
-              ) : (
-                "Realizar devolucion"
-              )}
-            </Button>
+            <div className="">
+              <Heading fontSize={"large"}>Total seleccionado:</Heading>
+              <Text fontSize={"large"}>
+                {formatoDinero(
+                  totalSeleccionado ? parseFloat(totalSeleccionado) : 0
+                )}
+              </Text>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <div className="">
+              <Heading fontSize={"large"}>Total a devolver:</Heading>
+              <Text fontSize={"large"}>{formatoDinero(totalDevolver)}</Text>
+            </div>
+
+            <div className="">
+              <Button colorScheme="blue" onClick={realizarDevolucion}>
+                {cargandoDevolucion ? (
+                  <TailSpin
+                    width={30}
+                    height={30}
+                    color="#fff"
+                    strokeWidth={3}
+                    visible={cargandoDevolucion}
+                  />
+                ) : (
+                  "Realizar devolucion"
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -363,8 +413,8 @@ export const Devoluciones = () => {
                       codigoProducto,
                       nombreProducto,
                       cantidadProducto,
-                      costoVentaItem,
-                      costoActualProducto,
+                      monto,
+                      costoProducto,
                       descuento,
                     }) => {
                       return (
@@ -372,8 +422,8 @@ export const Devoluciones = () => {
                           cantidad={cantidadProducto}
                           id={codigoProducto}
                           nombre={nombreProducto}
-                          precioCadaUno={costoActualProducto}
-                          precioTotal={costoVentaItem}
+                          precioCadaUno={costoProducto}
+                          precioTotal={monto}
                           descuento={descuento}
                           key={codigoProducto}
                           mostrarModal={mostrarModal}

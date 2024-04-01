@@ -199,7 +199,7 @@ export const VenderCredito = () => {
 
   const { msg } = alerta;
   return (
-    <div className="w-[85%] min-h-screen  bg-gray-100 rounded-md">
+    <div className="w-[85%] max-h-screen  bg-gray-100 rounded-md">
       <div className="flex relative p-2 gap-2 h-full">
         {showModalFacturaDeuda && (
           <ModalFacturaDeuda
@@ -217,7 +217,7 @@ export const VenderCredito = () => {
         />
 
         <div className=" w-[40%] flex flex-col gap-2">
-          <div className="bg-white rounded-md shadow-md p-3 h-[100%] overflow-y-scroll">
+          <div className="bg-white rounded-md shadow-md p-3 h-[35em] overflow-y-scroll">
             <TableContainer width={""}>
               <Table variant="simple">
                 <Thead>
@@ -332,7 +332,7 @@ export const VenderCredito = () => {
                   </div>
                 )}
               </div>
-              <div className=" w-full max-h-[80%] overflow-y-scroll">
+              <div className=" w-full h-[19em] overflow-y-scroll">
                 <TableContainer width={""}>
                   <Table variant="simple">
                     <Thead>

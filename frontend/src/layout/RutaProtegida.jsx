@@ -12,7 +12,7 @@ export const RutaProtegida = () => {
   }
 
   return (
-    <main className="min-w-screen h-full flex gap-3 bg-blue-700 p-2">
+    <main className="min-w-screen min-h-screen flex gap-3 bg-blue-700 p-2">
       <Header />
       {auth.id ? <Outlet /> : <Navigate to="/" />}
     </main>

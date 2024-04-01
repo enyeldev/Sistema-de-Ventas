@@ -20,7 +20,7 @@ export const Header = () => {
   const location = useLocation();
 
   return (
-    <header className=" h-full w-[15%] ">
+    <header className=" max-h-screen w-[15%] ">
       <div className="flex flex-col gap-8">
         <div className="w-full border-b border-gray-200 px-2 py-4">
           <Heading className="text-white" fontSize={"large"}>
@@ -103,10 +103,23 @@ export const Header = () => {
             texto={"Cobrar deudas"}
           />
 
-          <MenuLink
-            icono={<GiBackForth size={25} />}
-            ruta={"/caja/devoluciones"}
-            texto={"Devoluciones"}
+          <MenuOptions
+            icon={<GiBackForth size={25} />}
+            name={"Devoluciones"}
+            arrOptions={[
+              <MenuLink
+                key={"devolucion al contado"}
+                icono={<GiBackForth size={25} />}
+                texto={"Devoluciones al contado"}
+                ruta={"/caja/devoluciones-contado"}
+              />,
+              <MenuLink
+                key={"devolucion a credito"}
+                icono={<GiBackForth size={25} />}
+                texto={"Devoluciones a credito"}
+                ruta={"/caja/devoluciones-credito"}
+              />,
+            ]}
           />
 
           <MenuOptions

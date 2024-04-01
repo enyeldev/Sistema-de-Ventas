@@ -33,7 +33,7 @@ export const ModalProdDevoluciones = ({
     return;
   }
 
-  // console.log(modal.datos);
+  console.log(modal.datos);
 
   const {
     nombreProducto,
@@ -193,6 +193,8 @@ export const ModalProdDevoluciones = ({
       ...arrProductosDevoluciones,
       detallesProductoDevolucion,
     ]);
+
+    console.log(detallesProductoDevolucion);
     cerrarModal();
   };
 
@@ -254,8 +256,8 @@ export const ModalProdDevoluciones = ({
 
               <Text>
                 {descuento
-                  ? formatoDinero(totalDescuento)
-                  : formatoDinero(total)}
+                  ? formatoDinero(parseFloat(totalDescuento))
+                  : formatoDinero(parseFloat(total))}
               </Text>
             </div>
           </div>

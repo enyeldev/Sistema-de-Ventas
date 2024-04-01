@@ -127,7 +127,7 @@ export const ReimprimirFacturasCredito = () => {
   const { msg } = alerta;
 
   return (
-    <div className="w-[85%] min-h-screen bg-gray-100 rounded-md p-2">
+    <div className="w-[85%] max-h-screen bg-gray-100 rounded-md p-2">
       <div className="w-full h-full flex flex-col gap-2">
         {showModalFacturaDeuda && (
           <ModalFacturaDeuda

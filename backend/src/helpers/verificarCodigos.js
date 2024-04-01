@@ -163,7 +163,7 @@ export const existeCodigoFacturaDeduda = async () => {
 
   let existeFacturaDeuda = await prisma.facturasDeudas.findFirst({
     where: {
-      codigoFactura: codigoFacturaVentaDeuda,
+      codigoFacturaDeuda: codigoFacturaVentaDeuda,
     },
   });
 
@@ -192,7 +192,7 @@ export const existeCodigoDevolucionAlContado = async () => {
   while (existeDevolucionAlContado) {
     codigoDevolucionAlContado = generarID();
 
-    existeDevolucionAlContado = await prisma.facturasDeudas.findFirst({
+    existeDevolucionAlContado = await prisma.devolucionesAlContado.findFirst({
       where: {
         codigoDevolucion: codigoDevolucionAlContado,
       },
@@ -200,4 +200,26 @@ export const existeCodigoDevolucionAlContado = async () => {
   }
 
   return codigoDevolucionAlContado;
+};
+
+export const existeCodigoDevolucionACredito = async () => {
+  let codigoDevolucionACredito = generarID();
+
+  let existeDevolucionACredito = await prisma.devolucionACredito.findFirst({
+    where: {
+      codigoDevolucion: codigoDevolucionACredito,
+    },
+  });
+
+  while (existeDevolucionACredito) {
+    codigoDevolucionACredito = generarID();
+
+    existeDevolucionACredito = await prisma.devolucionACredito.findFirst({
+      where: {
+        codigoDevolucion: codigoDevolucionACredito,
+      },
+    });
+  }
+
+  return codigoDevolucionACredito;
 };

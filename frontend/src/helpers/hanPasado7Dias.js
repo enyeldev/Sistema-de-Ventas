@@ -1,6 +1,6 @@
 import moment from "moment";
-
-export function hanPasado30Dias(fechaInicial, fechaActual) {
+import { formatearFecha } from "./hanPasado30Dias";
+export function hanPasado7Dias(fechaInicial, fechaActual) {
   const fechaInicialFormateada = formatearFecha(fechaInicial);
   const fechaActualFormateada = formatearFecha(fechaActual);
 
@@ -9,17 +9,7 @@ export function hanPasado30Dias(fechaInicial, fechaActual) {
 
   const diasDiferencia = fechaActualObj.diff(fechaInicialObj, "days");
 
-  const estaVencido = diasDiferencia > 30;
+  const estaVencido = diasDiferencia > 7;
 
   return estaVencido;
-}
-
-export function formatearFecha(fecha) {
-  const fechaSeparada = fecha.split(",", 1)[0];
-
-  const [dia, mes, year] = fechaSeparada.split("/");
-
-  const fechaFormateada = `${year}/${mes}/${dia}`;
-
-  return fechaFormateada;
 }

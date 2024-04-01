@@ -13,6 +13,8 @@ import {
   imprimirFacturaDevolucionContado,
   mostrarTodasFacturasDevolucionesContado,
   buscarFacturasDevolucionContadoPorCodigo,
+  generarFacturaDevolucionCedito,
+  imprimirFacturaDevolucionCredito,
 } from "../controller/facturasController.js";
 
 const router = express.Router();
@@ -30,6 +32,11 @@ router.get(
   "/api/facturas/generarFacturaDevolucionAlContado/:codigoDevolucion",
   generarFacturaDevolucionContado
 );
+
+router.get(
+  "/api/facturas/generarFacturaDevolucionACredito/:codigoDevolucion",
+  generarFacturaDevolucionCedito
+);
 // Endpoint para generar facturas
 
 // Endpoint para imprimir facturas
@@ -45,6 +52,11 @@ router.get(
 router.get(
   "/api/facturas/imprimirFacturaDevolucionContado/:codigoFacturaDevolucion",
   imprimirFacturaDevolucionContado
+);
+
+router.get(
+  "/api/facturas/imprimirFacturaDevolucionACredito/:codigoFacturaDevolucion",
+  imprimirFacturaDevolucionCredito
 );
 // Endpoint para imprimir facturas
 

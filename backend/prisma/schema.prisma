@@ -34,6 +34,8 @@ model Productos {
   deudas ProductosDeudas[]
 
   productosDevueltos ProductosDevolucionAlContado[]
+
+  productosDevueltosCredito ProductosDevueltosACredito[]
 }
 
 model VentasItem {
@@ -216,15 +218,32 @@ model FacturasDevolucionesAlContado {
   devolucion       DevolucionesAlContado @relation(fields: [codigoDevolucion], references: [codigoDevolucion])
 }
 
-// model DevolucionACredito {
-//   id             Int     @id @default(autoincrement())
-//   codigoDeuda    String
-//   codigoProducto String
-//   cantidad       Int
-//   precioCadaUno  Decimal
-//   total          Decimal
-//   fecha          String
-// }
+model DevolucionACredito {
+  codigoDevolucion String                        @id
+  codigoDeuda      String                        @unique
+  fecha            String
+  total            Decimal
+  Facturas         FacturasDevolucionesACredito?
+  Productos        ProductosDevueltosACredito[]
+}
+
+model ProductosDevueltosACredito {
+  id                 Int                 @id @default(autoincrement())
+  nombreProducto     String
+  codigoDevolucion   String
+  codigoProducto     String
+  cantidad           Int
+  precioCadaUno      Decimal
+  total              Decimal
+  DevolucionACredito DevolucionACredito? @relation(fields: [codigoDevolucion], references: [codigoDevolucion])
+  Productos          Productos?          @relation(fields: [codigoProducto], references: [codigoProducto])
+}
+
+model FacturasDevolucionesACredito {
+  codigoFactura    String             @id
+  codigoDevolucion String             @unique
+  devolucion       DevolucionACredito @relation(fields: [codigoDevolucion], references: [codigoDevolucion])
+}
 
 model UsuariosAdministrativos {
   id String @id

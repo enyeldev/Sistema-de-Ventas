@@ -4,7 +4,8 @@ export const arrRutas = [
   { ruta: "/caja/venderCredito", nombre: "Vender a credito" },
   { ruta: "/caja/comprar", nombre: "Comprar" },
   { ruta: "/caja/cobrar-deudas", nombre: "Cobrar deudas" },
-  { ruta: "/caja/devoluciones", nombre: "Devoluciones" },
+  { ruta: "/caja/devoluciones-contado", nombre: "Devoluciones al contado" },
+  { ruta: "/caja/devoluciones-credito", nombre: "Devoluciones a credito" },
   { ruta: "/caja/registrar-ingreso", nombre: "Ingreso" },
   { ruta: "/caja/registrar-retiro", nombre: "Retiro" },
   {

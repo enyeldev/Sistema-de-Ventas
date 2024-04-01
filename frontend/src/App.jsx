@@ -17,6 +17,7 @@ import { FondoCaja } from "./pages/FondoCaja";
 import { FacturarVenta } from "./pages/FacturarVenta";
 import { ReimprimirFacturasContado } from "./pages/ReimprimirFacturasContado";
 import { ReimprimirFacturasDevolucionContado } from "./pages/ReimprimirFacturasDevolucionContado";
+import { DevolucionesCredito } from "./pages/DevolucionesCredito";
 
 function App() {
   return (
@@ -36,7 +37,11 @@ function App() {
               <Route path="venderCredito" element={<VenderCredito />} />
               <Route path="comprar" element={<Comprar />} />
               <Route path="cobrar-deudas" element={<CobrarDeudas />} />
-              <Route path="devoluciones" element={<Devoluciones />} />
+              <Route path="devoluciones-contado" element={<Devoluciones />} />
+              <Route
+                path="devoluciones-credito"
+                element={<DevolucionesCredito />}
+              />
               <Route path="registrar-ingreso" element={<Ingresos />} />
               <Route path="registrar-retiro" element={<Retiro />} />
               <Route

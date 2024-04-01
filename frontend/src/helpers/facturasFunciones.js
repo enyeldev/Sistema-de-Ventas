@@ -30,6 +30,16 @@ export async function generarFacturaDevolucionContado(codigoDevolucion) {
   }
 }
 
+export async function generarFacturaDevolucionCredito(codigoDevolucion) {
+  try {
+    const url = `/facturas/generarFacturaDevolucionACredito/${codigoDevolucion}`;
+    const respuesta = await clienteAxios.get(url);
+    return respuesta.data.codigoFacturaDevolucion;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function imprimirFacturaVenta(codigoFactura) {
   try {
     const url = `/facturas/imprimirFacturaVenta/${codigoFactura}`;
@@ -57,6 +67,18 @@ export async function imprimirFacturaDevolucionContado(
 ) {
   try {
     const url = `/facturas/imprimirFacturaDevolucionContado/${codigoFacturaDevolucion}`;
+    const respuesta = await clienteAxios.get(url);
+    return respuesta.data.facturaObj;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function imprimriFacturaDevolucionCredito(
+  codigoFacturaDevolucion
+) {
+  try {
+    const url = `/facturas/imprimirFacturaDevolucionACredito/${codigoFacturaDevolucion}`;
     const respuesta = await clienteAxios.get(url);
     return respuesta.data.facturaObj;
   } catch (error) {

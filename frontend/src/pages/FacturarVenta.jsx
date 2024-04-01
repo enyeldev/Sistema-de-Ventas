@@ -148,7 +148,7 @@ export const FacturarVenta = () => {
   const { msg } = alerta;
 
   return (
-    <div className="w-[85%] min-h-screen  bg-gray-100 rounded-md">
+    <div className="w-[85%] max-h-screen  bg-gray-100 rounded-md">
       <div className="w-full h-full flex flex-col gap-2 p-2 ">
         {showModalFacturaVenta && (
           <ModalFacturaComprobante

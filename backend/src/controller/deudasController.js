@@ -255,6 +255,62 @@ export const buscarProductosDelaDeuda = async (req, res) => {
       return;
     }
 
+    // validar si se han hecho devoluciones de esta venta
+    const existenDevolucionesDeuda = await prisma.devolucionACredito.findFirst({
+      where: {
+        codigoDeuda,
+      },
+    });
+
+    if (existenDevolucionesDeuda) {
+      const productosDevueltos = await prisma.$transaction(
+        productosDeudas.map(({ codigoProducto }) => {
+          return prisma.productosDevueltosACredito.findFirst({
+            where: {
+              codigoDevolucion: existenDevolucionesDeuda.codigoDevolucion,
+              codigoProducto,
+            },
+          });
+        })
+      );
+
+      const productosDevueltosFiltrados = productosDevueltos.filter(
+        (productoDevuelto) => productoDevuelto !== null
+      );
+
+      const productosAMostrar = productosDeudas.map((producto) => {
+        const instancia = productosDevueltosFiltrados.find((e) => {
+          return e.codigoProducto == producto.codigoProducto;
+        });
+
+        console.log("instancia", instancia);
+        if (!instancia) {
+          return producto;
+        }
+
+        const nuevaCantidad =
+          parseFloat(producto.cantidadProducto) -
+          parseFloat(instancia.cantidad);
+
+        console.log("nueva cantidad", nuevaCantidad);
+        producto.cantidadProducto = nuevaCantidad;
+        producto.monto =
+          parseFloat(nuevaCantidad) * parseFloat(producto.costoProducto);
+        console.log("productoo", producto);
+        return producto;
+      });
+
+      console.log("productos a mostarr", productosAMostrar);
+      console.log("ya se devolvio");
+      res.json({
+        msg: "Productos encontrados",
+        productosDeudas: productosAMostrar.filter(
+          (e) => e.cantidadProducto > 0
+        ),
+      });
+      return;
+    }
+
     res.json({ msg: "Productos encontrados", productosDeudas });
   } catch (error) {
     console.log(error);

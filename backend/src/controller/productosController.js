@@ -119,7 +119,7 @@ export const eliminarProductos = async (req, res) => {
     // const productoEliminado = await prisma.ventasItem.delete()
 
     const productosEliminados =
-      await prisma.$queryRaw`DELETE FROM Devolucionalcontado`;
+      await prisma.$queryRaw`DELETE FROM devolucionesalcontado`;
 
     res.json({ msg: "Producto eliminado correctamente" });
   } catch (error) {

@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 
+import { Text } from "@chakra-ui/react";
 import { useRef, useState, useEffect } from "react";
 import { IoChevronDown } from "react-icons/io5";
 
@@ -32,12 +33,12 @@ export const MenuOptions = ({ icon, name, arrOptions }) => {
     <div className="relative menu-desplegable">
       <div
         ref={ref}
-        className="text-lg text-white flex items-center justify-between p-2 rounded-md hover:bg-blue-800 transition-colors duration-150 cursor-pointer "
+        className=" text-white flex items-center justify-between p-2 rounded-md hover:bg-blue-800 transition-colors duration-150 cursor-pointer "
         onClick={() => setIsVisible(!isVisible)}
       >
         <div className="flex gap-3">
           {icon}
-          {name}
+          <Text fontSize={"medium"}>{name}</Text>
         </div>
         <IoChevronDown size={20} />
       </div>
