@@ -20,5 +20,9 @@ export const arrRutas = [
     ruta: "/caja/reimprimir-factura-devolucion-contado",
     nombre: "Factura devolucion al contado",
   },
+  {
+    ruta: "/caja/reimprimir-factura-devolucion-credito",
+    nombre: "Factura devolucion a credito",
+  },
   { ruta: "/caja/facturar-venta", nombre: "Generar factura" },
 ];

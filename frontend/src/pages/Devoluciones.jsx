@@ -226,7 +226,7 @@ export const Devoluciones = () => {
   const { msg } = alerta;
 
   return (
-    <div className="w-[85%] max-h-screen h-full bg-gray-100 rounded-md p-2 flex gap-2">
+    <div className="w-[85%] max-h-screen  bg-gray-100 rounded-md p-2 flex gap-2">
       {modal.show && (
         <ModalProdDevoluciones
           modal={modal}

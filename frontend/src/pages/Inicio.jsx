@@ -18,7 +18,7 @@ export const Inicio = () => {
   }, []);
 
   return (
-    <div className="w-[85%] max-h-screen h-full bg-gray-100 rounded-md p-2">
+    <div className="w-[85%] max-h-screen  bg-gray-100 rounded-md p-2">
       <div className="w-full flex gap-3">
         <Card>
           <CardBody display={"flex"} flexDirection={"column"} gap={"5px"}>

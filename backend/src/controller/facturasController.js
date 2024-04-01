@@ -351,6 +351,27 @@ export const mostrarTodasFacturasDevolucionesContado = async (req, res) => {
   }
 };
 
+export const mostrarTodasFacturasDevolucionesCredito = async (req, res) => {
+  try {
+    const facturasDevolucionCredito =
+      await prisma.$queryRaw`SELECT codigoFactura , * FROM FacturasDevolucionesACredito INNER JOIN DevolucionACredito on FacturasDevolucionesACredito.codigoDevolucion = DevolucionACredito.codigoDevolucion`;
+
+    const arrArreglado = facturasDevolucionCredito.map((e) => {
+      e.total = parseFloat(e.total);
+      return e;
+    });
+
+    console.log(facturasDevolucionCredito);
+    res.json({
+      msg: "Todos las facturas",
+      facturasDevolucionCredito: arrArreglado,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ msg: error });
+  }
+};
+
 export const buscarFacturaDeudaPorCodigo = async (req, res) => {
   const { codigoFactura } = req.params;
 

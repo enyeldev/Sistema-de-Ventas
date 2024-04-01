@@ -15,6 +15,7 @@ import {
   buscarFacturasDevolucionContadoPorCodigo,
   generarFacturaDevolucionCedito,
   imprimirFacturaDevolucionCredito,
+  mostrarTodasFacturasDevolucionesCredito,
 } from "../controller/facturasController.js";
 
 const router = express.Router();
@@ -94,6 +95,12 @@ router.get(
 router.get(
   "/api/facturas/mostrarTodasFacturasDevolucionesContado",
   mostrarTodasFacturasDevolucionesContado
+);
+
+// Endpoint para mostrar todas las facturas de devoluciones a credito
+router.get(
+  "/api/facturas/mostrarTodasFacturasDevolucionesCredito",
+  mostrarTodasFacturasDevolucionesCredito
 );
 
 // Endpoint para buscar facturas devoluciones contado por codigo

@@ -64,14 +64,6 @@ export const Header = () => {
             ]}
           />
 
-          <MenuLink
-            icono={
-              <CiShoppingTag size={25} className="group-hover:text-white" />
-            }
-            ruta={"/caja/comprar"}
-            texto={"Comprar"}
-          />
-
           <MenuOptions
             icon={<TiPrinter size={25} />}
             name={"Imprimir"}
@@ -94,7 +86,21 @@ export const Header = () => {
                 ruta={"/caja/reimprimir-factura-devolucion-contado"}
                 texto={"Factura devolucion contado"}
               />,
+              <MenuLink
+                key={"factura devolucion credito"}
+                icono={<MdLocalPrintshop size={25} />}
+                ruta={"/caja/reimprimir-factura-devolucion-credito"}
+                texto={"Factura devolucion credito"}
+              />,
             ]}
+          />
+
+          <MenuLink
+            icono={
+              <CiShoppingTag size={25} className="group-hover:text-white" />
+            }
+            ruta={"/caja/comprar"}
+            texto={"Comprar"}
           />
 
           <MenuLink
