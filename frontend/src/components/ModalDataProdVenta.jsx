@@ -46,6 +46,7 @@ export const ModalDataProdVenta = ({
   const [descuento, setDescuento] = useState("");
 
   const regexDescuento = /^[0-9]+$/;
+  const regexEntero = /^-?\d+$/;
 
   const descuentoCalculado =
     parseFloat(total) / parseInt(cantidad) - parseFloat(descuento);
@@ -153,10 +154,13 @@ export const ModalDataProdVenta = ({
 
     if (descuento.trim().length > 0) {
       const regexDescuentoValidation = regexDescuento.test(descuento);
+      const regexDescuentoEnteroValidation = regexEntero.test(descuento);
 
       if (
         !regexDescuentoValidation ||
-        descuentoCalculado < parseFloat(precioCompraUnd)
+        !regexDescuentoEnteroValidation ||
+        parseFloat(descuentoCalculado) < parseFloat(precioCompraUnd) 
+        // parseFloat(descuentoCalculado) == 0
       ) {
         setAlerta({
           titulo: "Error",
@@ -183,6 +187,8 @@ export const ModalDataProdVenta = ({
   };
 
   const leerDescuento = ({ currentTarget }) => {
+    setAlerta({});
+
     const valor = currentTarget.value;
     setDescuento(valor);
   };

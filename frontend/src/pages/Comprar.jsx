@@ -16,14 +16,17 @@ export const Comprar = () => {
   const [dataActualizar, setDataActualizar] = useState({});
   const [codigo, setCodigo] = useState("");
   const inputCodigo = useRef(null);
+  // const regexCodigo = /^[0-9]+$/;
 
   const handleBuscarProducto = async (e) => {
     e.preventDefault();
 
+    // const regexCodigoValidation = regexCodigo.test(codigo);
+
     if (codigo == "") {
       setAlerta({
         titulo: "Error",
-        msg: "Todos los campos son obligatorios",
+        msg: "Ingrese el codigo correctamente",
         status: "error",
       });
       return;
@@ -77,6 +80,7 @@ export const Comprar = () => {
   };
 
   const handleGenerarCodigo = async () => {
+    setAlerta({});
     setCargandoCodigo(true);
     try {
       const url = `/producto/generarCodigoProducto`;
@@ -125,7 +129,10 @@ export const Comprar = () => {
                         id="codigo"
                         bg={"gray.100"}
                         placeholder="Ej: 897217091241 , 4478"
-                        onChange={({ target }) => setCodigo(target.value)}
+                        onChange={({ target }) => {
+                          setAlerta({});
+                          setCodigo(target.value);
+                        }}
                         autoFocus
                       />
                     </div>

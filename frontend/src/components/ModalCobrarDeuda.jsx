@@ -51,6 +51,7 @@ export const ModalCobrarDeuda = ({
   const [alerta, setAlerta] = useState({});
   const [cargandoBusqueda, setCargandoBusqueda] = useState(false);
   const [arrProductosDeudas, setArrProductosDeudas] = useState([]);
+  const regexEntero = /^-?\d+$/;
 
   useEffect(() => {
     const productosDeLaDeuda = async () => {
@@ -86,9 +87,13 @@ export const ModalCobrarDeuda = ({
   const realizarPago = async (e) => {
     e.preventDefault();
 
+    const regexPagoValidation = regexEntero.test(pagoCliente);
+
     if (
       pagoCliente == "" ||
-      parseFloat(pagoCliente) > parseFloat(modal.datos.montoActualDeuda)
+      parseFloat(pagoCliente) > parseFloat(modal.datos.montoActualDeuda) ||
+      parseFloat(pagoCliente) <= 0 ||
+      !regexPagoValidation
     ) {
       setErrorInput(true);
       return;

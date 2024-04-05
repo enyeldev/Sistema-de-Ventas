@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import { generarCodigoVentaItem } from "../helpers/generarCodigoItemVenta";
+import { existeCodigoProductoItem } from "../helpers/generarCodigoItemVenta";
 import { formatoDinero } from "../helpers/formatoDinero";
 import { obtenerFechaYHoraActual } from "../helpers/fechaHoraActual";
 
@@ -31,12 +31,6 @@ export const FacturarVenta = () => {
   const [errorDescripcion, setErrorDescripcion] = useState(false);
   const [errorCobrarInput, setErrorCobrarInput] = useState(false);
   const [pagoCliente, setPagoCliente] = useState(0);
-  // const [nombreCliente, setNombreCliente] = useState("");
-  // const [telefonoCliente, setTelefonoCliente] = useState("");
-  // const [atendidoPor, setAtendidoPor] = useState("");
-  // const [errorNombreCliente, setErrorNombreCliente] = useState(false);
-  // const [errorAtendidoPor, setErrorAtendidoPor] = useState(false);
-  // const [errorTelefonoCliente, setErrorTelefonoCliente] = useState(false);
   const [showModalFacturaVenta, setShowModalFacturaVenta] = useState(false);
   const [datosFacturaVenta, setDatosFacturaVenta] = useState({});
 
@@ -46,8 +40,9 @@ export const FacturarVenta = () => {
 
   const devueltaCliente = pagoCliente - total;
 
-  // const regexNombreCliente = /^([A-Za-z]+\s*)+$/;
-  // const regexTelefonoCliente = /^\d{10}$/;
+  // const regexTexto = /^[a-zA-Z]+$/;
+  // const regexNumero = /^[0-9]+$/;
+  const regexEntero = /^-?\d+$/;
 
   // funcion agregar producto
   const agregarProductos = (e) => {
@@ -57,7 +52,11 @@ export const FacturarVenta = () => {
     setErrorDescripcion(false);
     setAlerta({});
 
-    if (parseInt(cantidad) == 0 || cantidad == "") {
+    const regexCantidadValidation = regexEntero.test(cantidad);
+    const regexPrecioValidation = regexEntero.test(totalProducto);
+    // const regexDescripcionValidation = regexTexto.test(descripcion);
+
+    if (parseInt(cantidad) <= 0 || cantidad == "" || !regexCantidadValidation) {
       setErrorCantidad(true);
       setAlerta({
         titulo: "Error ",
@@ -67,7 +66,11 @@ export const FacturarVenta = () => {
       return;
     }
 
-    if (parseInt(totalProducto) == 0 || totalProducto == "") {
+    if (
+      parseInt(totalProducto) <= 0 ||
+      totalProducto == "" ||
+      !regexPrecioValidation
+    ) {
       setErrorPrecio(true);
       setAlerta({
         titulo: "Error ",
@@ -77,7 +80,7 @@ export const FacturarVenta = () => {
       return;
     }
 
-    if (descripcion == "") {
+    if (descripcion.trim() == "") {
       setErrorDescripcion(true);
       setAlerta({
         titulo: "Error ",
@@ -88,7 +91,7 @@ export const FacturarVenta = () => {
     }
 
     const productoObj = {
-      codigoProducto: "",
+      codigoProducto: existeCodigoProductoItem(productos),
       descripcion: descripcion.toUpperCase(),
       cantidad,
       precioCadaUno: parseFloat(totalProducto) / parseInt(cantidad),
@@ -101,7 +104,9 @@ export const FacturarVenta = () => {
   // Callback para elimianr productos
   const eliminarItemVenta = ({ currentTarget }) => {
     const idElement = currentTarget.parentElement.parentElement.dataset.id;
+    console.log(idElement);
     const nuevoArry = productos.filter((e) => e.codigoProducto !== idElement);
+    console.log(nuevoArry);
     setProductos([...nuevoArry]);
   };
 
@@ -109,6 +114,7 @@ export const FacturarVenta = () => {
   const generarFactura = (e) => {
     e.preventDefault();
 
+    const regexPagoClienteValidation = regexEntero.test(pagoCliente);
     setErrorCobrarInput(false);
 
     if (productos.length == 0) {
@@ -120,7 +126,11 @@ export const FacturarVenta = () => {
       return;
     }
 
-    if (pagoCliente == 0 || pagoCliente < total) {
+    if (
+      pagoCliente == 0 ||
+      pagoCliente < total ||
+      !regexPagoClienteValidation
+    ) {
       setAlerta({
         titulo: "Error ",
         msg: "El pago del cliente es invalido",
@@ -167,11 +177,12 @@ export const FacturarVenta = () => {
                 <Input
                   background={"gray.100"}
                   borderColor={`${errorDescripcion ? "red" : "gray.200"}`}
-                  id="codigo"
                   placeholder={"Ej: Filtro de aire, Liquido de freno"}
-                  onChange={({ currentTarget }) =>
-                    setDescripcion(currentTarget.value)
-                  }
+                  onChange={({ currentTarget }) => {
+                    setAlerta({});
+                    setErrorDescripcion(false);
+                    setDescripcion(currentTarget.value);
+                  }}
                 />
               </div>
 
@@ -181,11 +192,13 @@ export const FacturarVenta = () => {
                 <Input
                   background={"gray.100"}
                   borderColor={`${errorCantidad ? "red" : "gray.200"}`}
-                  id="codigo"
+                  // id="Cantidad"
                   placeholder={"Ej: 1, 5"}
-                  onChange={({ currentTarget }) =>
-                    setCantidad(currentTarget.value)
-                  }
+                  onChange={({ currentTarget }) => {
+                    setAlerta({});
+                    setErrorCantidad(false);
+                    setCantidad(currentTarget.value);
+                  }}
                 />
               </div>
 
@@ -195,11 +208,13 @@ export const FacturarVenta = () => {
                 <Input
                   background={"gray.100"}
                   borderColor={`${errorPrecio ? "red" : "gray.200"}`}
-                  id="codigo"
+                  // id="precio"
                   placeholder={"Ej: 200, 1500"}
-                  onChange={({ currentTarget }) =>
-                    setTotalProducto(currentTarget.value)
-                  }
+                  onChange={({ currentTarget }) => {
+                    setAlerta({});
+                    setErrorPrecio(false);
+                    setTotalProducto(currentTarget.value);
+                  }}
                 />
               </div>
 
@@ -215,7 +230,7 @@ export const FacturarVenta = () => {
 
           {msg && <Alerta alerta={alerta} />}
 
-          <div className="w-full p-3 h-full overflow-y-scroll">
+          <div className="w-full p-3 h-[19em] overflow-y-scroll">
             <TableContainer width={""}>
               <Table variant="simple">
                 <Thead>
@@ -277,6 +292,8 @@ export const FacturarVenta = () => {
                   background={"gray.100"}
                   borderColor={`${errorCobrarInput ? "red" : "gray.200"}`}
                   onChange={({ target }) => {
+                    setAlerta({});
+                    setErrorCobrarInput(false);
                     let valorActual = target.value;
                     valorActual < total
                       ? setErrorCobrarInput(true)
@@ -291,46 +308,6 @@ export const FacturarVenta = () => {
               </form>
             </div>
           </div>
-          {/* 
-          <div className="w-[60%]  bg-white rounded-md shadow-md p-3 flex gap-3 justify-between">
-            <div className="flex flex-col gap-2">
-              <Heading fontSize={"larger"}>Nombre Cliente:</Heading>
-              <Input
-                background={"gray.100"}
-                placeholder={"Ej: Ramon, Carlos Andres"}
-                borderColor={`${errorNombreCliente ? "red" : "gray.200"}`}
-                onChange={({ target }) => {
-                  setNombreCliente(target.value.toUpperCase());
-                }}
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Heading fontSize={"larger"}>Telefono Cliente:</Heading>
-
-              <Input
-                background={"gray.100"}
-                placeholder={"Ej: 8091234567"}
-                borderColor={`${errorTelefonoCliente ? "red" : "gray.200"}`}
-                onChange={({ target }) => {
-                  setTelefonoCliente(target.value);
-                }}
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Heading fontSize={"larger"}>Atendido Por:</Heading>
-
-              <Input
-                background={"gray.100"}
-                placeholder={"Ej: Ramon, Carlos Andres"}
-                borderColor={`${errorAtendidoPor ? "red" : "gray.200"}`}
-                onChange={({ target }) => {
-                  setAtendidoPor(target.value.toUpperCase());
-                }}
-              />
-            </div>
-          </div> */}
         </div>
       </div>
     </div>

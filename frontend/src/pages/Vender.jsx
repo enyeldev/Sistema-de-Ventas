@@ -58,6 +58,7 @@ export const Vender = () => {
 
   const regexCodigo = /^[0-9]+$/;
   const regexNombre = /.*[a-zA-Z].*/;
+  const regexEntero = /^-?\d+$/;
 
   const mostrarModal = ({ currentTarget }) => {
     const idTarget = currentTarget.parentElement.parentElement.dataset.id;
@@ -158,15 +159,19 @@ export const Vender = () => {
     e.preventDefault();
     setErrorCobrarInput(false);
 
+    const regexValidation = regexCodigo.test(pagoCliente);
+    const regexValidationNumeroEntero = regexEntero.test(pagoCliente);
+
     if (
       arrProductosVent.length == 0 ||
       pagoCliente == 0 ||
-      pagoCliente < totalVenta
+      pagoCliente < totalVenta ||
+      !regexValidation ||
+      !regexValidationNumeroEntero
     ) {
       setErrorCobrarInput(true);
       return;
     }
-
     setCargandoCobro(true);
 
     // Generar nueva venta
