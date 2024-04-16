@@ -22,7 +22,7 @@ export const Header = () => {
   return (
     <header className=" max-h-screen w-[15%] ">
       <div className="flex flex-col gap-8">
-        <div className="w-full border-b border-gray-200 px-2 py-4">
+        <div className="w-full border-b border-gray-200 p-2">
           <Heading className="text-white" fontSize={"large"}>
             Sistema de ventas / {nombreDeRuta(location.pathname)}
           </Heading>
@@ -147,13 +147,17 @@ export const Header = () => {
             ]}
           />
 
-          {/* reimprimir-factura-devolucion-contado */}
-
           <MenuLink
             icono={<IoCreate size={25} />}
             ruta={"/caja/facturar-venta"}
             texto={"Generar factura"}
           />
+
+          {/* <MenuLink
+            icono={<IoCreate size={25} />}
+            ruta={"/caja/configuracion"}
+            texto={"Configuracion"}
+          /> */}
 
           <BtnCierreCaja />
         </nav>

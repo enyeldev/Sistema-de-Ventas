@@ -221,7 +221,6 @@ export const FacturarVenta = () => {
               <Button
                 type="submit"
                 colorScheme="blue"
-                // width={'full'}
               >
                 Agregar Producto
               </Button>

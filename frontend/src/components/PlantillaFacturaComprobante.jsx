@@ -67,8 +67,8 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
       textAlign: "center",
     },
     headerDescripcion: {
-      width: "40%",
-      textAlign: "center",
+      width: "70%",
+      // textAlign: "center",
     },
     headerTotal: {
       width: "30%",
@@ -154,7 +154,7 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
 
         <View style={styles.tabla}>
           <View style={styles.tablaHeader}>
-            <View style={styles.headerCodigo}>
+            {/* <View style={styles.headerCodigo}>
               <Text
                 style={{
                   fontSize: "11px",
@@ -163,7 +163,7 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
               >
                 Codigo
               </Text>
-            </View>
+            </View> */}
 
             <View style={styles.headerDescripcion}>
               <Text
@@ -200,13 +200,13 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
 
               return (
                 <View style={styles.bodyItem} key={codigoProducto}>
-                  <View>
+                  {/* <View>
                     <Text
                       style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
                     >
                       {codigoProducto}
                     </Text>
-                  </View>
+                  </View> */}
 
                   <View>
                     <Text

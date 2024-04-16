@@ -8,11 +8,13 @@ export const Retiro = () => {
   const [errorInput, setErrorInput] = useState(false);
   const [montoRetiro, setMontoRetiro] = useState("");
   const [descripcion, setDescripcion] = useState("");
+  const [nuevoRetiro, setNuevoRetiro] = useState(false);
   const [alerta, setAlerta] = useState({});
 
   const regexEntero = /^-?\d+$/;
 
   const realizarRetiro = async (e) => {
+    setAlerta({});
     e.preventDefault();
 
     const regexValidation = regexEntero.test(montoRetiro);
@@ -27,15 +29,31 @@ export const Retiro = () => {
       return;
     }
 
-    const respuesta = await generarNuevoRetiro(montoRetiro, descripcion);
+    try {
+      const respuesta = await generarNuevoRetiro(montoRetiro, descripcion);
 
-    setAlerta({
-      titulo: "Completado",
-      msg: respuesta.data.msg,
-      status: "success",
-    });
+      setNuevoRetiro(true);
+      setAlerta({
+        titulo: "Completado",
+        msg: respuesta.data.msg,
+        status: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      setAlerta({
+        titulo: "Error",
+        msg: error.response.data.msg,
+        status: "error",
+      });
+    }
   };
 
+  const handleNuevoRetiro = () => {
+    setDescripcion("");
+    setMontoRetiro("");
+    setAlerta({});
+    setNuevoRetiro(false);
+  };
   const { msg } = alerta;
 
   return (
@@ -58,6 +76,7 @@ export const Retiro = () => {
                   setErrorInput(false);
                   setMontoRetiro(target.value);
                 }}
+                value={montoRetiro}
               />
             </div>
 
@@ -70,15 +89,31 @@ export const Retiro = () => {
                 borderColor={`${errorDescripcion ? "red" : "gray.200"}`}
                 onChange={({ target }) => {
                   setErrorDescripcion(false);
-                  setDescripcion(target.value);
+                  setDescripcion(target.value.toUpperCase());
                 }}
+                value={descripcion}
               />
             </div>
           </div>
 
-          <Button type="submit" colorScheme="blue" width={"full"}>
-            Generar Retiro
-          </Button>
+          {!nuevoRetiro && (
+            <Button type="submit" colorScheme="blue" width={"full"}>
+              Generar Retiro
+            </Button>
+          )}
+
+          {nuevoRetiro && (
+            <Button
+              type="button"
+              colorScheme="green"
+              width={"full"}
+              onClick={() => {
+                handleNuevoRetiro();
+              }}
+            >
+              Nuevo retiro
+            </Button>
+          )}
         </form>
 
         {msg && (

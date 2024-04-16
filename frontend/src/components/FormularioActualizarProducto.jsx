@@ -3,6 +3,7 @@ import { useState } from "react";
 import { clienteAxios } from "../config/axios";
 import { Alerta } from "../components/Alerta";
 import { BtnSubmit } from "../components/BtnSubmit";
+import { Button } from "@chakra-ui/react";
 
 export const FormularioActualizarProducto = ({
   codigo,
@@ -10,6 +11,7 @@ export const FormularioActualizarProducto = ({
   actualizar,
   setCodigo,
   dataActualizar,
+  handleNuevoProducto,
 }) => {
   const [descripcionProducto, setDescripcionProducto] = useState(
     dataActualizar.nombre || ""
@@ -26,14 +28,98 @@ export const FormularioActualizarProducto = ({
   const [minimoInventarioProducto, setMinimoInventarioProducto] = useState(
     dataActualizar.minStock || ""
   );
+
+  const [nuevoProducto, setNuevoProducto] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [alerta, setAlerta] = useState({});
 
-  const regexTexto = /^[a-zA-Z]+$/;
   const regexNumero = /^[0-9]+$/;
 
   const handleActualizarProducto = async (e) => {
     e.preventDefault();
+
+    const regexPrecioCompraValidation = regexNumero.test(precioUnidadProducto);
+    const regexGananciaValidation = regexNumero.test(gananciaUnidadProducto);
+    const regexMinimoValidation = regexNumero.test(minimoInventarioProducto);
+    const regexcCantidadValidation = regexNumero.test(cantidadProducto);
+
+    if (
+      descripcionProducto == "" ||
+      cantidadProducto == "" ||
+      precioUnidadProducto == "" ||
+      gananciaUnidadProducto == "" ||
+      minimoInventarioProducto == ""
+    ) {
+      setAlerta({
+        titulo: "Error",
+        msg: "Ingrese el codigo correctamente",
+        status: "error",
+      });
+      return;
+    }
+
+    if (!regexcCantidadValidation) {
+      setAlerta({
+        titulo: "Error",
+        msg: "La cantidad es incorrecta",
+        status: "error",
+      });
+      return;
+    }
+
+    if (parseInt(cantidadProducto) <= 0) {
+      setAlerta({
+        titulo: "Error",
+        msg: "La cantidad del producto debe ser mayor a cero",
+        status: "error",
+      });
+      return;
+    }
+
+    if (!regexPrecioCompraValidation) {
+      setAlerta({
+        titulo: "Error",
+        msg: "El precio de compra es incorrecto",
+        status: "error",
+      });
+      return;
+    }
+
+    if (!regexGananciaValidation) {
+      setAlerta({
+        titulo: "Error",
+        msg: "La ganancia es incorrecta",
+        status: "error",
+      });
+      return;
+    }
+
+    if (parseFloat(gananciaUnidadProducto) <= 0) {
+      setAlerta({
+        titulo: "Error",
+        msg: "La ganancia debe ser mayos a cero",
+        status: "error",
+      });
+      return;
+    }
+
+    if (!regexMinimoValidation) {
+      setAlerta({
+        titulo: "Error",
+        msg: "El minimo es incorrecto",
+        status: "error",
+      });
+      return;
+    }
+
+    if (parseInt(minimoInventarioProducto) >= parseInt(cantidadProducto)) {
+      setAlerta({
+        titulo: "Error",
+        msg: "El minimo debe ser menor a la cantidad",
+        status: "error",
+      });
+      return;
+    }
 
     try {
       const url = `/producto/actualizar/${codigo}`;
@@ -48,6 +134,7 @@ export const FormularioActualizarProducto = ({
 
       const respuesta = await clienteAxios.put(url, data);
 
+      setNuevoProducto(true);
       setAlerta({
         titulo: "Completado",
         msg: respuesta.data.msg,
@@ -85,20 +172,10 @@ export const FormularioActualizarProducto = ({
       return;
     }
 
-    const regexDescripcionValidation = regexTexto.test(descripcionProducto);
     const regexPrecioCompraValidation = regexNumero.test(precioUnidadProducto);
     const regexGananciaValidation = regexNumero.test(gananciaUnidadProducto);
     const regexMinimoValidation = regexNumero.test(minimoInventarioProducto);
     const regexcCantidadValidation = regexNumero.test(cantidadProducto);
-
-    if (!regexDescripcionValidation) {
-      setAlerta({
-        titulo: "Error",
-        msg: "Ingrese la descripcion correctamente",
-        status: "error",
-      });
-      return;
-    }
 
     if (!regexcCantidadValidation) {
       setAlerta({
@@ -182,7 +259,7 @@ export const FormularioActualizarProducto = ({
       const ganancia = parseFloat(gananciaUnidadProducto);
 
       const producto = {
-        codigoProducto: codigo,
+        codigoProducto: codigo.toUpperCase(),
         nombre: descripcionProducto.toUpperCase(),
         cantidadStock,
         minStock,
@@ -192,6 +269,7 @@ export const FormularioActualizarProducto = ({
 
       const respuesta = await clienteAxios.post(url, producto);
 
+      setNuevoProducto(true);
       setAlerta({
         titulo: "Completado",
         msg: respuesta.data.msg,
@@ -326,11 +404,24 @@ export const FormularioActualizarProducto = ({
           </div>
         </div>
 
-        <BtnSubmit
-          text={"Agregar Producto"}
-          cargando={cargando}
-          tipo={"submit"}
-        />
+        {!nuevoProducto && (
+          <BtnSubmit
+            text={"Agregar Producto"}
+            cargando={cargando}
+            tipo={"submit"}
+          />
+        )}
+
+        <Button
+          colorScheme="green"
+          type="button"
+          fontSize={"large"}
+          onClick={() => {
+            handleNuevoProducto();
+          }}
+        >
+          Nuevo producto
+        </Button>
 
         {msg && <Alerta alerta={alerta} />}
       </form>

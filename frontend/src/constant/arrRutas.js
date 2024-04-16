@@ -25,4 +25,5 @@ export const arrRutas = [
     nombre: "Factura devolucion a credito",
   },
   { ruta: "/caja/facturar-venta", nombre: "Generar factura" },
+  { ruta: "/caja/configuracion", nombre: "Configuracion" },
 ];

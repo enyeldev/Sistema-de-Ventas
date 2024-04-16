@@ -51,6 +51,9 @@ export const ModalProdDevoluciones = ({
   const totalDescuento =
     parseFloat(total) - parseFloat(descuento) * parseInt(cantidad);
 
+  // const regexDescuento = /^[0-9]+$/;
+  const regexEntero = /^-?\d+$/;
+
   useEffect(() => {
     setTotal(parseFloat(costoActualProducto));
   }, [costoActualProducto]);
@@ -134,6 +137,7 @@ export const ModalProdDevoluciones = ({
     setAlerta({});
     // console.log(modal.datos);
 
+    const regexCantidadValidation = regexEntero.test(cantidad);
     const detallesProductoDevolucion = {
       nombreProducto,
       codigoProducto,
@@ -151,7 +155,11 @@ export const ModalProdDevoluciones = ({
       (e) => e.codigoProducto == detallesProductoDevolucion.codigoProducto
     );
 
-    if (cantidad <= 0 || cantidad > parseInt(cantidadProducto)) {
+    if (
+      cantidad <= 0 ||
+      cantidad > parseInt(cantidadProducto) ||
+      !regexCantidadValidation
+    ) {
       setAlerta({
         titulo: "Error",
         msg: "La cantidad no es valida",

@@ -98,7 +98,7 @@ export const PlantillaFacturaDevolucionContado = ({ datos }) => {
 
   return (
     <Document>
-      <Page size={{ width: 140 }}>
+      <Page size={{ width: 180 }}>
         <View style={styles.header}>
           <View style={styles.titulos}>
             <Text style={styles.nombreNegocio}>NOMBRE LOCAL</Text>

@@ -120,6 +120,7 @@ export const ModalDataProdVenta = ({
     setAlerta({});
     console.log(modal.datos);
 
+    const regexCantidadValidation = regexEntero.test(cantidad);
     const detallesProductoVenta = {
       nombre,
       codigoProducto,
@@ -134,7 +135,11 @@ export const ModalDataProdVenta = ({
       (e) => e.codigoProducto == detallesProductoVenta.codigoProducto
     );
 
-    if (cantidad <= 0 || cantidad > parseInt(cantidadStock)) {
+    if (
+      cantidad <= 0 ||
+      cantidad > parseInt(cantidadStock) ||
+      !regexCantidadValidation
+    ) {
       setAlerta({
         titulo: "Error",
         msg: "La cantidad no es valida",
@@ -159,7 +164,7 @@ export const ModalDataProdVenta = ({
       if (
         !regexDescuentoValidation ||
         !regexDescuentoEnteroValidation ||
-        parseFloat(descuentoCalculado) < parseFloat(precioCompraUnd) 
+        parseFloat(descuentoCalculado) < parseFloat(precioCompraUnd)
         // parseFloat(descuentoCalculado) == 0
       ) {
         setAlerta({

@@ -4,7 +4,7 @@ import { formatoDinero } from "../helpers/formatoDinero";
 
 import { Document, Page, Text, StyleSheet, View } from "@react-pdf/renderer";
 import { Font } from "@react-pdf/renderer";
-import Funete_one from "../font/CourierPrime-Bold.ttf";
+import Funete_one from "../font/CourierPrime-Regular.ttf";
 // import Funete_dos from "../font/DOTMBold.TTF";
 
 Font.register({
@@ -71,8 +71,8 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
       textAlign: "center",
     },
     headerDescripcion: {
-      width: "40%",
-      textAlign: "center",
+      width: "70%",
+      // textAlign: "center",
     },
     headerTotal: {
       width: "30%",
@@ -100,6 +100,8 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
 
   const { fecha, fechaUltimoPago, montoInicial, montoActual, estado } =
     datosDeuda;
+
+  console.log(historialPagos);
 
   return (
     <Document>
@@ -157,7 +159,7 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
 
         <View style={styles.tabla}>
           <View style={styles.tablaHeader}>
-            <View style={styles.headerCodigo}>
+            {/* <View style={styles.headerCodigo}>
               <Text
                 style={{
                   fontSize: "11px",
@@ -167,7 +169,7 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
               >
                 Codigo
               </Text>
-            </View>
+            </View> */}
 
             <View style={styles.headerDescripcion}>
               <Text
@@ -207,13 +209,13 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
 
               return (
                 <View style={styles.bodyItem} key={codigoProducto}>
-                  <View>
+                  {/* <View>
                     <Text
                       style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
                     >
                       {codigoProducto}
                     </Text>
-                  </View>
+                  </View> */}
 
                   <View>
                     <Text
@@ -275,7 +277,7 @@ export const PlantillaFacturaDeuda = ({ datos }) => {
                   <Text
                     style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
                   >
-                    Fecha: {fecha}
+                    Fecha: {e.fecha}
                   </Text>
                 </View>
               );

@@ -11,15 +11,14 @@ export const Ingresos = () => {
   const [select, setSelect] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [alerta, setAlerta] = useState({});
+  const [nuevoIngreso, setNuevoIngreso] = useState(false);
 
-  
   const regexEntero = /^-?\d+$/;
 
   const generarIngreso = async (e) => {
     e.preventDefault();
 
     const regexMontoValidation = regexEntero.test(montoIngreso);
-    
 
     if (
       montoIngreso == "" ||
@@ -40,19 +39,37 @@ export const Ingresos = () => {
       return;
     }
 
-    const respuesta = await generarNuevoIngresoVenta(
-      montoIngreso,
-      select,
-      descripcion
-    );
+    try {
+      const respuesta = await generarNuevoIngresoVenta(
+        montoIngreso,
+        select,
+        descripcion
+      );
 
-    setAlerta({
-      titulo: "Completado",
-      msg: respuesta.data.msg,
-      status: "success",
-    });
+      setNuevoIngreso(true);
+
+      setAlerta({
+        titulo: "Completado",
+        msg: respuesta.data.msg,
+        status: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      setAlerta({
+        titulo: "Error",
+        msg: error.response.data.msg,
+        status: "error",
+      });
+    }
   };
 
+  const handleNuevoIngreso = () => {
+    setMontoIngreso("");
+    setSelect("");
+    setDescripcion("");
+    setNuevoIngreso("");
+    setAlerta({});
+  };
   const { msg } = alerta;
 
   return (
@@ -75,6 +92,7 @@ export const Ingresos = () => {
                   setErrorInput(false);
                   setMontoIngreso(target.value);
                 }}
+                value={montoIngreso}
               />
             </div>
 
@@ -105,15 +123,31 @@ export const Ingresos = () => {
                 borderColor={`${errorDescripcion ? "red" : "gray.200"}`}
                 onChange={({ target }) => {
                   setErrorDescripcion(false);
-                  setDescripcion(target.value);
+                  setDescripcion(target.value.toUpperCase());
                 }}
+                value={descripcion}
               />
             </div>
           </div>
 
-          <Button type="submit" colorScheme="blue" width={"full"}>
-            Generar Ingreso
-          </Button>
+          {!nuevoIngreso && (
+            <Button type="submit" colorScheme="blue" width={"full"}>
+              Generar Ingreso
+            </Button>
+          )}
+
+          {nuevoIngreso && (
+            <Button
+              type="button"
+              colorScheme="green"
+              width={"full"}
+              onClick={() => {
+                handleNuevoIngreso();
+              }}
+            >
+              Nuevo Ingreso
+            </Button>
+          )}
         </form>
 
         {msg && (

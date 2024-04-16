@@ -50,7 +50,7 @@ export const agregarProductosEnDedua = (req, res) => {
         data: {
           codigoDeuda,
           codigoProducto,
-          cantidadProducto: cantidad,
+          cantidadProducto: parseInt(cantidad),
           costoProducto: parseFloat(precioVentaUnd),
           monto: parseFloat(total),
           nombreProducto: nombre,

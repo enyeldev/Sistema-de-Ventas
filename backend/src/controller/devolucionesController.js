@@ -511,7 +511,7 @@ export const devolverProductos = async (req, res) => {
               codigoProducto: existeProductoDevuelto.codigoProducto,
             },
             data: {
-              cantidad: nuevaCantidad,
+              cantidad: parseInt(nuevaCantidad),
               precioCadaUno: costoActualProducto,
               total:
                 parseFloat(nuevaCantidad) * parseFloat(costoActualProducto),
@@ -584,7 +584,7 @@ export const devolverProductos = async (req, res) => {
           },
           data: {
             cantidadStock: {
-              increment: cantidad,
+              increment: parseInt(cantidad),
             },
           },
         });

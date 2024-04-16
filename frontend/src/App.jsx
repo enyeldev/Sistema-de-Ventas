@@ -19,6 +19,7 @@ import { ReimprimirFacturasContado } from "./pages/ReimprimirFacturasContado";
 import { ReimprimirFacturasDevolucionContado } from "./pages/ReimprimirFacturasDevolucionContado";
 import { ReimprimirFacturasDevolucionCredito } from "./pages/ReimprimirFacturasDevolucionCredito";
 import { DevolucionesCredito } from "./pages/DevolucionesCredito";
+import { Configuracion } from "./pages/Configuracion";
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
                 element={<ReimprimirFacturasDevolucionCredito />}
               />
               <Route path="facturar-venta" element={<FacturarVenta />} />
+              <Route path="configuracion" element={<Configuracion />} />
             </Route>
           </Routes>
         </FondoProvaider>

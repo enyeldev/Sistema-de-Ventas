@@ -7,7 +7,8 @@ import { ModalInicio } from "../components/ModalInicio";
 
 export const Inicio = () => {
   const [datosProductos, setDatosProductos] = useState({});
-  const [modal, setModal] = useState({ datos: [], titulo: "", show: false });
+  const [listaProdcutos, setListaProdcutos] = useState([]);
+  const [modal, setModal] = useState({ titulo: "", show: false, filtro: "" });
 
   useEffect(() => {
     const obtenerDatosDeProductos = async () => {
@@ -21,11 +22,16 @@ export const Inicio = () => {
   }, []);
 
   // Funcion que trae los datos y muestra el modal
-  const handleClick = async ({ titulo, url }) => {
+  const handleClick = async ({ titulo, url, filtro }) => {
     try {
       const respuesta = await clienteAxios.get(url);
       console.log(respuesta.data.listaProductos);
-      setModal({ datos: respuesta.data.listaProductos, show: true, titulo });
+      setListaProdcutos(respuesta.data.listaProductos);
+      setModal({
+        show: true,
+        titulo,
+        filtro,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -33,7 +39,14 @@ export const Inicio = () => {
 
   return (
     <div className="w-[85%] max-h-screen  bg-gray-100 rounded-md p-2">
-      {modal.show && <ModalInicio modal={modal} setModal={setModal} />}
+      {modal.show && (
+        <ModalInicio
+          modal={modal}
+          setModal={setModal}
+          listaProdcutos={listaProdcutos}
+          setListaProdcutos={setListaProdcutos}
+        />
+      )}
       <div className="w-full flex gap-3">
         <Card>
           <CardBody display={"flex"} flexDirection={"column"} gap={"5px"}>
@@ -45,6 +58,7 @@ export const Inicio = () => {
                 await handleClick({
                   titulo: "Todos los productos",
                   url: "/inicio/todosProductos",
+                  filtro: "productos",
                 })
               }
             >
@@ -65,6 +79,7 @@ export const Inicio = () => {
                 handleClick({
                   titulo: "Todos los productos en baja",
                   url: "/inicio/productosEnBaja",
+                  filtro: "baja",
                 })
               }
             >
@@ -85,6 +100,7 @@ export const Inicio = () => {
                 handleClick({
                   titulo: "Todos los productos agotados",
                   url: "/inicio/productosAgotados",
+                  filtro: "agotado",
                 })
               }
             >

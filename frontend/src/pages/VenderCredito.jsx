@@ -51,8 +51,6 @@ export const VenderCredito = () => {
     return total + e.total;
   }, 0);
 
-  const regexCodigo = /^[0-9]+$/;
-  const regexNombre = /.*[a-zA-Z].*/;
   const regexNombreCliente = /^([A-Za-z]+\s*)+$/;
   // const regexTelefonoCliente = /^\d{10}$/;
 
@@ -69,9 +67,7 @@ export const VenderCredito = () => {
   const buscarProductoPorCodigo = async (e) => {
     e.preventDefault();
 
-    const regexValidation = regexCodigo.test(parametroBusqueda);
-
-    if (parametroBusqueda.length == 0 || !regexValidation) {
+    if (parametroBusqueda.length == 0) {
       setErrorInput(true);
       return;
     }
@@ -115,8 +111,7 @@ export const VenderCredito = () => {
   const bucarProductoPorNombre = async (e) => {
     e.preventDefault();
 
-    const regexValidation = regexNombre.test(parametroBusqueda);
-    if (parametroBusqueda.length == 0 || !regexValidation) {
+    if (parametroBusqueda.length == 0) {
       setErrorInput(true);
       return;
     }
@@ -286,7 +281,7 @@ export const VenderCredito = () => {
                           : "Ej: Filtro de aire, Liquido de freno"
                       }
                       onChange={({ target }) =>
-                        setParametroBusqueda(target.value)
+                        setParametroBusqueda(target.value.toUpperCase())
                       }
                       value={parametroBusqueda}
                       autoFocus

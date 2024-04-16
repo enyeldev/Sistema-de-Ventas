@@ -64,7 +64,7 @@ export const Comprar = () => {
 
       setActualizar(true);
 
-      setCodigo(codigoProducto);
+      setCodigo(codigoProducto.toUpperCase());
 
       console.log(respuesta);
     } catch (error) {
@@ -86,13 +86,19 @@ export const Comprar = () => {
       const url = `/producto/generarCodigoProducto`;
       const respuesta = await clienteAxios.get(url);
       inputCodigo.current.value = respuesta.data.codigo;
-      setCodigo(respuesta.data.codigo);
+      setCodigo(respuesta.data.codigo.toUpperCase());
       console.log(respuesta.data.codigo);
     } catch (error) {
       console.log(error);
       setAlerta({ msg: error.response.data.msg, error: true });
     }
     setCargandoCodigo(false);
+  };
+
+  const handleNuevoProducto = () => {
+    setDataActualizar({});
+    setActualizar(false);
+    setAgregarNuevo(false);
   };
 
   const { msg } = alerta;
@@ -107,6 +113,7 @@ export const Comprar = () => {
               codigo={codigo}
               setCodigo={setCodigo}
               dataActualizar={dataActualizar}
+              handleNuevoProducto={handleNuevoProducto}
             />
           ) : (
             <div className="flex w-full gap-4">
@@ -131,7 +138,7 @@ export const Comprar = () => {
                         placeholder="Ej: 897217091241 , 4478"
                         onChange={({ target }) => {
                           setAlerta({});
-                          setCodigo(target.value);
+                          setCodigo(target.value.toUpperCase());
                         }}
                         autoFocus
                       />

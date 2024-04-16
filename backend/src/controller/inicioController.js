@@ -16,7 +16,7 @@ export const datosProductos = async (req, res) => {
 
     // Obtenemos los produtos que estan en baja en stock
     const arrProductosEnbaja = productos.map((e) => {
-      return e.enBaja == true;
+      return e.enBaja == true && e.agotado == false;
     });
 
     // Calculamos la cantidad de productos en baja
@@ -65,6 +65,7 @@ export const productosEnBaja = async (req, res) => {
     const todosLosProductosEnbaja = await prisma.productos.findMany({
       where: {
         enBaja: true,
+        agotado: false,
       },
     });
 
@@ -94,5 +95,69 @@ export const productosAgotados = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ msg: error });
+  }
+};
+
+// Controller que devuelve los productos que contengan el nombre
+export const filtrarProductosPorNombre = async (req, res) => {
+  const { nombre } = req.params;
+
+  try {
+    const producotsFiltrado = await prisma.productos.findMany({
+      where: {
+        nombre: {
+          contains: nombre,
+        },
+      },
+    });
+
+    res.json({ producotsFiltrado });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error });
+  }
+};
+
+// Controller que devuelve los productos agotados que contengan el nombre
+export const filtrarProductosAgotadosPorNombre = async (req, res) => {
+  const { nombre } = req.params;
+
+  try {
+    const productosFiltrados = await prisma.productos.findMany({
+      where: {
+        nombre: {
+          contains: nombre,
+        },
+        agotado: true,
+      },
+    });
+
+    res.json({ productosFiltrados });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error });
+  }
+};
+
+// Controller que deveyelve los productos en baja que contengan el nombre
+export const filtrarProductosEnBajaPorNombre = async (req, res) => {
+  const { nombre } = req.params;
+
+  try {
+    const productosEnBaja = await prisma.productos.findMany({
+      where: {
+        nombre: {
+          contains: nombre,
+        },
+        enBaja: true,
+      },
+    });
+
+    const productosFiltrados = productosEnBaja.filter((e) => e.agotado != true);
+
+    res.json({ productosFiltrados });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error });
   }
 };
