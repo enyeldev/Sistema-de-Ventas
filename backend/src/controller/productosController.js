@@ -86,6 +86,7 @@ export const agregarProductos = async (req, res) => {
     minStock,
     precioCompraUnd,
     ganancia,
+    tramoProducto,
   } = req.body;
 
   const precioVentaUnd = Math.round(precioCompraUnd + ganancia);
@@ -100,6 +101,7 @@ export const agregarProductos = async (req, res) => {
         precioCompraUnd,
         precioVentaUnd,
         ganancia,
+        tramo: tramoProducto,
       },
     });
 
@@ -134,11 +136,10 @@ export const actualizarProductos = async (req, res) => {
     minStockNuevo,
     precioCompraUndNuevo,
     gananciaNuevo,
+    tramoProducto,
   } = req.body;
 
   const precioVentaUndNuevo = Math.round(precioCompraUndNuevo + gananciaNuevo);
-
-  console.log();
 
   try {
     //Asignar nuevo valores al producto
@@ -154,6 +155,7 @@ export const actualizarProductos = async (req, res) => {
     producto.precioCompraUnd = precioCompraUndNuevo;
     producto.ganancia = gananciaNuevo;
     producto.precioVentaUnd = precioVentaUndNuevo;
+    producto.tramo = tramoProducto;
 
     if (producto.cantidadStock > 0) {
       producto.agotado = false;

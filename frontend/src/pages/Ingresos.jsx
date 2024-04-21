@@ -108,7 +108,7 @@ export const Ingresos = () => {
                   setSelect(target.value);
                 }}
               >
-                <option value="1">Venta</option>
+                <option value="4">Venta externa</option>
                 <option value="2">Externo</option>
                 <option value="3">Pago de Deuda</option>
               </Select>

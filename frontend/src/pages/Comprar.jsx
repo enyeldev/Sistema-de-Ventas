@@ -52,7 +52,10 @@ export const Comprar = () => {
         ganancia,
         minStock,
         codigoProducto,
+        tramo,
       } = respuesta.data;
+
+      console.log(respuesta.data);
 
       setDataActualizar({
         nombre: nombre.toUpperCase(),
@@ -60,6 +63,7 @@ export const Comprar = () => {
         precioCompraUnd,
         ganancia,
         minStock,
+        tramo,
       });
 
       setActualizar(true);

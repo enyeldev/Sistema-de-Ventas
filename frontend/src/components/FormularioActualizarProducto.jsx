@@ -5,6 +5,8 @@ import { Alerta } from "../components/Alerta";
 import { BtnSubmit } from "../components/BtnSubmit";
 import { Button } from "@chakra-ui/react";
 
+import { InputComprarProducto } from "../components/InputComprarProducto";
+
 export const FormularioActualizarProducto = ({
   codigo,
   agregarNuevo,
@@ -28,6 +30,9 @@ export const FormularioActualizarProducto = ({
   const [minimoInventarioProducto, setMinimoInventarioProducto] = useState(
     dataActualizar.minStock || ""
   );
+  const [tramoProducto, setTramoProducto] = useState(
+    dataActualizar.tramo || ""
+  );
 
   const [nuevoProducto, setNuevoProducto] = useState(false);
   const [cargando, setCargando] = useState(false);
@@ -45,20 +50,19 @@ export const FormularioActualizarProducto = ({
 
     if (
       descripcionProducto == "" ||
-      cantidadProducto == "" ||
       precioUnidadProducto == "" ||
       gananciaUnidadProducto == "" ||
       minimoInventarioProducto == ""
     ) {
       setAlerta({
         titulo: "Error",
-        msg: "Ingrese el codigo correctamente",
+        msg: "Hay campos vacios",
         status: "error",
       });
       return;
     }
 
-    if (!regexcCantidadValidation) {
+    if (!regexcCantidadValidation && cantidadProducto.length > 0) {
       setAlerta({
         titulo: "Error",
         msg: "La cantidad es incorrecta",
@@ -67,7 +71,7 @@ export const FormularioActualizarProducto = ({
       return;
     }
 
-    if (parseInt(cantidadProducto) <= 0) {
+    if (parseInt(cantidadProducto) < 0) {
       setAlerta({
         titulo: "Error",
         msg: "La cantidad del producto debe ser mayor a cero",
@@ -112,14 +116,14 @@ export const FormularioActualizarProducto = ({
       return;
     }
 
-    if (parseInt(minimoInventarioProducto) >= parseInt(cantidadProducto)) {
-      setAlerta({
-        titulo: "Error",
-        msg: "El minimo debe ser menor a la cantidad",
-        status: "error",
-      });
-      return;
-    }
+    // if (parseInt(minimoInventarioProducto) >= parseInt(cantidadProducto)) {
+    //   setAlerta({
+    //     titulo: "Error",
+    //     msg: "El minimo debe ser menor a la cantidad",
+    //     status: "error",
+    //   });
+    //   return;
+    // }
 
     try {
       const url = `/producto/actualizar/${codigo}`;
@@ -130,6 +134,7 @@ export const FormularioActualizarProducto = ({
         minStockNuevo: parseInt(minimoInventarioProducto),
         precioCompraUndNuevo: parseFloat(precioUnidadProducto),
         gananciaNuevo: parseFloat(gananciaUnidadProducto),
+        tramoProducto: tramoProducto.toUpperCase(),
       };
 
       const respuesta = await clienteAxios.put(url, data);
@@ -250,6 +255,7 @@ export const FormularioActualizarProducto = ({
     }
 
     setCargando(true);
+    console.log(tramoProducto);
     try {
       const url = `/productos/agregar`;
 
@@ -265,6 +271,7 @@ export const FormularioActualizarProducto = ({
         minStock,
         precioCompraUnd,
         ganancia,
+        tramoProducto: tramoProducto.toUpperCase(),
       };
 
       const respuesta = await clienteAxios.post(url, producto);
@@ -300,113 +307,80 @@ export const FormularioActualizarProducto = ({
             agregarNuevo || actualizar ? "flex" : "block"
           } flex-wrap gap-2 `}
         >
-          <div className={`flex flex-col gap-2`}>
-            <label htmlFor="codigo" className="font-bold text-xl">
-              Codigo del producto
-            </label>
-            <input
-              type="text"
-              id="codigo"
-              className="bg-gray-100 p-3 outline-none rounded-md"
-              placeholder="Ej: 897217091241 , 4478"
-              onChange={({ target }) => {
-                setAlerta({});
-                setCodigo(target.value);
-              }}
-              value={codigo}
-              readOnly
-            />
-          </div>
+          <InputComprarProducto
+            estado={codigo}
+            label={"Codigo del producto"}
+            placeHolder={"Ej: 897217091241 , 4478"}
+            setAlerta={setAlerta}
+            setEstado={setCodigo}
+            id={"codigo"}
+            soloLeer={true}
+          />
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="nombre" className="font-bold text-xl">
-              Descripcion del producto
-            </label>
-            <input
-              type="text"
-              id="nombre"
-              className="bg-gray-100 p-3 outline-none rounded-md"
-              placeholder="Ej: Filtro de aire"
-              onChange={({ target }) => {
-                setAlerta({});
-                setDescripcionProducto(target.value);
-              }}
-              value={descripcionProducto}
-            />
-          </div>
+          <InputComprarProducto
+            estado={descripcionProducto}
+            label={"Descripcion del producto"}
+            placeHolder={"Ej: Filtro de aire"}
+            setAlerta={setAlerta}
+            setEstado={setDescripcionProducto}
+            id={"nombre"}
+            soloLeer={false}
+          />
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="cantidad" className="font-bold text-xl">
-              Cantidad del producto{" "}
-            </label>
-            <input
-              type="text"
-              id="cantidad"
-              className="bg-gray-100 p-3 outline-none rounded-md"
-              placeholder="Ej: 20, 30, 5"
-              onChange={({ target }) => {
-                setAlerta({});
-                setCantidadProducto(target.value);
-              }}
-              value={cantidadProducto}
-            />
-          </div>
+          <InputComprarProducto
+            estado={tramoProducto}
+            label={"Tramo del producto"}
+            placeHolder={"Ej: A1, B3"}
+            setAlerta={setAlerta}
+            setEstado={setTramoProducto}
+            id={"tramo"}
+            soloLeer={false}
+          />
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="precio" className="font-bold text-xl">
-              Precio de compra por unidad
-            </label>
-            <input
-              type="text"
-              id="precio"
-              className="bg-gray-100 p-3 outline-none rounded-md"
-              placeholder="Ej: 20, 30, 5"
-              onChange={({ target }) => {
-                setAlerta({});
-                setPrecioUnidadProducto(target.value);
-              }}
-              value={precioUnidadProducto}
-            />
-          </div>
+          <InputComprarProducto
+            estado={cantidadProducto}
+            label={"Cantidad del producto"}
+            placeHolder={"Ej: 20, 30, 5"}
+            setAlerta={setAlerta}
+            setEstado={setCantidadProducto}
+            id={"cantidad"}
+            soloLeer={false}
+          />
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="ganancia" className="font-bold text-xl">
-              Ganancia por unidad
-            </label>
-            <input
-              type="text"
-              id="ganancia"
-              className="bg-gray-100 p-3 outline-none rounded-md"
-              placeholder="Ej: 20, 30, 5"
-              onChange={({ target }) => {
-                setAlerta({});
-                setGananciaUnidadProducto(target.value);
-              }}
-              value={gananciaUnidadProducto}
-            />
-          </div>
+          <InputComprarProducto
+            estado={precioUnidadProducto}
+            label={"Precio de compra C/U"}
+            placeHolder={"Ej: 20, 30, 5"}
+            setAlerta={setAlerta}
+            setEstado={setPrecioUnidadProducto}
+            id={"precioCompra"}
+            soloLeer={false}
+          />
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="minimo" className="font-bold text-xl">
-              Minimo en el inventario
-            </label>
-            <input
-              type="text"
-              id="minimo"
-              className="bg-gray-100 p-3 outline-none rounded-md"
-              placeholder="Ej: 20, 30, 5"
-              onChange={({ target }) => {
-                setAlerta({});
-                setMinimoInventarioProducto(target.value);
-              }}
-              value={minimoInventarioProducto}
-            />
-          </div>
+          <InputComprarProducto
+            estado={gananciaUnidadProducto}
+            label={"Ganancia por unidad"}
+            placeHolder={"Ej: 20, 30, 5"}
+            setAlerta={setAlerta}
+            setEstado={setGananciaUnidadProducto}
+            id={"gananci"}
+            soloLeer={false}
+          />
+
+          <InputComprarProducto
+            estado={minimoInventarioProducto}
+            label={"Minimo en el inventario"}
+            placeHolder={"Ej: 20, 30, 5"}
+            setAlerta={setAlerta}
+            setEstado={setMinimoInventarioProducto}
+            id={"minimo"}
+            soloLeer={false}
+          />
         </div>
 
         {!nuevoProducto && (
           <BtnSubmit
-            text={"Agregar Producto"}
+            text={actualizar ? "Actualizar producto" : "Agregar producto"}
             cargando={cargando}
             tipo={"submit"}
           />
