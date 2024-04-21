@@ -4,7 +4,7 @@ import { formatoDinero } from "../helpers/formatoDinero";
 
 import { Document, Page, Text, StyleSheet, View } from "@react-pdf/renderer";
 import { Font } from "@react-pdf/renderer";
-import Funete_one from "../font/cour.ttf";
+import Funete_one from "../font/CourierPrime-Bold.ttf";
 
 Font.register({
   family: "FuenteDotOne",
@@ -29,11 +29,11 @@ export const PlantillaFacturaVenta = ({ datos }) => {
       fontFamily: "FuenteDotOne",
     },
     textoComun: {
-      fontSize: "8px",
+      fontSize: "11px",
       fontFamily: "FuenteDotOne",
     },
     textoComunCenter: {
-      fontSize: "8px",
+      fontSize: "11px",
       textAlign: "center",
       fontFamily: "FuenteDotOne",
     },
@@ -158,7 +158,7 @@ export const PlantillaFacturaVenta = ({ datos }) => {
         <View style={{ width: "100%", marginTop: "10px" }}>
           <Text
             style={{
-              fontSize: "9px",
+              fontSize: "11px",
               textAlign: "center",
               fontFamily: "FuenteDotOne",
             }}
@@ -184,7 +184,7 @@ export const PlantillaFacturaVenta = ({ datos }) => {
             <View style={styles.headerDescripcion}>
               <Text
                 style={{
-                  fontSize: "9px",
+                  fontSize: "11px",
                   // fontWeight: "800",
                   fontFamily: "FuenteDotOne",
                 }}
@@ -196,7 +196,7 @@ export const PlantillaFacturaVenta = ({ datos }) => {
             <View style={styles.headerTotal}>
               <Text
                 style={{
-                  fontSize: "9px",
+                  fontSize: "11px",
                   // fontWeight: "800",
                   fontFamily: "FuenteDotOne",
                 }}
@@ -229,7 +229,7 @@ export const PlantillaFacturaVenta = ({ datos }) => {
 
                   <View>
                     <Text
-                      style={{ fontSize: "9px", fontFamily: "FuenteDotOne" }}
+                      style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
                     >
                       {`${nombre} CANT. ${cantidadProducto} PRECIO: ${formatoDinero(
                         costoVentaItem
@@ -243,7 +243,7 @@ export const PlantillaFacturaVenta = ({ datos }) => {
 
                   <View style={{ width: "100%" }}>
                     <Text
-                      style={{ fontSize: "9px", fontFamily: "FuenteDotOne" }}
+                      style={{ fontSize: "11px", fontFamily: "FuenteDotOne" }}
                     >
                       {formatoDinero(totalVentaItem)}
                     </Text>
@@ -259,7 +259,7 @@ export const PlantillaFacturaVenta = ({ datos }) => {
             width: "100%",
             flexDirection: "row",
             flexWrap: "wrap",
-            gap: "8px",
+            gap: "11px",
             marginTop: "10px",
           }}
         >

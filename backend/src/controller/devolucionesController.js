@@ -721,7 +721,7 @@ export const devolverProductosACredivo = async (req, res) => {
         await prisma.productosDevueltosACredito.create({
           data: {
             nombreProducto,
-            cantidad,
+            cantidad: parseInt(cantidad),
             precioCadaUno: descuento
               ? parseFloat(costoActualProducto - descuento)
               : parseFloat(costoActualProducto),

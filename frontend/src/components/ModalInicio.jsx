@@ -115,7 +115,9 @@ export const ModalInicio = ({
               <Table variant="simple">
                 <Thead>
                   <Tr>
+                    <Th>Codigo del producto</Th>
                     <Th>Nombre del productos</Th>
+                    <Th>Tramo del producto</Th>
                     <Th>Cantidad en inventario</Th>
                     <Th>Minimo inventario</Th>
                     <Th>Precio de compra C/U</Th>
@@ -137,6 +139,7 @@ export const ModalInicio = ({
                       agotado,
                       enBaja,
                       codigoProducto,
+                      tramo,
                     }) => {
                       return (
                         <ItemInicio
@@ -149,6 +152,7 @@ export const ModalInicio = ({
                           nombre={nombre}
                           precioCompraUnd={precioCompraUnd}
                           precioVentaUnd={precioVentaUnd}
+                          tramo={tramo}
                           key={codigoProducto}
                         />
                       );

@@ -106,9 +106,9 @@ export const DevolucionesCredito = () => {
           "Ya han pasado 7 dias de esta venta, no se permiten devoluciones"
         );
         setAlerta({
-          titulo: "Error",
+          titulo: "Advertencia",
           msg: "Ya han pasado 7 dias de esta venta, no se permiten devoluciones",
-          status: "error",
+          status: "warning",
         });
       }
 

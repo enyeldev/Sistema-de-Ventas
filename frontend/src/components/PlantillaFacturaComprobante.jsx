@@ -25,7 +25,7 @@ export const PlantillaFacturaComprobante = ({ datos }) => {
     },
     nombreNegocio: {
       fontSize: "18px",
-      // fontWeight: "800",
+      fontWeight: "800",
       marginBottom: "5px",
       fontFamily: "FuenteDotOne",
     },

@@ -17,6 +17,8 @@ model Productos {
 
   cantidadStock Int
 
+  tramo String? 
+
   minStock Int
 
   precioCompraUnd Decimal

@@ -156,7 +156,7 @@ export const ModalDataProdVenta = ({
       });
       return;
     }
-
+    console.log(descuento, "ver descuento prueba");
     if (descuento.trim().length > 0) {
       const regexDescuentoValidation = regexDescuento.test(descuento);
       const regexDescuentoEnteroValidation = regexEntero.test(descuento);

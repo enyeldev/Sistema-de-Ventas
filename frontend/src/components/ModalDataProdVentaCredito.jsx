@@ -150,6 +150,7 @@ export const ModalDataProdVentaCredito = ({
       return;
     }
 
+    console.log(descuento, "ver descuento prueba");
     if (descuento.trim().length > 0) {
       const regexDescuentoValidation = regexDescuento.test(descuento);
 
@@ -176,11 +177,14 @@ export const ModalDataProdVentaCredito = ({
   const cerrarModal = () => {
     setCantidad(1);
     setTotal(parseFloat(precioVentaUnd));
+    setDescuento("");
     setAlerta({});
     setModal({ show: false, datos: modal.datos });
   };
 
   const leerDescuento = ({ currentTarget }) => {
+    setAlerta({});
+
     const valor = currentTarget.value;
     setDescuento(valor);
   };

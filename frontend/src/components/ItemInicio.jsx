@@ -1,10 +1,6 @@
 /* eslint-disable react/prop-types */
-
 import { formatoDinero } from "../helpers/formatoDinero";
-import { hanPasado30Dias } from "../helpers/hanPasado30Dias";
-import { obtenerFechaYHoraActual } from "../helpers/fechaHoraActual";
 
-import { AddIcon } from "@chakra-ui/icons";
 import { Tr, Td } from "@chakra-ui/react";
 
 export const ItemInicio = ({
@@ -17,10 +13,13 @@ export const ItemInicio = ({
   ganancia,
   agotado,
   enBaja,
+  tramo,
 }) => {
   return (
     <Tr data-id={codigoProducto}>
+      <Td>{codigoProducto}</Td>
       <Td>{nombre}</Td>
+      <Td textAlign={"center"}>{tramo ? tramo : "---"}</Td>
       <Td textAlign={"center"}>{cantidadStock}</Td>
       <Td textAlign={"center"}>{minStock}</Td>
       <Td>{formatoDinero(parseFloat(precioCompraUnd))}</Td>
